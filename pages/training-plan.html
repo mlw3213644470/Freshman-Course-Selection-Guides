@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>培养方案 · 新生选课指南</title>
+  <link rel="stylesheet" href="../global.css">
+  <link rel="stylesheet" href="./training-plan.css">
+  <script src="./training-plan.js" defer></script>
+</head>
+<body class="plan-page">
+  <main class="container section plan-layout">
+    <header class="plan-header">
+      <a class="plan-back" href="../../网页.html">← 返回首页</a>
+      <h1>培养方案</h1>
+      <p class="reading-width">选择一份 PDF 或 DOCX 培养方案文件，为后续查看与分析做准备。目前文件仅保留在当前浏览器页面中，不会上传或分析。</p>
+      <!-- 后续可在此添加页面介绍、使用说明等内容。 -->
+    </header>
+
+    <section class="card plan-upload" aria-labelledby="upload-title">
+      <h2 id="upload-title">选择培养方案文件</h2>
+      <p id="file-help">支持 PDF、DOCX，每次选择一个文件。</p>
+      <div class="plan-dropzone" id="dropzone">
+        <label class="plan-picker" for="plan-file">
+          <span class="plan-picker-title">将文件拖到这里，或点击选择</span>
+          <span class="text-small">也可使用 Tab 聚焦，再按 Enter 或空格选择文件</span>
+          <input class="plan-file-input" id="plan-file" type="file"
+                 accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                 aria-describedby="file-help file-status">
+        </label>
+      </div>
+      <p class="plan-status" id="file-status" role="status" aria-live="polite" aria-atomic="true">尚未选择文件。</p>
+      <div class="plan-selected" id="selected-file" hidden>
+        <p class="plan-filename">已选文件：<span id="file-name"></span></p>
+        <button class="button button--secondary" id="remove-file" type="button">移除文件</button>
+      </div>
+      <div class="plan-actions">
+        <!-- 后续接入分析接口时，再启用按钮并绑定提交事件。 -->
+        <button class="button" id="analyze-button" type="button" disabled>开始分析 · 即将开放</button>
+      </div>
+      <noscript><p>请启用 JavaScript，以显示所选文件名、移除文件和使用拖拽选择功能。</p></noscript>
+    </section>
+
+    <section class="card plan-results" aria-labelledby="results-title">
+      <h2 id="results-title">分析结果</h2>
+      <!-- 后续在此渲染真实接口结果；当前不生成占位分析内容。 -->
+      <div class="plan-results-content" id="analysis-results"></div>
+    </section>
+  </main>
+</body>
+</html>

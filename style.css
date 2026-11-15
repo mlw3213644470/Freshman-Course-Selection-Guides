@@ -1,0 +1,260 @@
+/*
+ * 全站公共视觉基础。三个业务板块共用此文件。
+ * 色彩取自校园门楼照片：青绿瓦、树叶、暖光与灰白石材。
+ */
+
+/* 1. 设计参数 */
+:root {
+  color-scheme: light;
+
+  /* 主色：青绿瓦；辅助色：树叶绿与夕光暖金 */
+  --color-primary: #285b63;
+  --color-primary-hover: #19454d;
+  --color-secondary: #66745d;
+  --color-accent: #a87850;
+  --color-text: #000000;
+  --color-text-muted: #3f4949;
+  --color-surface: rgb(255 255 255 / 92%);
+  --color-surface-soft: #f6f1eb;
+  --color-border: #cbd2ce;
+  --color-focus: #285b63;
+  --color-background: #f6f1eb;
+
+  /* 图片路径相对于本 CSS 文件；半透明白层保障黑字可读 */
+  --site-background-image: url("./assets/campus-gate.png");
+  --site-background-overlay: linear-gradient(rgb(250 247 243 / 64%), rgb(250 247 243 / 70%));
+  --site-background-position: center center;
+  --site-background-size: cover;
+
+  /* 字体与文字层级 */
+  --font-family-base: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: clamp(1.75rem, 2vw + 1rem, 2.25rem);
+  --font-size-3xl: clamp(2rem, 3vw + 1rem, 3rem);
+  --line-height-tight: 1.3;
+  --line-height-base: 1.7;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* 4px 基准间距 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* 布局、圆角、边框与阴影 */
+  --content-max-width: 72rem;
+  --page-gutter: clamp(1rem, 4vw, 3rem);
+  --section-spacing: clamp(3rem, 6vw, 5rem);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --border-width: 1px;
+  --shadow-card: 0 0.25rem 1.25rem rgb(0 0 0 / 6%);
+  --shadow-nav: 0 0.125rem 0.75rem rgb(0 0 0 / 5%);
+  --transition-fast: 160ms ease;
+}
+
+/* 2. 全局基础 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-background);
+  background-image: var(--site-background-overlay), var(--site-background-image);
+  background-position: var(--site-background-position);
+  background-size: var(--site-background-size);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-base);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-block: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-bold);
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+small { font-size: var(--font-size-sm); }
+
+a {
+  color: var(--color-primary);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* 3. 公共布局：页面容器与区块间距 */
+.site-container {
+  width: calc(100% - var(--page-gutter) - var(--page-gutter));
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+}
+
+.site-section {
+  padding-block: var(--section-spacing);
+}
+
+/* 4. 通用视觉样式；各板块可在此基础上扩展 */
+.site-nav {
+  border-bottom: var(--border-width) solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-nav);
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+.site-card {
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.site-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-5);
+  border: var(--border-width) solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.site-button:hover {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+  color: var(--color-surface);
+}
+
+.site-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.site-button--secondary {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.site-button--secondary:hover {
+  border-color: var(--color-primary);
+  background: var(--color-surface-soft);
+  color: var(--color-primary-hover);
+}
+
+/* 5. 响应式基础：平板 768px，手机 480px */
+@media (max-width: 768px) {
+  :root {
+    --section-spacing: var(--space-12);
+  }
+
+  body {
+    background-attachment: scroll;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-gutter: var(--space-4);
+    --section-spacing: var(--space-10);
+  }
+
+  .site-card {
+    padding: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

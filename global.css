@@ -1,0 +1,157 @@
+/* 公共设计基础：先加载本文件，再加载各板块样式；不在分支中复制此文件。
+ * 色彩取意于参考图的青瓦、树叶、暖阳和石材；正文保持黑色。
+ */
+:root {
+  color-scheme: light;
+  --color-primary: #365e63;
+  --color-primary-hover: #294a4e;
+  --color-primary-soft: #e4eded;
+  --color-secondary: #646b50;
+  --color-accent: #d6b57c;
+  --color-background: #f5f2ec;
+  --color-surface: #fffdf8;
+  --color-surface-glass: rgb(255 253 248 / 94%);
+  --color-text: #000000;
+  --color-on-primary: #ffffff;
+  --color-border: #c9c7be;
+  --color-focus: #365e63;
+  --color-selection: #dce7e4;
+  --background-image: url("./assets/campus-background.png");
+  --background-overlay: rgb(245 242 236 / 84%);
+  --background-position: center center;
+
+  --font-body: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
+  --font-xs: 0.8125rem;
+  --font-sm: 0.875rem;
+  --font-md: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --font-2xl: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  --font-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --weight-normal: 400;
+  --weight-bold: 700;
+  --leading-body: 1.8;
+  --leading-heading: 1.4;
+
+  /* 间距以 4px 为基准（默认根字号下），随用户字号设置缩放。 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --container-max: 75rem;
+  --reading-max: 42rem;
+  --page-gutter: clamp(1rem, 4vw, 3rem);
+  --section-space: clamp(2rem, 5vw, 4rem);
+  --layout-gap: var(--space-6);
+  --card-padding: var(--space-6);
+  --control-min-height: 2.75rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --border-width: 1px;
+  --border-default: var(--border-width) solid var(--color-border);
+  --shadow-sm: 0 2px 8px rgb(39 48 43 / 6%);
+  --shadow-md: 0 6px 24px rgb(39 48 43 / 10%);
+  --focus-width: 2px;
+  --focus-offset: 3px;
+  --motion-fast: 160ms;
+  --motion-easing: ease-out;
+}
+
+/* 全局基线：不重置列表样式，保留浏览器原生语义。 */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 100%; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-md);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-body);
+  overflow-wrap: anywhere;
+  background-color: var(--color-background);
+  background-image: linear-gradient(var(--background-overlay), var(--background-overlay)), var(--background-image);
+  background-position: var(--background-position);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+img, video { display: block; max-width: 100%; height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button, input, select, textarea { max-width: 100%; }
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 var(--space-4);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-heading);
+}
+h1 { font-size: var(--font-3xl); }
+h2 { font-size: var(--font-2xl); }
+h3 { font-size: var(--font-xl); }
+h4 { font-size: var(--font-lg); }
+h5, h6 { font-size: var(--font-md); }
+p { margin: 0 0 var(--space-4); }
+small, .text-small { font-size: var(--font-sm); }
+.text-caption { font-size: var(--font-xs); }
+a { color: inherit; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+::selection { color: var(--color-text); background: var(--color-selection); }
+:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); }
+
+/* 可选布局工具：按需使用，不预设三个板块的页面结构。 */
+.container { width: 100%; max-width: var(--container-max); margin-inline: auto; padding-inline: var(--page-gutter); }
+.section { padding-block: var(--section-space); }
+.reading-width { max-width: var(--reading-max); }
+.stack { display: flex; flex-direction: column; gap: var(--layout-gap); }
+.cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--layout-gap); }
+.stack > *, .cluster > *, .grid > * { min-width: 0; }
+
+/* 基础视觉类：仅定义公共外观，不包含任何业务组件或内容。 */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-min-height);
+  padding: var(--space-2) var(--space-6);
+  border: var(--border-width) solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  line-height: var(--leading-heading);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--motion-easing), border-color var(--motion-fast) var(--motion-easing);
+}
+.button:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
+.button--secondary { color: var(--color-text); background: var(--color-surface); border-color: var(--color-border); }
+.button--secondary:hover { background: var(--color-primary-soft); border-color: var(--color-primary); }
+.button:disabled, .button[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+.button:disabled:hover, .button[aria-disabled="true"]:hover { background: var(--color-primary); border-color: var(--color-primary); }
+.button--secondary:disabled:hover, .button--secondary[aria-disabled="true"]:hover { background: var(--color-surface); border-color: var(--color-border); }
+.card { padding: var(--card-padding); border: var(--border-default); border-radius: var(--radius-lg); background: var(--color-surface-glass); box-shadow: var(--shadow-sm); }
+.navbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--page-gutter); border-bottom: var(--border-default); background: var(--color-surface-glass); }
+.nav-link { display: inline-flex; align-items: center; min-height: var(--control-min-height); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); color: var(--color-text); text-decoration: none; }
+.nav-link:hover, .nav-link[aria-current="page"] { background: var(--color-primary-soft); }
+.nav-link[aria-current="page"] { font-weight: var(--weight-bold); text-decoration: underline; }
+
+/* 断点使用固定 rem：CSS 变量不能用于原生媒体查询条件。
+ * 小屏默认换行；48rem 起增加留白，75rem 起沿用最大内容宽度。
+ */
+@media (max-width: 48rem) {
+  :root { --layout-gap: var(--space-4); --card-padding: var(--space-4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0ms; }
+}
+@media print {
+  body { background: #ffffff; }
+  .card, .navbar { background: #ffffff; box-shadow: none; }
+}
