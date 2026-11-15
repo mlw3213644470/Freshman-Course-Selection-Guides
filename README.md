@@ -1,13 +1,12 @@
 # Freshman-Course-Selection-Guides
 
-原生 HTML/CSS/JS 前端，Python Flask 本地后端。培养方案分析使用 DeepSeek 官方 API，浏览器只访问本项目后端。首页和全局视觉样式保持不变。
+原生 HTML/CSS/JS 前端，Python Flask 本地后端。培养方案作为独立板块运行，分析使用 DeepSeek 官方 API，浏览器只访问本项目后端。页面和资源全部位于仓库内，不依赖仓库外的首页 HTML、CSS 或图片，也不提供“返回首页”链接。
 
 ## 配置与启动
 
-在 Windows PowerShell 中进入仓库。已有虚拟环境时无需重复创建：
+在 Windows PowerShell 中进入克隆后的仓库目录（位置和文件夹名称不限）。已有虚拟环境时无需重复创建：
 
 ```powershell
-cd E:\数智杯\Freshman-Course-Selection-Guides
 py -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 if (!(Test-Path .env)) { Copy-Item .env.example .env }
@@ -27,16 +26,19 @@ DEEPSEEK_API_KEY=你的DeepSeek官方APIKey
 .\.venv\Scripts\python.exe server.py
 ```
 
-若使用 8001 端口：先在原来运行该服务的终端按 Ctrl+C，再执行以下命令（不启用自动重载）：
+默认端口统一为 **8002**。
 
-```powershell
-cd E:\数智杯\Freshman-Course-Selection-Guides
-.\.venv\Scripts\python.exe -m flask --app server:create_app run --host 127.0.0.1 --port 8001
-```
+打开 <http://127.0.0.1:8002/pages/training-plan.html> 即可直接使用培养方案页面；根地址 <http://127.0.0.1:8002/> 也会跳转至此。拖入或选择一个 PDF/DOCX，再点击“开始分析”。这一步才会上传文件并触发真实计费；启动服务、打开页面、选择文件、检查健康状态均不调用 DeepSeek。不使用 Live Server 进行分析。
 
-随后打开 <http://127.0.0.1:8001/>；前端 API 使用同源相对路径，会请求 8001。直接运行 `server.py` 仍默认使用 8000。
+队友将来在同一 Python 服务提供的首页中链接到 `/pages/training-plan.html` 即可。如果首页由其他域名或端口提供，请链接到培养方案 Python 后端的完整地址，例如本地开发时的 `http://127.0.0.1:8002/pages/training-plan.html`；页面和 `/api` 必须由同一后端提供。部署后使用实际后端域名。旧的 `/Freshman-Course-Selection-Guides/pages/training-plan.html` 路径保留兼容，但新链接建议统一使用 `/pages/training-plan.html`。
 
-打开 <http://127.0.0.1:8000/>，点击“培养方案”，拖入或选择一个 PDF/DOCX，再点击“开始分析”。这一步才会上传文件并触发真实计费；启动服务、打开页面、选择文件、检查健康状态均不调用 DeepSeek。不使用 Live Server 进行分析。
+## VS Code 启动与集成浏览器
+
+队友克隆后直接在 VS Code 打开仓库目录，仓库自带 `.vscode/launch.json`，路径使用 `${workspaceFolder}`，无需本机父目录配置。在“运行和调试”中选择“Python 后端（8002）”，按 F5，启动成功后会打开集成浏览器。Python 调试需要 Microsoft Python Debugger 扩展。
+
+若已在终端启动后端，选择“集成浏览器预览（8002）”即可，仅打开页面，不再启动一个后端。也可运行 VS Code 命令 `Browser: Open Integrated Browser` 并输入 `http://127.0.0.1:8002/pages/training-plan.html`。
+
+停止旧服务：终端启动的服务在其终端按 Ctrl+C；调试启动的服务使用“停止调试”（Shift+F5）。然后重新启动。不要用 Live Server 或直接打开 HTML 文件进行培养方案分析，页面和 `/api` 必须由同一个 Python 后端提供。
 
 ## 文件与接口
 
@@ -62,13 +64,15 @@ cd E:\数智杯\Freshman-Course-Selection-Guides
 
 模型读取超时为 120 秒（两次网络读取之间的空闲上限，并非模型总时长）。上传与模型分析共享 660 秒的硬性总时限，持续心跳也无法延长；清理独立限制最多 15 秒。后端网络处理预算最多约 675 秒，低于前端 720 秒，留有约 45 秒的余量用于验证与本地传输。如另加反向代理，也需为此同步请求配置足够长的等待时间。SSE 可降低长时间无响应造成的断连风险，但不能消除上游或网络故障。
 
-结果接口保持 `{"result":{"培养目标":"…","毕业要求":"…","课程分类":"…","学分要求":"…","注意事项":"…"}}`；失败为 `{"error":"提示"}`。页面刷新后本地选择和结果消失，不建立文档或结果数据库。
+结果接口为 `{"result":{"培养目标":[{"text":"结论","source":null}],"毕业要求":[...],"课程分类":[...],"学分要求":[...],"注意事项":[...]}}`（结构示意，省略号不是实际 JSON）。五个板块均为非空条目数组，每条包含非空、单行的纯文本 `text` 与字符串或 `null` 的 `source`。正常培养目标需 2～3 条；整个板块无依据时统一返回 `[{"text":"原文未说明","source":null}]`。出处无法确认时使用 `null`，不编造页码。
+
+毕业要求与学分要求一项一条，出处由前端在同一条末尾用青绿色、加粗括号标记显示。课程分类使用有序列表，其余使用无序列表。全部内容通过 `textContent` 创建，不渲染模型 HTML。学分原始数字、单位、范围和条件不得为简短而省略，后端不截短条目。旧版字符串结果会被拒绝，不能混用旧后端与新前端。失败仍为 `{"error":"提示"}`。页面刷新后本地选择和结果消失，不建立文档或结果数据库。
 
 ## “开始分析”没有反应时
 
 - 未选择文件点击按钮，会提示先选 PDF/DOCX；分析过程中禁用按钮以防重复请求。
 - 页面加载后显示“页面已就绪”。若脚本丢失或初始化失败，页面会显示错误；使用 Ctrl+F5 强制刷新。静态资源使用 no-store，脚本链接有版本参数。
-- 本地后端未启动、Key 未配置、使用 Live Server、后端仍是旧版本都会显示提示。可访问 <http://127.0.0.1:8000/api/health> 检查。
+- 本地后端未启动、Key 未配置、使用 Live Server、后端仍是旧版本都会显示提示。可访问 <http://127.0.0.1:8002/api/health> 检查。
 - 点击后浏览器 Network 中应出现 `POST /api/training-plan/analyze`，终端应出现“培养方案分析 received”。若没有请求，检查浏览器 Console 中的脚本错误；若有请求，根据终端的失败步骤定位。
 - 网络断开、非 JSON 响应、后端 HTTP 错误、结果不完整、等待超时均显示错误；finally 恢复按钮。前端最长等待 12 分钟，超时后服务端可能仍在处理，请避免立即重复提交。
 

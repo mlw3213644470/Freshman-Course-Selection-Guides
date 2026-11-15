@@ -87,9 +87,11 @@
 .plan-page .plan-status[data-state="success"] { color: var(--color-primary); }
 .plan-page .plan-dropzone.is-busy { opacity: 0.6; }
 .plan-page .is-busy .plan-picker { cursor: wait; }
-.plan-page .plan-result-item + .plan-result-item { border-top: var(--border-default); padding-top: var(--space-6); }
+.plan-page .plan-result-item + .plan-result-item { border-top: var(--border-default); margin-top: var(--space-8); padding-top: var(--space-8); }
 .plan-page .plan-result-item h3 { font-size: var(--font-lg); color: var(--color-primary); }
-.plan-page .plan-result-item p { white-space: pre-wrap; }
+.plan-page .plan-result-list { margin: 0; padding-inline-start: var(--space-6); line-height: var(--leading-body); }
+.plan-page .plan-result-list li + li { margin-top: var(--space-3); }
+.plan-page .plan-result-source { display: inline; margin-inline-start: var(--space-2); color: var(--color-primary); font-weight: var(--weight-bold); font-size: var(--font-sm); }
 
 @media (max-width: 48rem) {
   .plan-page .plan-layout { gap: var(--space-6); }

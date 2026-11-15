@@ -11,7 +11,6 @@
 <body class="plan-page">
   <main class="container section plan-layout">
     <header class="plan-header">
-      <a class="plan-back" href="../../网页.html">← 返回首页</a>
       <h1>培养方案</h1>
       <p class="reading-width">选择培养方案 PDF 或 DOCX，分析培养目标、毕业要求、课程分类、学分要求和注意事项。点击“开始分析”后，文件将经本项目后端发送至 DeepSeek 官方 API；未找到的信息标为“原文未说明”。</p>
       <!-- 后续可在此添加页面介绍、使用说明等内容。 -->
@@ -51,7 +50,7 @@
     window.addEventListener("load", function () {
       if (!window.trainingPlanReady) {
         var status = document.getElementById("file-status");
-        status.textContent = "文件选择脚本加载或初始化失败，请按 Ctrl+F5 刷新，并通过 http://127.0.0.1:8000 打开页面。";
+        status.textContent = "文件选择脚本加载或初始化失败，请按 Ctrl+F5 刷新，并通过 http://127.0.0.1:8002 打开页面。";
         status.dataset.state = "error";
         document.getElementById("analyze-button").addEventListener("click", function () {
           status.textContent = "分析功能尚未初始化，请刷新页面或检查浏览器控制台中的脚本加载错误。";

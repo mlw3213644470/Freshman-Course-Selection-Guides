@@ -4,6 +4,9 @@ import asyncio
 import json
 import unittest
 import zipfile
+import tempfile
+import shutil
+from pathlib import Path
 from unittest.mock import patch
 
 import httpx
@@ -22,9 +25,13 @@ def pdf_bytes(encrypted=False):
     return stream.getvalue()
 
 
+def empty_result():
+    return {key: [{"text": "原文未说明", "source": None}] for key in server.RESULT_KEYS}
+
+
 def result_response():
     return {"status": "completed", "output": [{"type": "message", "content": [
-        {"type": "output_text", "text": json.dumps({key: "原文未说明" for key in server.RESULT_KEYS})}
+        {"type": "output_text", "text": json.dumps(empty_result())}
     ]}]}
 
 
@@ -45,7 +52,7 @@ class MockSSE(httpx.AsyncByteStream):
 
 def sse_response(chunks=None):
     if chunks is None:
-        text = json.dumps({key: "原文未说明" for key in server.RESULT_KEYS}, ensure_ascii=False)
+        text = json.dumps(empty_result(), ensure_ascii=False)
         data = (b": heartbeat\r\n\r\n" + sse_frame("response.created") +
                 sse_frame("response.output_text.delta", delta=text[:20]) +
                 sse_frame("response.output_text.delta", delta=text[20:]) +
@@ -71,13 +78,34 @@ class OfflineTests(unittest.TestCase):
         }, **kwargs)
 
     def test_static_and_secrets(self):
-        for path in ("/", "/网页.html", "/首页.css", "/Freshman-Course-Selection-Guides/pages/training-plan.html",
+        self.assertEqual(self.client.get("/").location, "/pages/training-plan.html")
+        for path in ("/pages/training-plan.html", "/global.css", "/assets/campus-background.png",
+                     "/Freshman-Course-Selection-Guides/pages/training-plan.html",
                      "/Freshman-Course-Selection-Guides/global.css"):
             with self.client.get(path) as response:
                 self.assertEqual(response.status_code, 200)
         for path in ("/.env", "/Freshman-Course-Selection-Guides/.env", "/Freshman-Course-Selection-Guides/.git/config",
-                     "/Freshman-Course-Selection-Guides/server.py", "/Freshman-Course-Selection-Guides/../.env"):
+                     "/Freshman-Course-Selection-Guides/server.py", "/Freshman-Course-Selection-Guides/../.env",
+                     "/网页.html", "/首页.css", "/ABFFFC33CA805A3D44D73FFB6AD9E783.png"):
             self.assertEqual(self.client.get(path).status_code, 404)
+
+    def test_standalone_checkout_without_parent_homepage(self):
+        # A differently named checkout with no parent HTML/CSS/image files.
+        with tempfile.TemporaryDirectory() as temporary:
+            checkout = Path(temporary) / "teammate-checkout"
+            for filename in ("pages/training-plan.html", "pages/training-plan.css", "pages/training-plan.js",
+                             "global.css", "assets/campus-background.png"):
+                destination = checkout / filename
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(server.ROOT / filename, destination)
+            with patch.object(server, "ROOT", checkout):
+                with self.client.get("/", follow_redirects=True) as response:
+                    self.assertEqual(response.status_code, 200)
+                    self.assertIn("培养方案", response.text)
+                    self.assertNotIn("../../网页.html", response.text)
+                for url in ("/pages/training-plan.css", "/pages/training-plan.js", "/global.css", "/assets/campus-background.png"):
+                    with self.client.get(url) as response:
+                        self.assertEqual(response.status_code, 200)
 
     def test_config_missing(self):
         self.app.config["DEEPSEEK_API_KEY"] = ""
@@ -106,7 +134,7 @@ class OfflineTests(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_route_result_and_errors(self):
-        with patch.object(server, "analyze_document", return_value={k: "原文未说明" for k in server.RESULT_KEYS}) as analyze:
+        with patch.object(server, "analyze_document", return_value=empty_result()) as analyze:
             response = self.post()
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(response.json["result"]), 5)
@@ -126,7 +154,7 @@ class OfflineTests(unittest.TestCase):
         with zipfile.ZipFile(stream, "w") as archive:
             archive.writestr("[Content_Types].xml", '<Types><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>')
             archive.writestr("word/document.xml", '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body/></w:document>')
-        with patch.object(server, "analyze_document", return_value={k: "原文未说明" for k in server.RESULT_KEYS}) as analyze:
+        with patch.object(server, "analyze_document", return_value=empty_result()) as analyze:
             self.assertEqual(self.post(stream.getvalue(), "plan.docx").status_code, 200)
             self.assertEqual(analyze.call_args.args[2], "training-plan.docx")
         self.assertEqual(self.post(b"PK fake archive", "fake.docx").status_code, 400)
@@ -221,6 +249,38 @@ class OfflineTests(unittest.TestCase):
             with self.subTest(response=response), self.assertRaises(server.AnalysisError):
                 server.parse_result(response)
 
+    def test_structured_results_preserve_credits_and_sources(self):
+        result = empty_result()
+        result["培养目标"] = [{"text": "目标概括一", "source": None}, {"text": "目标概括二", "source": None}]
+        result["学分要求"] = [
+            {"text": "总学分不少于 160 学分（适用于 2025 级）", "source": "第 5 页"},
+            {"text": "限选课程 6～8 学分，且须完成模块 A；不计入通识学分", "source": "学分要求一节"},
+        ]
+        result["毕业要求"] = [{"text": "须完成毕业设计", "source": "毕业要求一节"}]
+        response = result_response()
+        response["output"][0]["content"][0]["text"] = json.dumps(result)
+        self.assertEqual(server.parse_result(response), result)
+
+    def test_reject_legacy_or_invalid_structured_results(self):
+        invalid_values = ("旧版大段文字", [], [{"text": "", "source": None}],
+                          [{"text": "结论"}], [{"text": "结论", "source": 5}],
+                          [{"text": "结论\n另一项", "source": None}],
+                          [{"text": "原文未说明", "source": "第 5 页"}])
+        for value in invalid_values:
+            result = empty_result()
+            result["毕业要求"] = value
+            response = result_response()
+            response["output"][0]["content"][0]["text"] = json.dumps(result)
+            with self.subTest(value=value), self.assertRaises(server.AnalysisError):
+                server.parse_result(response)
+        for count in (1, 4):
+            result = empty_result()
+            result["培养目标"] = [{"text": "概括", "source": None}] * count
+            response = result_response()
+            response["output"][0]["content"][0]["text"] = json.dumps(result)
+            with self.subTest(count=count), self.assertRaises(server.AnalysisError):
+                server.parse_result(response)
+
     def test_non_json_error_does_not_log_raw_body(self):
         response = httpx.Response(502, text="private raw body", request=httpx.Request("POST", "https://example.invalid"))
         with self.assertLogs("server", level="ERROR") as logs, self.assertRaises(server.AnalysisError):
@@ -252,7 +312,7 @@ class OfflineTests(unittest.TestCase):
         return httpx.MockTransport(handler), calls
 
     def test_sse_terminal_failures_discard_complete_looking_text(self):
-        full_text = json.dumps({key: "原文未说明" for key in server.RESULT_KEYS})
+        full_text = json.dumps(empty_result())
         for kind in ("response.incomplete", "response.failed", "error"):
             chunks = [sse_frame("response.output_text.delta", delta=full_text), sse_frame(kind)]
             transport, calls = self.stream_transport(sse_response(chunks))
@@ -261,7 +321,7 @@ class OfflineTests(unittest.TestCase):
             self.assertEqual(calls, [("POST", "/files"), ("POST", "/responses"), ("DELETE", "/files/file-test")])
 
     def test_sse_eof_and_partial_terminal_are_not_success(self):
-        text = json.dumps({key: "原文未说明" for key in server.RESULT_KEYS})
+        text = json.dumps(empty_result())
         for ending in (b"", sse_frame("response.completed", response=result_response()).rstrip()):
             transport, calls = self.stream_transport(sse_response([sse_frame("response.output_text.delta", delta=text), ending]))
             with self.subTest(ending=bool(ending)), self.assertLogs("server", level="ERROR"), self.assertRaises(server.AnalysisError) as caught:
@@ -270,7 +330,7 @@ class OfflineTests(unittest.TestCase):
             self.assertEqual(calls[-1][0], "DELETE")
 
     def test_sse_disconnect_returns_safe_502_and_cleans_up(self):
-        text = json.dumps({key: "原文未说明" for key in server.RESULT_KEYS})
+        text = json.dumps(empty_result())
         transport, calls = self.stream_transport(sse_response([
             sse_frame("response.output_text.delta", delta=text), httpx.RemoteProtocolError("PRIVATE FILE CONTENT")
         ]))
@@ -301,7 +361,7 @@ class OfflineTests(unittest.TestCase):
             self.assertEqual(calls[-1][0], "DELETE")
 
     def test_sse_stage_logs_and_multiline_event(self):
-        text = json.dumps({key: "原文未说明" for key in server.RESULT_KEYS})
+        text = json.dumps(empty_result())
         # SSE permits multiline data and event type supplied in the event field.
         chunk = ('event: response.output_text.delta\ndata: {\ndata: "delta": ' + json.dumps(text) + '}\n\n').encode()
         transport, _calls = self.stream_transport(sse_response([

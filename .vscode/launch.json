@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python 后端（8002）",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/server.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "serverReadyAction": {
+        "pattern": "Running on (http://127[.]0[.]0[.]1:8002)",
+        "action": "startDebugging",
+        "name": "集成浏览器预览（8002）"
+      }
+    },
+    {
+      "name": "集成浏览器预览（8002）",
+      "type": "editor-browser",
+      "request": "launch",
+      "url": "http://127.0.0.1:8002/"
+    }
+  ]
+}

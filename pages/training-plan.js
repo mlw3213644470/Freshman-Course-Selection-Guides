@@ -110,7 +110,7 @@
       return;
     }
     if (!["http:", "https:"].includes(location.protocol)) {
-      setStatus("请启动后端，并通过 http://127.0.0.1:8000 打开页面。", "error");
+      setStatus("请启动后端，并通过 http://127.0.0.1:8002 打开页面。", "error");
       return;
     }
     let timer;
@@ -127,13 +127,17 @@
         method: "POST", body, signal: controller.signal,
       });
       if (!response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("未连接到分析后端，请通过 http://127.0.0.1:8000 打开页面，而非 Live Server。");
+        throw new Error("未连接到分析后端，请通过 http://127.0.0.1:8002 打开页面，而非 Live Server。");
       }
       let payload;
       try { payload = await response.json(); }
       catch { throw new Error("后端返回了无效 JSON，请查看运行 server.py 的终端日志。"); }
       if (!response.ok) throw new Error(payload?.error || "分析失败，请稍后重试。");
-      if (!resultKeys.every((key) => typeof payload?.result?.[key] === "string" && payload.result[key].trim())) {
+      const validItem = (item) => item && typeof item.text === "string" && item.text.trim()
+        && !/[\r\n]/.test(item.text)
+        && (item.source === null || (typeof item.source === "string" && item.source.trim() && !/[\r\n]/.test(item.source)));
+      if (!resultKeys.every((key) => Array.isArray(payload?.result?.[key])
+          && payload.result[key].length > 0 && payload.result[key].every(validItem))) {
         throw new Error("后端返回的分析结果不完整，请重试。");
       }
       for (const key of resultKeys) {
@@ -141,9 +145,22 @@
         section.className = "plan-result-item";
         const heading = document.createElement("h3");
         heading.textContent = key;
-        const text = document.createElement("p");
-        text.textContent = payload.result[key];
-        section.append(heading, text);
+        const list = document.createElement(key === "课程分类" ? "ol" : "ul");
+        list.className = "plan-result-list";
+        for (const item of payload.result[key]) {
+          const row = document.createElement("li");
+          const text = document.createElement("span");
+          text.textContent = item.text;
+          row.append(text);
+          if (item.source !== null) {
+            const source = document.createElement("strong");
+            source.className = "plan-result-source";
+            source.textContent = `（${item.source}）`;
+            row.append(source);
+          }
+          list.append(row);
+        }
+        section.append(heading, list);
         results.append(section);
       }
       setStatus("分析成功，结果已显示在下方。请对照 PDF 原文核查。", "success");
@@ -161,7 +178,7 @@
   // 启动时只探测本地后端，不接触 DeepSeek，不上传任何文件。
   async function checkBackend() {
     if (!["http:", "https:"].includes(location.protocol)) {
-      setStatus("请启动 server.py，并通过 http://127.0.0.1:8000 打开页面。", "error");
+      setStatus("请启动 server.py，并通过 http://127.0.0.1:8002 打开页面。", "error");
       return;
     }
     let timer;
@@ -170,14 +187,14 @@
       timer = setTimeout(() => controller.abort(), 5000);
       const response = await fetch("/api/health", { signal: controller.signal, cache: "no-store" });
       if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("请通过 http://127.0.0.1:8000 打开页面，Live Server 无法提供分析接口。");
+        throw new Error("请通过 http://127.0.0.1:8002 打开页面，Live Server 无法提供分析接口。");
       }
       const health = await response.json();
       if (health.provider !== "deepseek") throw new Error("后端尚未更新为 DeepSeek，请重启 server.py 并刷新页面。");
       if (!health.configured) throw new Error("后端未配置 DEEPSEEK_API_KEY，请填写本地 .env 并重启服务。");
     } catch (error) {
       if (!selectedFile && !busy) setStatus(error instanceof TypeError || error.name === "AbortError"
-        ? "无法连接本地后端，请启动 server.py 并通过 http://127.0.0.1:8000 访问。" : error.message, "error");
+        ? "无法连接本地后端，请启动 server.py 并通过 http://127.0.0.1:8002 访问。" : error.message, "error");
     } finally { clearTimeout(timer); }
   }
   setBusy(false);

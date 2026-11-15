@@ -6,8 +6,10 @@ const assert = require('node:assert/strict');
 const source = fs.readFileSync(path.join(__dirname, 'pages/training-plan.js'), 'utf8');
 const keys = ['培养目标', '毕业要求', '课程分类', '学分要求', '注意事项'];
 
-function element() {
+function element(tagName = 'div') {
   return {
+    tagName,
+    set innerHTML(value) { throw new Error('HTML rendering is forbidden'); },
     handlers: {}, dataset: {}, children: [],
     classList: { add() {}, remove() {}, toggle() {} },
     addEventListener(type, fn) { this.handlers[type] = fn; },
@@ -52,7 +54,7 @@ async function boot(apiFetch, protocol = 'http:') {
 }
 
 async function main() {
-  const success = () => reply({ result: Object.fromEntries(keys.map(key => [key, '原文未说明'])) });
+  const success = () => reply({ result: Object.fromEntries(keys.map(key => [key, [{ text: '原文未说明', source: null }]])) });
   let app = await boot(success);
   await app.click();
   assert.match(app.nodes['#file-status'].textContent, /请先/);
@@ -72,12 +74,33 @@ async function main() {
   app.select('bad.exe');
   assert.equal(app.nodes['#file-status'].dataset.state, 'error');
 
+  const structured = Object.fromEntries(keys.map(key => [key, [{ text: '原文未说明', source: null }]]));
+  structured['培养目标'] = [{ text: '目标一', source: null }, { text: '目标二', source: null }];
+  structured['课程分类'] = [{ text: '通识课程', source: null }, { text: '专业课程', source: null }];
+  structured['毕业要求'] = [{ text: '<img src=x onerror=alert(1)>', source: '第 5 页' }];
+  structured['学分要求'] = [{ text: '必修不少于 120 学分，仅适用 2025 级', source: '<script>unsafe</script>' }];
+  app = await boot(() => reply({ result: structured }));
+  app.select();
+  await app.click();
+  const sections = app.nodes['#analysis-results'].children;
+  assert.equal(sections.length, 5);
+  assert.equal(sections[0].children[1].children.length, 2);
+  assert.equal(sections[2].children[1].tagName, 'ol');
+  assert.equal(sections[2].children[1].children.length, 2);
+  const graduation = sections[1].children[1].children[0];
+  assert.equal(graduation.tagName, 'li');
+  assert.equal(graduation.children[0].textContent, '<img src=x onerror=alert(1)>');
+  assert.equal(graduation.children[1].tagName, 'strong');
+  assert.equal(graduation.children[1].textContent, '（第 5 页）');
+  assert.equal(sections[3].children[1].children[0].children[1].textContent, '（<script>unsafe</script>）');
+
   const failures = [
     [() => reply({ error: 'Key未配置' }, false), /Key未配置/],
-    [() => reply({}, false, 'text/html'), /8000/],
+    [() => reply({}, false, 'text/html'), /8002/],
     [() => { throw new TypeError('offline'); }, /无法连接后端/],
     [() => ({ ...reply({}), json: async () => { throw new SyntaxError(); } }), /无效 JSON/],
     [() => reply({ result: {} }), /不完整/],
+    [() => reply({ result: Object.fromEntries(keys.map(key => [key, '旧版字符串'])) }), /不完整/],
     [() => { const error = new Error(); error.name = 'AbortError'; throw error; }, /超时/],
   ];
   for (const [fetchImpl, expected] of failures) {
@@ -104,7 +127,7 @@ async function main() {
   app = await boot(success, 'file:');
   app.select();
   await app.click();
-  assert.match(app.nodes['#file-status'].textContent, /8000/);
+  assert.match(app.nodes['#file-status'].textContent, /8002/);
   assert.equal(app.requests.length, 0);
 
   // Check the independent inline fallback when the external script never runs.
