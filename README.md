@@ -1,29 +1,40 @@
 # Freshman-Course-Selection-Guides
 
-新生选课指南（静态页面 + Vite 开发/构建）。
+武汉大学选课经验网页：《选课经验：少走弯路，排好第一份课表》。
 
-## 环境要求
+核心原则：**只做选课指导，不给具体数据和链接**。页面只写判断方法、核对步骤和该去问谁，不列课程名单、学分、给分、通过率，也不跳转外部地址。
 
-Node.js 20+（当前使用 v24）。
+## 页面结构
+
+| 文件 | 内容 |
+| --- | --- |
+| `index.html` | 首页：蜿蜒路线串联五个板块，可直达「选前准备」 |
+| `prep.html` | 选前准备：读懂毕业要求、整理清单、检查选课条件 |
+| `course-info.html` | 课程信息：对照清单、打听问题模板、红黄绿提示 |
+| `schedule.html` | 课表安排：放固定课 → 填自选 → 检查整周 → 备选方案 |
+| `after.html` | 选后调整：立即核对、开课复盘、调整前确认 |
+| `faq.html` | 常见问题：4 组场景、15 条折叠问答 |
+| `sources.html` | 经验来源与贡献：来源分类、经验卡字段、纠错与更新记录 |
+
+板块之间用「上一步 / 下一步」按钮按顺序串联；首页与页脚的导航可跳到任意板块。
 
 ## 开发
 
-```bash
-npm install   # 首次运行安装依赖
-npm run dev   # 启动开发服务器，默认 http://localhost:5173
-```
-
-## 构建与预览
+需要 Node.js 20+。
 
 ```bash
-npm run build     # 产物输出到 dist/
-npm run preview   # 本地预览构建结果
+npm install     # 首次运行安装依赖
+npm run dev     # 开发服务器，默认 http://localhost:5173
+npm run build   # 构建到 dist/
+npm run preview # 预览构建结果
 ```
 
-## 目录结构
+## 实现说明
 
-```text
-index.html   页面入口
-script.js    页面逻辑（以 ES module 方式加载）
-package.json 依赖与脚本
-```
+- `src/guide.css`：全站样式（珞珈绿 + 米白纸质），含首页路线与移动端时间轴布局。
+- `src/guide.js`：注入页头页脚导航、标记当前板块、问答「全部展开／收起」、滚动渐显。
+- `vite.config.js`：多页构建入口（上面 7 个页面）。
+
+## 旧版文件
+
+`课程信息.html`、`课程数据.js`、`global.css`、`style.css`、`pages/`、`assets/` 为早期实验页面，保留未改动，**不参与构建**。
