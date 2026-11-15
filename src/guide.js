@@ -5,6 +5,11 @@ const NAV = [
   { page: 'schedule', href: 'schedule.html', label: '课表安排' },
   { page: 'after', href: 'after.html', label: '选后调整' },
   { page: 'faq', href: 'faq.html', label: '常见问题' },
+<<<<<<< HEAD
+=======
+  { page: 'sources', href: 'sources.html', label: '经验来源' },
+  { page: 'training-plan', href: '/pages/training-plan.html', label: '培养方案' },
+>>>>>>> e7234c81a1aae74431c7500b5d10974cb27972e8
 ];
 
 function buildNav(current) {

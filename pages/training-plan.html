@@ -50,7 +50,7 @@
     window.addEventListener("load", function () {
       if (!window.trainingPlanReady) {
         var status = document.getElementById("file-status");
-        status.textContent = "文件选择脚本加载或初始化失败，请按 Ctrl+F5 刷新，并通过 http://127.0.0.1:8002 打开页面。";
+        status.textContent = "文件选择脚本加载或初始化失败，请按 Ctrl+F5 刷新，并通过 Vite 首页或 http://127.0.0.1:8002 打开页面。";
         status.dataset.state = "error";
         document.getElementById("analyze-button").addEventListener("click", function () {
           status.textContent = "分析功能尚未初始化，请刷新页面或检查浏览器控制台中的脚本加载错误。";
