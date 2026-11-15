@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="在武汉大学樱花树下探索通识课程，并通过 MBTI 兴趣助手发现适合自己的课程方向。">
+  <title>樱下选课 · 武汉大学通识课程</title>
+  <style>
+    :root {
+      --ink: #3a3440;
+      --muted: #847d88;
+      --paper: #fffaf9;
+      --rose: #d67e9d;
+      --rose-dark: #a95275;
+      --rose-pale: #f9e9ee;
+      --leaf: #5e8564;
+      --line: #f0e2e6;
+      --shadow: 0 18px 48px rgba(111, 63, 81, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .page { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
+
+    .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 700; letter-spacing: .04em; }
+    .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; color: white; background: var(--rose); border-radius: 50% 50% 47% 53%; font-size: 18px; }
+    .nav { display: flex; align-items: center; gap: 25px; color: #766b74; font-size: 13px; }
+    .nav a { text-decoration: none; }
+    .nav a:hover { color: var(--rose-dark); }
+    .nav .nav-cta { padding: 9px 14px; color: white; background: var(--rose); border-radius: 99px; }
+
+    .hero {
+      position: relative; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center;
+      min-height: 420px; overflow: hidden; margin: 24px 0 42px; padding: 42px 54px;
+      background: linear-gradient(115deg, #fff1f4 0%, #fff8f4 56%, #f5f8ed 100%);
+      border: 1px solid #f6e5e9; border-radius: 27px;
+    }
+    .hero::before, .hero::after { content: ""; position: absolute; border: 1px solid rgba(214,126,157,.15); border-radius: 50%; pointer-events: none; }
+    .hero::before { width: 360px; height: 360px; left: -205px; bottom: -240px; box-shadow: 0 0 0 30px rgba(214,126,157,.035), 0 0 0 62px rgba(214,126,157,.03); }
+    .hero::after { width: 300px; height: 300px; right: 20px; top: -220px; box-shadow: 0 0 0 28px rgba(214,126,157,.035); }
+    .hero-copy { position: relative; z-index: 1; align-self: center; padding-bottom: 16px; }
+    .eyebrow { margin: 0 0 13px; color: var(--rose-dark); font-size: 11px; font-weight: 700; letter-spacing: .2em; }
+    h1 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: clamp(35px, 5vw, 58px); font-weight: 500; letter-spacing: .04em; line-height: 1.22; }
+    .hero-copy > p:last-of-type { max-width: 430px; margin: 18px 0 0; color: #776d75; font-size: 14px; line-height: 1.9; }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .primary-button, .secondary-button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 0 17px; border-radius: 99px; font-size: 13px; text-decoration: none; transition: .2s ease; }
+    .primary-button { color: white; background: var(--rose-dark); border: 1px solid var(--rose-dark); }
+    .primary-button:hover { background: #904261; }
+    .secondary-button { color: var(--rose-dark); background: rgba(255,255,255,.55); border: 1px solid #e8becb; }
+    .secondary-button:hover { background: white; }
+    .sakura-scene { position: relative; width: min(100%, 440px); height: 330px; justify-self: end; }
+    .tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .blossom { position: absolute; z-index: 2; display: grid; width: 39px; height: 39px; place-items: center; padding: 0; color: #86556a; background: rgba(255,255,255,.94); border: 1px solid #f3ccd7; border-radius: 50%; box-shadow: 0 5px 16px rgba(148,78,105,.12); font-size: 11px; font-weight: 700; transition: transform .18s ease, box-shadow .18s ease; }
+    .blossom:hover, .blossom:focus-visible { z-index: 5; transform: scale(1.18); box-shadow: 0 8px 24px rgba(148,78,105,.22); outline: 2px solid #d67e9d; outline-offset: 3px; }
+    .blossom.recommended { color: white; background: var(--rose-dark); border-color: white; animation: glow 1.8s ease-in-out infinite; }
+    @keyframes glow { 50% { box-shadow: 0 0 0 7px rgba(214,126,157,.19), 0 8px 20px rgba(148,78,105,.22); } }
+    .tree-caption { position: absolute; right: 0; bottom: -2px; left: 0; color: #8a7480; font-family: "STSong", serif; font-size: 13px; letter-spacing: .12em; text-align: center; }
+    .tree-caption span { color: var(--rose-dark); font-weight: 700; }
+
+    .intro-row { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+    .section-kicker { margin: 0 0 5px; color: var(--rose-dark); font-size: 10px; font-weight: 700; letter-spacing: .17em; }
+    h2 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: 27px; font-weight: 500; }
+    .section-subtitle { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .dataset-badge { flex: 0 0 auto; padding: 8px 12px; color: #806b75; background: white; border: 1px solid var(--line); border-radius: 99px; font-size: 11px; }
+
+    .mbti-section { margin: 58px 0 62px; padding: 32px; background: linear-gradient(135deg, #fff0f4, #fff8f5 62%, #f7f8ed); border: 1px solid #f2e2e5; border-radius: 22px; }
+    .mbti-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(300px, 1.2fr); gap: 30px; align-items: start; }
+    .mbti-intro h2 { font-size: 26px; }
+    .mbti-intro p { margin: 12px 0 0; color: #766c75; font-size: 13px; line-height: 1.85; }
+    .notice { margin-top: 14px !important; color: #957789 !important; font-size: 11px !important; }
+    .quiz { padding: 21px; background: rgba(255,255,255,.83); border: 1px solid #f0e0e5; border-radius: 16px; }
+    .quiz-progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 15px; color: var(--muted); font-size: 11px; }
+    .progress-track { flex: 1; height: 5px; overflow: hidden; background: #f2e9ec; border-radius: 99px; }
+    .progress-fill { width: 0; height: 100%; background: var(--rose); border-radius: inherit; transition: width .25s ease; }
+    .question { min-height: 47px; margin: 0 0 14px; font-size: 15px; font-weight: 600; line-height: 1.65; }
+    .answer-list { display: grid; gap: 8px; }
+    .answer-button { padding: 11px 13px; color: #544a52; background: white; border: 1px solid #eee2e6; border-radius: 10px; text-align: left; font-size: 12px; line-height: 1.55; transition: .18s ease; }
+    .answer-button:hover, .answer-button:focus-visible { color: var(--rose-dark); background: #fff9fa; border-color: #dfaaba; outline: none; }
+    .quiz-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 14px; }
+    .quiz-actions button, .result-actions button { min-height: 35px; padding: 0 13px; color: #7a5364; background: white; border: 1px solid #e6c6d0; border-radius: 99px; font-size: 11px; }
+    .quiz-actions button:disabled { opacity: .4; cursor: not-allowed; }
+    .result-panel { margin-top: 15px; padding: 17px; background: white; border: 1px solid #f0dce3; border-radius: 13px; }
+    .result-panel[hidden] { display: none; }
+    .result-type { color: var(--rose-dark); font-family: Georgia, serif; font-size: 29px; font-weight: 700; letter-spacing: .06em; }
+    .result-summary { margin: 6px 0 12px; color: #716772; font-size: 12px; line-height: 1.7; }
+    .recommend-title { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
+    .recommendations { display: grid; gap: 7px; }
+    .recommend-card { padding: 10px 11px; background: #fff8fa; border: 1px solid #f5e6eb; border-radius: 10px; }
+    .recommend-card strong { display: block; color: #5b3e4c; font-size: 12px; }
+    .recommend-card span { display: block; margin-top: 4px; color: #8a7c84; font-size: 10px; line-height: 1.55; }
+    .result-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+    .course-section { margin: 0 0 60px; scroll-margin-top: 22px; }
+    .filters { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(190px, 290px); gap: 10px; margin: 20px 0 13px; }
+    .filter-input, .filter-select { width: 100%; min-height: 43px; padding: 0 13px; color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 10px; outline: none; font-size: 12px; }
+    .filter-input:focus, .filter-select:focus { border-color: #d58ba3; box-shadow: 0 0 0 3px rgba(214,126,157,.12); }
+    .category-tabs { display: flex; gap: 7px; overflow-x: auto; padding: 2px 0 12px; scrollbar-width: thin; }
+    .category-tab { flex: 0 0 auto; padding: 7px 11px; color: #756d75; background: white; border: 1px solid var(--line); border-radius: 99px; font-size: 10px; }
+    .category-tab.active { color: white; background: var(--rose-dark); border-color: var(--rose-dark); }
+    .results-line { display: flex; justify-content: space-between; gap: 12px; margin: 4px 0 12px; color: var(--muted); font-size: 11px; }
+    .course-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+    .course-card { min-width: 0; padding: 16px; background: white; border: 1px solid var(--line); border-radius: 13px; transition: transform .18s ease, box-shadow .18s ease; }
+    .course-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .course-head { display: flex; align-items: flex-start; gap: 11px; }
+    .course-number { flex: 0 0 42px; padding: 5px 3px; color: var(--rose-dark); background: var(--rose-pale); border-radius: 8px; font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-align: center; }
+    .course-title-wrap { min-width: 0; flex: 1; }
+    .course-title { margin: 1px 0 4px; font-size: 15px; line-height: 1.5; }
+    .course-source-category { color: #8b8189; font-size: 10px; line-height: 1.5; }
+    .course-facts { display: flex; flex-wrap: wrap; gap: 6px 13px; margin: 12px 0 0; color: #766e76; font-size: 10px; }
+    .course-facts span::before { content: "·"; margin-right: 5px; color: var(--rose); font-weight: 700; }
+    .match-tag { padding: 3px 7px; color: #92506a; background: #fff0f4; border-radius: 99px; font-size: 9px; }
+    .course-details { margin-top: 11px; padding-top: 9px; border-top: 1px solid #f4ecef; }
+    .course-details summary { color: var(--rose-dark); cursor: pointer; font-size: 10px; font-weight: 600; }
+    .course-details p { margin: 8px 0 0; color: #716a72; font-size: 11px; line-height: 1.75; }
+    .empty { grid-column: 1 / -1; padding: 44px 20px; color: var(--muted); background: white; border: 1px dashed #e6ccd5; border-radius: 13px; text-align: center; font-size: 12px; line-height: 1.8; }
+    .footer { margin: 0 0 30px; padding: 19px 0; color: #8e858c; border-top: 1px solid var(--line); font-size: 10px; line-height: 1.8; text-align: center; }
+    .footer a { color: var(--rose-dark); }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr .9fr; padding: 36px; }
+      .sakura-scene { height: 280px; }
+      .mbti-layout { grid-template-columns: 1fr; gap: 18px; }
+      .course-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .page { width: min(100% - 30px, 500px); }
+      .topbar { height: 62px; }
+      .brand { font-size: 12px; }
+      .brand-mark { width: 31px; height: 31px; }
+      .nav { gap: 11px; font-size: 10px; }
+      .nav a:not(.nav-cta) { display: none; }
+      .nav .nav-cta { padding: 8px 11px; }
+      .hero { display: flex; flex-direction: column; align-items: stretch; margin: 16px 0 34px; padding: 28px 22px 18px; }
+      .hero-copy { padding: 0; }
+      h1 { font-size: 39px; }
+      .hero-copy > p:last-of-type { margin-top: 12px; font-size: 12px; }
+      .hero-buttons { margin-top: 16px; }
+      .sakura-scene { align-self: center; width: min(100%, 370px); height: 240px; margin-top: 8px; }
+      .tree-caption { bottom: 0; font-size: 11px; }
+      .blossom { width: 34px; height: 34px; font-size: 9px; }
+      .intro-row { align-items: flex-start; flex-direction: column; gap: 10px; }
+      h2 { font-size: 24px; }
+      .mbti-section { margin: 38px 0 46px; padding: 22px 16px; border-radius: 17px; }
+      .quiz { padding: 15px; }
+      .filters { grid-template-columns: 1fr; }
+      .course-card { padding: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#tree">樱花课程树</a>
+        <a href="#mbti">MBTI 助手</a>
+        <a href="#courses">通识课程</a>
+        <a class="nav-cta" href="#mbti">开始兴趣测试</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="tree" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">WUHAN UNIVERSITY · SAKURA SELECTION</p>
+          <h1 id="heroTitle">樱花树下<br>遇见你的下一门课</h1>
+          <p>把武汉大学通识课程挂上樱花枝头。先做一个轻量兴趣小测，再沿着课程树找到值得探索的方向。</p>
+          <div class="hero-buttons">
+            <a class="primary-button" href="#mbti">测测我的课程人格　↓</a>
+            <a class="secondary-button" href="#courses">浏览全部课程</a>
+          </div>
+        </div>
+        <div class="sakura-scene" role="img" aria-label="以武汉大学樱花为灵感绘制的课程树，花瓣代表课程类别">
+          <svg class="tree-svg" viewBox="0 0 440 330" aria-hidden="true">
+            <ellipse cx="227" cy="298" rx="157" ry="15" fill="#eadbd1" opacity=".58"/>
+            <path d="M216 296 C219 259 197 232 203 201 C208 171 237 153 229 125 C224 106 207 92 197 75" fill="none" stroke="#745c49" stroke-width="16" stroke-linecap="round"/>
+            <path d="M214 225 C186 204 164 190 139 185 C118 181 102 168 91 149 M210 204 C237 183 255 168 276 160 C303 150 318 131 326 108 M220 176 C194 153 183 134 172 111 C163 91 145 77 126 71 M228 149 C250 129 267 113 279 91 C287 74 301 62 319 54 M207 234 C183 231 164 237 148 250 M235 194 C257 200 275 214 293 232" fill="none" stroke="#80654e" stroke-width="9" stroke-linecap="round"/>
+            <path d="M207 293 Q218 277 231 293 M201 298 Q217 284 239 298" fill="none" stroke="#9e795c" stroke-width="4" stroke-linecap="round"/>
+            <g fill="#88a67c">
+              <ellipse cx="105" cy="143" rx="12" ry="6" transform="rotate(32 105 143)"/><ellipse cx="145" cy="176" rx="12" ry="6" transform="rotate(28 145 176)"/>
+              <ellipse cx="303" cy="129" rx="12" ry="6" transform="rotate(-32 303 129)"/><ellipse cx="263" cy="168" rx="12" ry="6" transform="rotate(-22 263 168)"/>
+              <ellipse cx="154" cy="94" rx="11" ry="5" transform="rotate(48 154 94)"/><ellipse cx="290" cy="78" rx="12" ry="6" transform="rotate(-42 290 78)"/>
+              <ellipse cx="272" cy="220" rx="12" ry="6" transform="rotate(35 272 220)"/><ellipse cx="165" cy="239" rx="12" ry="6" transform="rotate(-25 165 239)"/>
+              <ellipse cx="190" cy="119" rx="10" ry="5" transform="rotate(-38 190 119)"/><ellipse cx="244" cy="131" rx="10" ry="5" transform="rotate(35 244 131)"/>
+            </g>
+            <g fill="#f3b4c6" opacity=".88">
+              <circle cx="92" cy="119" r="13"/><circle cx="130" cy="104" r="14"/><circle cx="171" cy="83" r="14"/><circle cx="201" cy="57" r="14"/>
+              <circle cx="239" cy="81" r="14"/><circle cx="278" cy="65" r="15"/><circle cx="322" cy="87" r="14"/><circle cx="350" cy="119" r="13"/>
+              <circle cx="118" cy="164" r="12"/><circle cx="154" cy="147" r="14"/><circle cx="184" cy="151" r="13"/><circle cx="256" cy="145" r="14"/>
+              <circle cx="296" cy="151" r="13"/><circle cx="330" cy="176" r="12"/><circle cx="144" cy="211" r="12"/><circle cx="292" cy="202" r="12"/>
+            </g>
+            <g fill="#ffe5eb" opacity=".95">
+              <circle cx="92" cy="115" r="5"/><circle cx="130" cy="100" r="5"/><circle cx="171" cy="79" r="5"/><circle cx="201" cy="53" r="5"/>
+              <circle cx="239" cy="77" r="5"/><circle cx="278" cy="61" r="5"/><circle cx="322" cy="83" r="5"/><circle cx="350" cy="115" r="5"/>
+              <circle cx="118" cy="160" r="4"/><circle cx="154" cy="143" r="5"/><circle cx="184" cy="147" r="4"/><circle cx="256" cy="141" r="5"/>
+              <circle cx="296" cy="147" r="4"/><circle cx="330" cy="172" r="4"/>
+            </g>
+          </svg>
+          <button class="blossom" style="left:19%;top:24%" data-category="中华文化与世界文明（核心通识课）" aria-label="查看中华文化与世界文明核心通识课程">文史</button>
+          <button class="blossom" style="left:33%;top:13%" data-category="中华文化与世界文明（一般通识课）" aria-label="查看中华文化与世界文明一般通识课程">文明</button>
+          <button class="blossom" style="left:44%;top:3%" data-category="科学精神与生命关怀（核心通识课）" aria-label="查看科学精神与生命关怀核心通识课程">科学</button>
+          <button class="blossom" style="left:56%;top:12%" data-category="科学精神与生命关怀（一般通识课）" aria-label="查看科学精神与生命关怀一般通识课程">生命</button>
+          <button class="blossom" style="left:68%;top:7%" data-category="社会科学与现代社会（核心通识课）" aria-label="查看社会科学与现代社会核心通识课程">社会</button>
+          <button class="blossom" style="left:79%;top:18%" data-category="社会科学与现代社会（一般通识课）" aria-label="查看社会科学与现代社会一般通识课程">思辨</button>
+          <button class="blossom" style="left:26%;top:38%" data-category="艺术体验与审美鉴赏（核心通识课）" aria-label="查看艺术体验与审美鉴赏核心通识课程">艺术</button>
+          <button class="blossom" style="left:42%;top:40%" data-category="艺术体验与审美鉴赏（一般通识课）" aria-label="查看艺术体验与审美鉴赏一般通识课程">审美</button>
+          <div class="tree-caption">每一朵花，都是一段<span>新的探索</span></div>
+        </div>
+      </section>
+
+      <section class="mbti-section" id="mbti" aria-labelledby="mbtiTitle">
+        <div class="mbti-layout">
+          <div class="mbti-intro">
+            <p class="section-kicker">A LITTLE GUIDE FOR YOU</p>
+            <h2 id="mbtiTitle">MBTI 通识选课助手</h2>
+            <p>回答 8 个关于学习偏好的小问题，看看你更喜欢怎样探索世界。助手会结合你的选择，从课程简介中挑出一些可能合你兴趣的武大通识课。</p>
+            <p class="notice">这是兴趣探索，不是正式心理测评；MBTI 也不能决定你适合或不适合某门课。推荐结果仅供灵感参考。</p>
+          </div>
+          <div class="quiz" id="quiz">
+            <div class="quiz-progress"><span id="questionCounter">第 1 / 8 题</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span></div>
+            <p class="question" id="questionText"></p>
+            <div class="answer-list" id="answerList"></div>
+            <div class="quiz-actions">
+              <button id="prevQuestion" type="button" disabled>← 上一题</button>
+              <button id="resetQuiz" type="button">重新开始</button>
+            </div>
+            <section class="result-panel" id="resultPanel" aria-live="polite" hidden>
+              <div class="result-type" id="resultType"></div>
+              <p class="result-summary" id="resultSummary"></p>
+              <p class="recommend-title">为你挑选的通识课</p>
+              <div class="recommendations" id="recommendations"></div>
+              <div class="result-actions">
+                <button id="showRecommendations" type="button">在樱花树上标记推荐</button>
+                <button id="clearRecommendations" type="button">清除结果</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="course-section" id="courses" aria-labelledby="coursesTitle">
+        <div class="intro-row">
+          <div>
+            <p class="section-kicker">WHU GENERAL EDUCATION</p>
+            <h2 id="coursesTitle">在课程树下逛一逛</h2>
+            <p class="section-subtitle">点选上方花瓣可按类别浏览。也可以搜索课程名、授课教师、开课单位或课程简介。</p>
+          </div>
+          <span class="dataset-badge" id="datasetBadge">正在载入课程资料…</span>
+        </div>
+        <div class="filters">
+          <input class="filter-input" id="searchInput" type="search" placeholder="搜索课程、教师、学院或关键词…" aria-label="搜索通识课程">
+          <select class="filter-select" id="categorySelect" aria-label="选择课程类别">
+            <option value="">全部课程类别</option>
+          </select>
+        </div>
+        <div class="category-tabs" id="categoryTabs" aria-label="课程类别快捷筛选"></div>
+        <div class="results-line"><span id="resultCount" aria-live="polite">正在载入课程…</span><span id="activeFilter"></span></div>
+        <div class="course-list" id="courseList"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      本页面课程信息依据武汉大学通识教育中心公开资料《“武大通识3.0”课程简介》整理（资料日期：2021-09-02）。<br>
+      课程介绍汇总不等同于当学期实际开课名单；学分、学时及开课安排请以学校教务系统和当期通知为准。
+      <a href="http://gec.whu.edu.cn/info/1027/2412.htm" target="_blank" rel="noreferrer">查看官方资料来源</a>。
+    </footer>
+  </div>
+
+  <script src="课程数据.js"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const courses = window.WHU_COURSES;
+      const categoryLabels = [
+        "中华文化与世界文明（核心通识课）",
+        "中华文化与世界文明（一般通识课）",
+        "科学精神与生命关怀（核心通识课）",
+        "科学精神与生命关怀（一般通识课）",
+        "社会科学与现代社会（核心通识课）",
+        "社会科学与现代社会（一般通识课）",
+        "艺术体验与审美鉴赏（核心通识课）",
+        "艺术体验与审美鉴赏（一般通识课）"
+      ];
+      const axes = ["EI", "SN", "TF", "JP"];
+      const questions = [
+        { axis: "EI", options: ["和同学交流想法、讨论中获得灵感（E）", "独自阅读和整理思路后形成观点（I）"] },
+        { axis: "SN", options: ["从具体案例、史料和真实经验开始（S）", "先了解概念、理论和整体图景（N）"] },
+        { axis: "TF", options: ["关注论证是否严谨、结论是否合理（T）", "关注议题对人的影响与情感共鸣（F）"] },
+        { axis: "JP", options: ["喜欢目标清晰、结构明确的课程（J）", "喜欢开放探索、允许临场发现的课程（P）"] },
+        { axis: "EI", options: ["课堂讨论、展示和协作会让我更投入（E）", "留有安静思考和个人阅读的时间更适合我（I）"] },
+        { axis: "SN", options: ["更想学可观察、可验证的现象与方法（S）", "更想追问新可能、抽象联系与未来问题（N）"] },
+        { axis: "TF", options: ["我会被逻辑、系统和问题解决吸引（T）", "我会被文化、价值和人的故事吸引（F）"] },
+        { axis: "JP", options: ["我喜欢循序推进、阶段安排明确（J）", "我喜欢自由联想、跨领域连接（P）"] }
+      ];
+      const dimensions = {
+        EI: ["更倾向在交流与协作中获得能量，也愿意分享和讨论。", "更倾向通过独立观察与思考形成自己的理解。"],
+        SN: ["更容易被具体经验、可见细节和现实案例吸引。", "更容易被概念、想象力和抽象关联吸引。"],
+        TF: ["更看重逻辑分析、证据与清晰的推理过程。", "更看重人的体验、价值关怀与情感共鸣。"],
+        JP: ["偏好有结构、方向明确、便于规划的学习路径。", "偏好开放探索、灵活联想和多种可能性。"]
+      };
+
+      const questionsAnswered = Array(questions.length).fill(null);
+      let questionIndex = 0;
+      let activeCategory = "";
+      let recommendedCourses = [];
+      const categorySelect = document.getElementById("categorySelect");
+      const categoryTabs = document.getElementById("categoryTabs");
+      const searchInput = document.getElementById("searchInput");
+      const courseList = document.getElementById("courseList");
+      const resultCount = document.getElementById("resultCount");
+      const resultPanel = document.getElementById("resultPanel");
+
+      function escapeHtml(value) {
+        return String(value || "").replace(/[&<>"']/g, character => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[character]);
+      }
+
+      function renderCategories() {
+        categorySelect.innerHTML = '<option value="">全部课程类别</option>' +
+          categoryLabels.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("");
+        categoryTabs.innerHTML = [
+          `<button class="category-tab${activeCategory ? "" : " active"}" type="button" data-category="">全部类别</button>`,
+          ...categoryLabels.map(category => `<button class="category-tab${activeCategory === category ? " active" : ""}" type="button" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>`)
+        ].join("");
+      }
+
+      function renderCourses() {
+        const keyword = searchInput.value.trim().toLocaleLowerCase();
+        const visible = courses.filter(course => {
+          const matchesCategory = !activeCategory || course.category === activeCategory;
+          const searchable = `${course.id} ${course.title} ${course.category} ${course.teacher} ${course.department} ${course.intro}`.toLocaleLowerCase();
+          return matchesCategory && (!keyword || searchable.includes(keyword));
+        });
+
+        resultCount.textContent = `显示 ${visible.length} / ${courses.length} 门课程`;
+        document.getElementById("activeFilter").textContent = activeCategory ? `当前类别：${activeCategory}` : "";
+        if (!visible.length) {
+          courseList.innerHTML = '<div class="empty">没有找到符合条件的课程。<br>试试更换分类或搜索关键词。</div>';
+          return;
+        }
+
+        courseList.innerHTML = visible.map(course => {
+          const recommendation = recommendedCourses.some(item => item.id === course.id);
+          const teacherDepartment = [course.teacher, course.department].filter(Boolean).join(" · ") || "课程资料未注明";
+          return `<article class="course-card">
+            <div class="course-head">
+              <span class="course-number">${escapeHtml(course.id)}</span>
+              <div class="course-title-wrap">
+                <h3 class="course-title">${escapeHtml(course.title)}</h3>
+                <div class="course-source-category">${escapeHtml(course.category)}</div>
+                <div class="course-source-category">${escapeHtml(teacherDepartment)}</div>
+              </div>
+              ${recommendation ? '<span class="match-tag">兴趣推荐</span>' : ""}
+            </div>
+            <div class="course-facts">
+              <span>学分：${escapeHtml(course.credits || "原文未标注")}</span>
+              <span>学时：${escapeHtml(course.hours || "原文未标注")}</span>
+              ${course.sourcePage ? `<span>资料第 ${escapeHtml(course.sourcePage)} 页</span>` : ""}
+            </div>
+            <details class="course-details">
+              <summary>查看课程简介${course.assessment ? "与考核信息" : ""}</summary>
+              <p>${escapeHtml(course.intro || "原资料未提供课程简介。")}</p>
+              ${course.assessment ? `<p><strong>考核方式：</strong>${escapeHtml(course.assessment)}</p>` : ""}
+            </details>
+          </article>`;
+        }).join("");
+      }
+
+      function renderQuestion() {
+        const question = questions[questionIndex];
+        document.getElementById("questionCounter").textContent = `第 ${questionIndex + 1} / ${questions.length} 题`;
+        document.getElementById("progressFill").style.width = `${(questionIndex / questions.length) * 100}%`;
+        document.getElementById("questionText").textContent = question.text || ({
+          EI: "哪种学习场景更容易让你进入状态？",
+          SN: "什么样的课程内容更容易吸引你？",
+          TF: "遇到一个有争议的问题，你通常先关注什么？",
+          JP: "你更喜欢怎样的课程节奏？"
+        })[question.axis];
+        const answers = question.options.map((label, optionIndex) => `
+          <button class="answer-button" type="button" data-answer="${optionIndex}">
+            ${escapeHtml(label.replace(/（[EI]）$/, ""))}
+          </button>
+        `).join("");
+        document.getElementById("answerList").innerHTML = answers;
+        document.getElementById("prevQuestion").disabled = questionIndex === 0;
+        resultPanel.hidden = true;
+      }
+
+      function calculateType() {
+        const scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+        questions.forEach((question, index) => {
+          if (questionsAnswered[index] !== null) scores[question.axis] += questionsAnswered[index] === 0 ? 1 : -1;
+        });
+        return axes.map(axis => scores[axis] >= 0 ? axis[0] : axis[1]).join("");
+      }
+
+      function getCourseThemes(course) {
+        const text = `${course.title} ${course.intro}`.toLowerCase();
+        const themes = new Set();
+        const add = (theme, terms) => { if (terms.some(term => text.includes(term.toLowerCase()))) themes.add(theme); };
+        add("历史与文明", ["历史", "文明", "考古", "文献", "文化", "中外关系", "文学"]);
+        add("科学探索", ["科学", "科研", "地球", "物理", "生命", "病毒", "数学", "技术", "环境", "宇宙"]);
+        add("社会与经济", ["社会", "经济", "法律", "政治", "创业", "管理", "金融", "城市", "教育"]);
+        add("艺术与审美", ["艺术", "审美", "电影", "音乐", "绘画", "戏剧", "设计", "舞台"]);
+        add("思辨与逻辑", ["逻辑", "批判", "哲学", "思维", "辩论", "思想"]);
+        add("心理与生命关怀", ["心理", "健康", "生命", "关怀", "情感", "成长"]);
+        return themes;
+      }
+
+      function scoreCourse(course, type) {
+        const themes = getCourseThemes(course);
+        const profile = new Set();
+        const [energy, style, decision, pace] = type.split("");
+
+        if (style === "N") ["历史与文明", "思辨与逻辑", "科学探索"].forEach(theme => profile.add(theme));
+        else ["科学探索", "社会与经济", "历史与文明"].forEach(theme => profile.add(theme));
+        if (decision === "F") ["艺术与审美", "心理与生命关怀", "历史与文明"].forEach(theme => profile.add(theme));
+        else ["思辨与逻辑", "科学探索", "社会与经济"].forEach(theme => profile.add(theme));
+        if (energy === "E") ["社会与经济", "艺术与审美"].forEach(theme => profile.add(theme));
+        if (pace === "P") ["艺术与审美", "思辨与逻辑"].forEach(theme => profile.add(theme));
+
+        let score = [...themes].filter(theme => profile.has(theme)).length * 3;
+        const category = course.category || "";
+        if (style === "N" && category.includes("中华文化")) score += 1;
+        if (style === "S" && category.includes("科学精神")) score += 1;
+        if (decision === "F" && (category.includes("艺术体验") || category.includes("中华文化"))) score += 2;
+        if (decision === "T" && (category.includes("科学精神") || category.includes("社会科学"))) score += 2;
+        if (pace === "P" && category.includes("艺术体验")) score += 1;
+        return score;
+      }
+
+      function finishQuiz() {
+        const type = calculateType();
+        const typeDescription = axes.map(axis => {
+          const optionIndex = type.includes(axis[0]) ? 0 : 1;
+          return dimensions[axis][optionIndex];
+        }).join("");
+        recommendedCourses = courses
+          .map(course => ({ course, score: scoreCourse(course, type) }))
+          .filter(item => item.score > 0)
+          .sort((a, b) => b.score - a.score || a.course.id.localeCompare(b.course.id))
+          .slice(0, 3)
+          .map(item => item.course);
+
+        document.getElementById("questionCounter").textContent = "兴趣探索完成";
+        document.getElementById("progressFill").style.width = "100%";
+        document.getElementById("questionText").textContent = "你的课程探索偏好";
+        document.getElementById("answerList").innerHTML = "";
+        document.getElementById("prevQuestion").disabled = true;
+        document.getElementById("resultType").textContent = type;
+        document.getElementById("resultSummary").textContent = typeDescription;
+        document.getElementById("recommendations").innerHTML = recommendedCourses.map(course =>
+          `<div class="recommend-card"><strong>${escapeHtml(course.title)}</strong><span>${escapeHtml(course.category)} · ${escapeHtml(course.intro.slice(0, 95))}${course.intro.length > 95 ? "…" : ""}</span></div>`
+        ).join("");
+        resultPanel.hidden = false;
+      }
+
+      categorySelect.addEventListener("change", () => {
+        activeCategory = categorySelect.value;
+        renderCategories();
+        renderCourses();
+      });
+
+      categoryTabs.addEventListener("click", event => {
+        const button = event.target.closest("[data-category]");
+        if (!button) return;
+        activeCategory = button.dataset.category;
+        categorySelect.value = activeCategory;
+        renderCategories();
+        renderCourses();
+      });
+
+      document.querySelector(".sakura-scene").addEventListener("click", event => {
+        const blossom = event.target.closest("[data-category]");
+        if (!blossom) return;
+        activeCategory = blossom.dataset.category;
+        categorySelect.value = activeCategory;
+        renderCategories();
+        renderCourses();
+        document.getElementById("courses").scrollIntoView({ behavior: "smooth" });
+      });
+
+      searchInput.addEventListener("input", renderCourses);
+
+      document.getElementById("answerList").addEventListener("click", event => {
+        const button = event.target.closest("[data-answer]");
+        if (!button) return;
+        questionsAnswered[questionIndex] = Number(button.dataset.answer);
+        if (questionIndex < questions.length - 1) {
+          questionIndex += 1;
+          renderQuestion();
+        } else {
+          finishQuiz();
+        }
+      });
+
+      document.getElementById("prevQuestion").addEventListener("click", () => {
+        if (questionIndex === 0) return;
+        questionIndex -= 1;
+        renderQuestion();
+      });
+
+      document.getElementById("resetQuiz").addEventListener("click", () => {
+        questionsAnswered.fill(null);
+        questionIndex = 0;
+        recommendedCourses = [];
+        document.querySelectorAll(".blossom").forEach(blossom => blossom.classList.remove("recommended"));
+        renderQuestion();
+        renderCourses();
+      });
+
+      document.getElementById("clearRecommendations").addEventListener("click", () => {
+        recommendedCourses = [];
+        questionsAnswered.fill(null);
+        questionIndex = 0;
+        document.querySelectorAll(".blossom").forEach(blossom => blossom.classList.remove("recommended"));
+        renderQuestion();
+        renderCourses();
+      });
+
+      document.getElementById("showRecommendations").addEventListener("click", () => {
+        document.querySelectorAll(".blossom").forEach(blossom => {
+          const category = blossom.dataset.category;
+          const recommended = recommendedCourses.some(course => course.category === category);
+          blossom.classList.toggle("recommended", recommended);
+        });
+        document.getElementById("tree").scrollIntoView({ behavior: "smooth" });
+      });
+
+      if (!Array.isArray(courses) || courses.length === 0) {
+        document.getElementById("datasetBadge").textContent = "课程资料未能载入";
+        resultCount.textContent = "课程数据文件缺失或为空，请确认课程数据.js 与本页面位于同一文件夹。";
+        courseList.innerHTML = '<div class="empty">暂时无法载入课程资料。请确认课程数据.js 与课程信息.html 位于同一文件夹后重新打开页面。</div>';
+        renderQuestion();
+        return;
+      }
+
+      document.getElementById("datasetBadge").textContent = `${courses.length} 门课程 · 8 个类别`;
+      renderCategories();
+      renderCourses();
+      renderQuestion();
+    })();
+  </script>
+</body>
+</html>
