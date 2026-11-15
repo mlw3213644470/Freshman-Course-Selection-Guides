@@ -5,7 +5,6 @@ const NAV = [
   { page: 'schedule', href: 'schedule.html', label: '课表安排' },
   { page: 'after', href: 'after.html', label: '选后调整' },
   { page: 'faq', href: 'faq.html', label: '常见问题' },
-  { page: 'sources', href: 'sources.html', label: '经验来源' },
 ];
 
 function buildNav(current) {
@@ -18,13 +17,22 @@ function buildNav(current) {
 function renderHeader(current) {
   const host = document.querySelector('[data-site-header]');
   if (!host) return;
+  const backLink = {
+    index: '<a class="site-header__back" href="首页.html">← 返回封面</a>',
+    'senior-tips': '<a class="site-header__back" href="index.html">← 返回指南</a>',
+  }[current] || '';
   host.innerHTML = `
     <div class="site-header__inner">
+      ${backLink}
       <a class="brand" href="index.html">
         <span class="brand__mark" aria-hidden="true">珞</span>
         <span class="brand__text">选课经验<small>武汉大学</small></span>
       </a>
       <nav class="site-nav" aria-label="板块导航">${buildNav(current)}</nav>
+      <div class="site-header__features">
+        <a class="site-header__feature site-header__feature--sakura" href="课程信息.html">樱下选课</a>
+        <a class="site-header__feature site-header__feature--senior" href="学长抢课秘籍.html">学长抢课秘籍</a>
+      </div>
     </div>`;
 }
 
@@ -35,7 +43,7 @@ function renderFooter() {
     <div class="site-footer__inner">
       <p class="site-footer__note">本站只整理选课方法与判断标准：不提供具体课程数据、评分或外部链接。选课时间、名额与办理规则，一律以当期官方通知为准。</p>
       <nav class="site-footer__nav" aria-label="页脚导航">${buildNav('')}</nav>
-      <p class="site-footer__meta">内容会随新学年核实后更新，修改记录见「经验来源与贡献」。</p>
+      <p class="site-footer__meta">内容会随新学年核实后更新，选课规则以当期官方通知为准。</p>
     </div>`;
 }
 

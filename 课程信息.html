@@ -33,6 +33,9 @@
     .page { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
 
     .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .topbar-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .back-link { display: inline-flex; align-items: center; flex: 0 0 auto; padding: 8px 14px; border: 1px solid var(--rose); border-radius: 99px; color: var(--rose-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background .16s ease, border-color .16s ease, color .16s ease; }
+    .back-link:hover { background: var(--rose); border-color: var(--rose); color: #fff; }
     .brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 700; letter-spacing: .04em; }
     .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; color: white; background: var(--rose); border-radius: 50% 50% 47% 53%; font-size: 18px; }
     .nav { display: flex; align-items: center; gap: 25px; color: #766b74; font-size: 13px; }
@@ -136,6 +139,8 @@
     @media (max-width: 600px) {
       .page { width: min(100% - 30px, 500px); }
       .topbar { height: 62px; }
+      .topbar-left { gap: 10px; }
+      .back-link { padding: 6px 10px; font-size: 11px; }
       .brand { font-size: 12px; }
       .brand-mark { width: 31px; height: 31px; }
       .nav { gap: 11px; font-size: 10px; }
@@ -164,7 +169,10 @@
 <body>
   <div class="page">
     <header class="topbar">
-      <a class="brand" href="#" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+      <div class="topbar-left">
+        <a class="back-link" href="index.html">← 返回指南</a>
+        <a class="brand" href="#" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+      </div>
       <nav class="nav" aria-label="页面导航">
         <a href="#tree">樱花课程树</a>
         <a href="#mbti">MBTI 助手</a>
