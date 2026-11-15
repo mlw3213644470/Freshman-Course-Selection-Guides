@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, redirect, request, send_from_directory
 from pypdf import PdfReader
 from werkzeug.exceptions import HTTPException, RequestEntityTooLarge
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 ROOT = Path(__file__).resolve().parent
 logger = logging.getLogger(__name__)
@@ -357,6 +358,8 @@ def analyze_document(data, api_key, filename, mime_type, transport=None):
 
 def create_app(test_config=None):
     app = Flask(__name__, static_folder=None)
+    if os.getenv("RENDER") == "true":
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1)
     app.config.update(
         MAX_CONTENT_LENGTH=MAX_PDF_BYTES + 1024 * 1024,
         DEEPSEEK_API_KEY=os.getenv("DEEPSEEK_API_KEY", "").strip(),
@@ -438,4 +441,4 @@ def create_app(test_config=None):
 
 
 if __name__ == "__main__":
-    create_app().run(host="127.0.0.1", port=8002, debug=False)
+    create_app().run(host="0.0.0.0", port=int(os.getenv("PORT", "8002")), debug=False)
