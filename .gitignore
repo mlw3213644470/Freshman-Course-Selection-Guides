@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node / Vite
+node_modules/
+.vite/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
