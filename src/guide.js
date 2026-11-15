@@ -6,6 +6,7 @@ const NAV = [
   { page: 'after', href: 'after.html', label: '选后调整' },
   { page: 'faq', href: 'faq.html', label: '常见问题' },
   { page: 'sources', href: 'sources.html', label: '经验来源' },
+  { page: 'training-plan', href: '/pages/training-plan.html', label: '培养方案' },
 ];
 
 function buildNav(current) {
