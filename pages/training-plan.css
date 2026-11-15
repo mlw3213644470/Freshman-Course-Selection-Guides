@@ -82,6 +82,14 @@
 .plan-page .plan-filename { flex: 1 1 12rem; min-width: 0; margin: 0; }
 .plan-page .plan-actions { margin-top: var(--space-6); }
 .plan-page .plan-results-content { min-height: 10rem; }
+.plan-page .plan-status[data-state="error"] { border-left: 3px solid currentColor; padding-left: var(--space-3); font-weight: var(--weight-bold); }
+.plan-page .plan-status[data-state="loading"],
+.plan-page .plan-status[data-state="success"] { color: var(--color-primary); }
+.plan-page .plan-dropzone.is-busy { opacity: 0.6; }
+.plan-page .is-busy .plan-picker { cursor: wait; }
+.plan-page .plan-result-item + .plan-result-item { border-top: var(--border-default); padding-top: var(--space-6); }
+.plan-page .plan-result-item h3 { font-size: var(--font-lg); color: var(--color-primary); }
+.plan-page .plan-result-item p { white-space: pre-wrap; }
 
 @media (max-width: 48rem) {
   .plan-page .plan-layout { gap: var(--space-6); }

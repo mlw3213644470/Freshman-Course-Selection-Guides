@@ -6,20 +6,20 @@
   <title>培养方案 · 新生选课指南</title>
   <link rel="stylesheet" href="../global.css">
   <link rel="stylesheet" href="./training-plan.css">
-  <script src="./training-plan.js" defer></script>
+  <script src="./training-plan.js?v=deepseek-1" defer></script>
 </head>
 <body class="plan-page">
   <main class="container section plan-layout">
     <header class="plan-header">
       <a class="plan-back" href="../../网页.html">← 返回首页</a>
       <h1>培养方案</h1>
-      <p class="reading-width">选择一份 PDF 或 DOCX 培养方案文件，为后续查看与分析做准备。目前文件仅保留在当前浏览器页面中，不会上传或分析。</p>
+      <p class="reading-width">选择培养方案 PDF 或 DOCX，分析培养目标、毕业要求、课程分类、学分要求和注意事项。点击“开始分析”后，文件将经本项目后端发送至 DeepSeek 官方 API；未找到的信息标为“原文未说明”。</p>
       <!-- 后续可在此添加页面介绍、使用说明等内容。 -->
     </header>
 
     <section class="card plan-upload" aria-labelledby="upload-title">
       <h2 id="upload-title">选择培养方案文件</h2>
-      <p id="file-help">支持 PDF、DOCX，每次选择一个文件。</p>
+      <p id="file-help">每次选择一个 PDF 或 DOCX，最大 20 MiB；PDF 最多 200 页。不支持加密或损坏的文件。仅识别文字，不分析文档插图。</p>
       <div class="plan-dropzone" id="dropzone">
         <label class="plan-picker" for="plan-file">
           <span class="plan-picker-title">将文件拖到这里，或点击选择</span>
@@ -29,23 +29,35 @@
                  aria-describedby="file-help file-status">
         </label>
       </div>
-      <p class="plan-status" id="file-status" role="status" aria-live="polite" aria-atomic="true">尚未选择文件。</p>
+      <p class="plan-status" id="file-status" role="status" aria-live="polite" aria-atomic="true">正在加载文件选择功能；若此提示一直不变，请刷新页面并检查 JavaScript 是否已启用。</p>
       <div class="plan-selected" id="selected-file" hidden>
         <p class="plan-filename">已选文件：<span id="file-name"></span></p>
         <button class="button button--secondary" id="remove-file" type="button">移除文件</button>
       </div>
       <div class="plan-actions">
-        <!-- 后续接入分析接口时，再启用按钮并绑定提交事件。 -->
-        <button class="button" id="analyze-button" type="button" disabled>开始分析 · 即将开放</button>
+        <button class="button" id="analyze-button" type="button">开始分析</button>
       </div>
       <noscript><p>请启用 JavaScript，以显示所选文件名、移除文件和使用拖拽选择功能。</p></noscript>
     </section>
 
     <section class="card plan-results" aria-labelledby="results-title">
       <h2 id="results-title">分析结果</h2>
-      <!-- 后续在此渲染真实接口结果；当前不生成占位分析内容。 -->
-      <div class="plan-results-content" id="analysis-results"></div>
+      <p class="text-small">结果仅供对照原文，请核查具体课程与学分要求。</p>
+      <div class="plan-results-content" id="analysis-results" aria-busy="false"></div>
     </section>
   </main>
+  <!-- 独立于主脚本：脚本丢失、缓存或初始化失败时也必须显示错误。 -->
+  <script>
+    window.addEventListener("load", function () {
+      if (!window.trainingPlanReady) {
+        var status = document.getElementById("file-status");
+        status.textContent = "文件选择脚本加载或初始化失败，请按 Ctrl+F5 刷新，并通过 http://127.0.0.1:8000 打开页面。";
+        status.dataset.state = "error";
+        document.getElementById("analyze-button").addEventListener("click", function () {
+          status.textContent = "分析功能尚未初始化，请刷新页面或检查浏览器控制台中的脚本加载错误。";
+        });
+      }
+    });
+  </script>
 </body>
 </html>
