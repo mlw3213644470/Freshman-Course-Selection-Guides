@@ -430,7 +430,7 @@ def create_app(test_config=None):
     @app.get("/Freshman-Course-Selection-Guides/<path:filename>")
     def public_file(filename):
         allowed = {
-            "global.css", "theme-illustration.css", "illustration.js", "assets/campus-background.png",
+            "global.css", "assets/campus-background.png",
             "pages/training-plan.html", "pages/training-plan.css", "pages/training-plan.js",
         }
         if filename not in allowed:
