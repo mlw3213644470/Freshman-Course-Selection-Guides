@@ -304,6 +304,30 @@ a { color: var(--luojia); }
   color: var(--luojia-deep);
 }
 
+.button--plan {
+  min-height: 52px;
+  padding: 0 26px;
+  border-color: transparent;
+  background: linear-gradient(135deg, #eec372, #b57d24);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  box-shadow: 0 12px 26px rgb(181 125 36 / 32%);
+}
+
+.button--plan:hover {
+  background: linear-gradient(135deg, #f3cf85, #a06c1c);
+  color: #fff;
+  box-shadow: 0 16px 32px rgb(181 125 36 / 40%);
+}
+
+.button--plan svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+}
+
 /* ---------- winding road ---------- */
 
 .road-section { padding: 26px 24px 64px; }
