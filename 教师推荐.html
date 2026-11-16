@@ -109,8 +109,6 @@
         <a class="brand" href="./首页.html" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
       </div>
       <nav class="nav" aria-label="页面导航">
-        <a href="课程信息.html#tree">回到樱花树</a>
-        <a href="课程信息.html#mbti">MBTI 助手</a>
         <span class="nav-cta">教师推荐</span>
       </nav>
     </header>
@@ -119,7 +117,7 @@
       <section class="page-head" aria-labelledby="pageTitle">
         <p class="eyebrow">樱下选课 · STUDENT VOICE · TEACHER PICKS</p>
         <h1 id="pageTitle">教师推荐</h1>
-        <p class="lede">这里整理的是往届同学在课程评价里留下的教师口碑：看的是评价条数、成绩样本和具体说法，而不是一句话的「好」或「不好」。样本少的时候请谨慎参考，开课学期、考核方式和给分都可能变化，选课前仍要以当期教务信息为准。</p>
+        <p class="lede">这里整理的是往届同学在课程评价里留下的教师口碑：只保留教师成绩均分在 90 分以上的记录，看的是评价条数、成绩样本和具体说法，而不是一句话的「好」或「不好」。样本少的时候请谨慎参考，开课学期、考核方式和给分都可能变化，选课前仍要以当期教务信息为准。</p>
       </section>
 
       <section class="teacher-panel" aria-labelledby="teacherListTitle">
@@ -127,7 +125,7 @@
           <div>
             <p class="section-kicker">TEACHER PICKS</p>
             <h2 id="teacherListTitle">教师口碑推荐清单</h2>
-            <p class="teacher-panel-subtitle">可以按课程名、教师姓名搜索，也可以只看「优先推荐」的记录。</p>
+            <p class="teacher-panel-subtitle">只展示教师成绩均分 ≥ 90 的记录；可以按课程名、教师姓名搜索，也可以只看「优先推荐」。</p>
           </div>
         </div>
         <div class="filters">
@@ -155,7 +153,15 @@
   <script>
     const teacherData = window.WHU_TEACHER_RECOMMENDATIONS;
     const allRecords = teacherData && Array.isArray(teacherData.records) ? teacherData.records : [];
+    const MIN_TEACHER_AVERAGE = 90;
+
+    function teacherAverage(record) {
+      const values = (String(record.teacherAverages || "").match(/\d+(?:\.\d+)?/g) || []).map(Number);
+      return values.length ? Math.max(...values) : NaN;
+    }
+
     const records = allRecords
+      .filter(record => teacherAverage(record) >= MIN_TEACHER_AVERAGE)
       .map((record, index) => ({ record, order: index }))
       .sort((a, b) => Number(b.record.score) - Number(a.record.score) || a.order - b.order)
       .map(({ record }, index) => ({ ...record, rank: index + 1 }));
@@ -220,7 +226,7 @@
       });
 
       grid.innerHTML = matched.map(renderCard).join("");
-      countText.textContent = `共 ${records.length} 条记录，当前显示 ${matched.length} 条`;
+      countText.textContent = `教师成绩均分 ≥ ${MIN_TEACHER_AVERAGE} 的共 ${records.length} 条记录，当前显示 ${matched.length} 条`;
 
       if (matched.length === 0) {
         dataStatus.hidden = false;
@@ -237,7 +243,7 @@
       levelSelect.disabled = true;
       countText.textContent = "";
     } else {
-      dataNote.textContent = `数据源：${teacherData.source || "课程评价整理"}（截至 ${teacherData.updated || "日期未注明"}）。综合参考分只用于本页排序，不代表学校评价；评价条数少的老师请谨慎参考。`;
+      dataNote.textContent = `数据源：${teacherData.source || "课程评价整理"}（截至 ${teacherData.updated || "日期未注明"}）。已按教师成绩均分 ≥ ${MIN_TEACHER_AVERAGE} 过滤，成绩缺失或低于该分数的记录不列出；综合参考分只用于本页排序，不代表学校评价，评价条数少的老师请谨慎参考。`;
       searchInput.addEventListener("input", applyFilters);
       levelSelect.addEventListener("change", applyFilters);
       applyFilters();
