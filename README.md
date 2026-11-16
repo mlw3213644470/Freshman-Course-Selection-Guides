@@ -50,11 +50,14 @@ npm run preview # 预览构建结果
 
 ## 实现说明
 
-- `src/guide.css`：全站样式（珞珈绿 + 米白纸质），含首页路线与移动端时间轴布局。
+- `src/guide.css`：指南各页的基础样式与布局（首页路线、移动端时间轴）。
 - `src/guide.js`：注入页头页脚导航、标记当前板块、问答「全部展开／收起」、滚动渐显。
+- `theme-illustration.css`：全站外观主题（手绘绘本风）。放在各页原有样式之后加载，用设计令牌和组件覆盖实现奶油纸背景、水彩晕染、云／山／波浪过渡与涂鸦式 hover，不改动页面结构。
+- `illustration.js`：绘本主题的装饰与动效——给卡片注入手绘小插画、滚动淡入、Hero 插画视差；装饰全部可降级，脚本失败不影响阅读。
+- `assets/illustration/hero-scene.svg`：封面主插画（珞珈山、樱花树、牌坊与学生的 SVG 手绘场景）。
 - `vite.config.js`：多页构建入口（上面 10 个页面），以及本机培养方案页和 API 的开发代理（培养方案页由 Python 后端提供，不进构建）。
-- `assets/campus/`：各指南页与教师推荐页的武汉大学校园照片背景（每页一张，`body.has-campus-bg` + 米色叠层淡化）。
+- `assets/campus/`：各指南页与教师推荐页的武汉大学校园照片（当前绘本主题已用纸纹与水彩替代，照片保留未启用）。
 
 ## 旧版文件
 
-`课程信息.html`、`课程数据.js`、`教师推荐数据.js`、`global.css`、`style.css`、`pages/` 中除培养方案外的页面为早期实验内容，**不参与打包**；其中 `课程信息.html`、`课程数据.js` 与 `教师推荐数据.js` 由构建脚本原样复制到 `dist/`，供「樱下选课」与「教师推荐」入口使用。培养方案页使用 `global.css` 和 `assets/campus-background.png`，由 Vite 构建处理。
+`课程信息.html`、`课程数据.js`、`教师推荐数据.js`、`global.css`、`style.css`、`pages/` 中除培养方案外的页面为早期实验内容，**不参与打包**；其中 `课程信息.html`、`课程数据.js`、`教师推荐数据.js` 与 `theme-illustration.css`、`illustration.js` 由构建脚本原样复制到 `dist/`（樱下选课页不经过打包，需要同目录下这两份主题文件），供「樱下选课」与「教师推荐」入口使用。培养方案页使用 `global.css` 和 `assets/campus-background.png`，由 Vite 构建处理。

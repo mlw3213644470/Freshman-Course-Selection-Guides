@@ -8,6 +8,8 @@
   <title>新生选课指南 · 从珞珈山下出发</title>
   <link rel="stylesheet" href="./src/guide.css">
   <link rel="stylesheet" href="./src/home.css">
+  <link rel="stylesheet" href="./theme-illustration.css">
+  <script src="./illustration.js" defer></script>
 </head>
 <body class="guide-home">
   <a class="skip-link" href="#main">跳到正文</a>
@@ -22,6 +24,148 @@
   <main id="main">
     <section class="landing-hero" aria-labelledby="welcome-title">
       <div class="landing-hero__shade"></div>
+      <!-- Hero 插画：珞珈山下的学生（整幅 SVG 手绘场景） -->
+      <div class="hero-art" data-parallax="0.06">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="手绘插画：珞珈山下，一位背着书包的学生站在樱花树旁，远处是武汉大学牌坊">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf4e6"/>
+      <stop offset="0.55" stop-color="#fbe9e6"/>
+      <stop offset="1" stop-color="#f7e2e6"/>
+    </linearGradient>
+    <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe3da"/>
+      <stop offset="1" stop-color="#b3d3c7"/>
+    </linearGradient>
+    <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d8b9"/>
+      <stop offset="1" stop-color="#9cc49f"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7ecc9"/>
+      <stop offset="1" stop-color="#f0dfb4"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffe9ab" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ffe9ab" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 手绘抖动：轻微位移，让线条不那么"电脑" -->
+    <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- 纸张颗粒 -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.06"/></feComponentTransfer>
+    </filter>
+  </defs>
+
+  <!-- 天空 -->
+  <rect width="1200" height="560" fill="url(#sky)"/>
+
+  <g filter="url(#wobble)">
+    <!-- 太阳与光晕 -->
+    <circle cx="948" cy="118" r="150" fill="url(#sunGlow)"/>
+    <circle cx="948" cy="118" r="46" fill="#ffd98e" stroke="#f0bd66" stroke-width="3"/>
+
+    <!-- 云朵：三团，带呼吸漂浮动画 -->
+    <g class="illu-cloud illu-cloud--1" fill="#fffaf0" stroke="#efdcc6" stroke-width="2.5">
+      <path d="M180 108c-6-22 12-42 36-40 6-18 30-26 48-16 16-12 42-6 48 12 22-2 36 16 32 34-2 14-16 22-32 22H206c-16 0-24-6-26-12z"/>
+      <path d="M560 74c-5-18 10-34 30-32 5-15 25-21 40-13 13-10 35-5 40 10 18-2 30 13 27 28-2 12-13 18-27 18H582c-13 0-20-5-22-11z"/>
+      <path d="M860 232c-4-14 8-27 24-25 4-12 20-17 32-10 10-8 28-4 32 8 14-2 24 10 21 22-1 10-10 15-21 15H876c-10 0-15-4-16-10z"/>
+    </g>
+
+    <!-- 远山 -->
+    <path d="M-20 300c90-60 150-18 220-52 70-34 120-6 186-30 66-24 130-4 196 22 66 26 120-6 190 10 70 16 120 44 180 34 60-10 110-40 178-34v110H-20z" fill="url(#hillFar)"/>
+    <!-- 近山 -->
+    <path d="M-20 360c70-34 128-10 190-30 62-20 96-40 156-30 60 10 96 34 158 26 62-8 104-38 168-30 64 8 96 36 160 40 64 4 110-16 158-6v50H-20z" fill="url(#hillNear)"/>
+
+    <!-- 远处的武大牌坊剪影 -->
+    <g class="illu-gate" transform="translate(742 250) scale(0.62)" opacity="0.92">
+      <path d="M0 0h16v96H0zM116 0h16v96h-16zM54 0h16v96H54z" fill="#f3e4cf" stroke="#d9c3a6" stroke-width="2"/>
+      <path d="M-10-8h146l10 12H-20z" fill="#7fa79c" stroke="#5f8b80" stroke-width="2"/>
+      <path d="M-4 12h134v12H-4z" fill="#faf0dd" stroke="#d9c3a6" stroke-width="2"/>
+      <path d="M22 24h12v72H22zM92 24h12v72H92z" fill="#f3e4cf" stroke="#d9c3a6" stroke-width="2"/>
+      <path d="M-16 96h170v10H-16z" fill="#e6d3b6" stroke="#d0b995" stroke-width="2"/>
+    </g>
+
+    <!-- 樱花树 -->
+    <g class="illu-tree">
+      <path d="M214 392c8-58 6-96-6-140 22 6 34 26 38 54 6-30 18-52 40-66-4 34-8 60-6 90 10-22 24-38 44-46-10 30-16 56-16 86 0 12 2 22 6 30z" fill="#c39a76" stroke="#a97d59" stroke-width="3" stroke-linejoin="round"/>
+      <g fill="#f7c6d6">
+        <circle cx="196" cy="196" r="52"/>
+        <circle cx="268" cy="164" r="44"/>
+        <circle cx="330" cy="204" r="48"/>
+        <circle cx="252" cy="238" r="46"/>
+        <circle cx="146" cy="234" r="34"/>
+        <circle cx="322" cy="150" r="30"/>
+      </g>
+      <g fill="#fbdbe8" opacity="0.95">
+        <circle cx="222" cy="150" r="34"/>
+        <circle cx="300" cy="222" r="30"/>
+        <circle cx="176" cy="186" r="26"/>
+        <circle cx="352" cy="248" r="24"/>
+      </g>
+      <g fill="#ffeef4" opacity="0.9">
+        <circle cx="248" cy="196" r="18"/>
+        <circle cx="196" cy="252" r="14"/>
+        <circle cx="320" cy="188" r="14"/>
+      </g>
+    </g>
+
+    <!-- 地面 -->
+    <path d="M-20 430c120-26 210 6 320-14 110-20 190-30 300-12 110 18 200 34 320 12 60-11 120-20 200-6v150H-20z" fill="url(#ground)"/>
+    <path d="M-20 430c120-26 210 6 320-14 110-20 190-30 300-12 110 18 200 34 320 12 60-11 120-20 200-6" fill="none" stroke="#e0c894" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- 草丛笔触 -->
+    <g stroke="#a8c99c" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.9">
+      <path d="M80 486c4-12 10-18 16-22M96 488c2-14 6-22 14-28M112 486c0-12 4-20 10-26"/>
+      <path d="M980 470c4-12 10-18 16-22M996 472c2-14 6-22 14-28M1012 470c0-12 4-20 10-26"/>
+      <path d="M560 470c-4-12-10-18-16-22M544 472c-2-14-6-22-14-28"/>
+    </g>
+
+    <!-- 主角：背书包的学生 -->
+    <g class="illu-character" transform="translate(470 300)">
+      <ellipse cx="66" cy="182" rx="58" ry="12" fill="#d8c39c" opacity="0.55"/>
+      <path d="M54 140v34M80 140v34" stroke="#5b5a72" stroke-width="13" stroke-linecap="round"/>
+      <path d="M46 178h16M74 178h16" stroke="#3f3e52" stroke-width="9" stroke-linecap="round"/>
+      <path d="M50 74c-10 0-16 8-16 18v36c0 10 6 16 16 16h34c10 0 16-6 16-16V92c0-10-6-18-16-18z" fill="#f0b45f" stroke="#d99a45" stroke-width="3"/>
+      <path d="M52 74c6 8 24 8 32 0 4 6 2 12-2 14-8 6-27 6-35 0-4-3-3-9 5-14z" fill="#ef8f92"/>
+      <path d="M56 80v44M84 80v44" stroke="#b9765f" stroke-width="5" stroke-linecap="round"/>
+      <path d="M28 104c-6 2-8 10-4 16 8 12 26 16 44 12" stroke="#e0a250" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <g transform="translate(4 112) rotate(-8)">
+        <rect x="0" y="0" width="46" height="30" rx="4" fill="#8fb8d8" stroke="#6d95b5" stroke-width="2.5"/>
+        <path d="M23 2v26" stroke="#6d95b5" stroke-width="2"/>
+        <path d="M6 8h11M6 15h9" stroke="#eef6fb" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <path d="M66 62v10" stroke="#e8b79a" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="66" cy="38" r="27" fill="#f8dcc4" stroke="#e3b898" stroke-width="3"/>
+      <path d="M40 34c2-18 14-28 27-28s25 10 26 26c-6-8-14-10-22-8-10 2-18 8-24 18-2-3-5-5-7-8z" fill="#4b3a33"/>
+      <path d="M92 30c6 2 8 8 6 12-3 5-8 4-10 0z" fill="#4b3a33"/>
+      <circle cx="57" cy="40" r="2.6" fill="#3d3230"/>
+      <circle cx="76" cy="40" r="2.6" fill="#3d3230"/>
+      <path d="M60 50c4 4 10 4 14 0" stroke="#c1785f" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <circle cx="50" cy="48" r="5" fill="#f6b3b6" opacity="0.7"/>
+      <circle cx="83" cy="48" r="5" fill="#f6b3b6" opacity="0.7"/>
+    </g>
+
+    <!-- 飘落花瓣 -->
+    <g fill="#f9c8d8" opacity="0.95">
+      <ellipse cx="384" cy="300" rx="7" ry="5" transform="rotate(-18 384 300)"/>
+      <ellipse cx="428" cy="352" rx="6" ry="4" transform="rotate(24 428 352)"/>
+      <ellipse cx="628" cy="322" rx="7" ry="5" transform="rotate(-32 628 322)"/>
+      <ellipse cx="700" cy="392" rx="6" ry="4" transform="rotate(12 700 392)"/>
+      <ellipse cx="330" cy="420" rx="6" ry="4" transform="rotate(8 330 420)"/>
+      <ellipse cx="1030" cy="352" rx="7" ry="5" transform="rotate(-24 1030 352)"/>
+    </g>
+  </g>
+
+  <!-- 纸纹叠加 -->
+  <rect width="1200" height="560" filter="url(#grain)" opacity="0.5" style="mix-blend-mode:multiply"/>
+</svg>
+      </div>
       <div class="landing-hero__content">
         <p class="landing-eyebrow"><span></span> 新生选课指南 · 珞珈山</p>
         <h1 id="welcome-title">从珞珈山下出发<br>开启大学的第一场探索</h1>
