@@ -469,6 +469,14 @@ a { color: var(--luojia); }
 .section__head + .qa-groups,
 .section__head + .panel { margin-top: 26px; }
 
+/* ---------- 正文重点 ---------- */
+
+main strong,
+main b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 /* ---------- cards ---------- */
 
 .cards {
@@ -984,7 +992,7 @@ a { color: var(--luojia); }
   border-radius: 6px;
 }
 
-.note__slots b {
+.note__slots strong {
   color: #5a4423;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;

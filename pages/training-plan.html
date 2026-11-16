@@ -12,13 +12,13 @@
   <main class="container section plan-layout">
     <header class="plan-header">
       <h1>培养方案</h1>
-      <p class="reading-width">选择培养方案 PDF 或 DOCX，分析培养目标、毕业要求、课程分类、学分要求和注意事项。点击“开始分析”后，文件将经本项目后端发送至 DeepSeek 官方 API；未找到的信息标为“原文未说明”。</p>
+      <p class="reading-width">选择培养方案 PDF 或 DOCX，分析<strong>培养目标、毕业要求、课程分类、学分要求和注意事项</strong>。点击“开始分析”后，文件将<strong>经本项目后端发送至 DeepSeek 官方 API</strong>；未找到的信息标为<strong>“原文未说明”</strong>。</p>
       <!-- 后续可在此添加页面介绍、使用说明等内容。 -->
     </header>
 
     <section class="card plan-upload" aria-labelledby="upload-title">
       <h2 id="upload-title">选择培养方案文件</h2>
-      <p id="file-help">每次选择一个 PDF 或 DOCX，最大 20 MiB；PDF 最多 200 页。不支持加密或损坏的文件。仅识别文字，不分析文档插图。</p>
+      <p id="file-help">每次选择一个 PDF 或 DOCX，<strong>最大 20 MiB</strong>；PDF <strong>最多 200 页</strong>。不支持加密或损坏的文件。<strong>仅识别文字</strong>，不分析文档插图。</p>
       <div class="plan-dropzone" id="dropzone">
         <label class="plan-picker" for="plan-file">
           <span class="plan-picker-title">将文件拖到这里，或点击选择</span>
@@ -41,7 +41,7 @@
 
     <section class="card plan-results" aria-labelledby="results-title">
       <h2 id="results-title">分析结果</h2>
-      <p class="text-small">结果仅供对照原文，请核查具体课程与学分要求。</p>
+      <p class="text-small">结果<strong>仅供对照原文</strong>，请核查具体课程与学分要求。</p>
       <div class="plan-results-content" id="analysis-results" aria-busy="false"></div>
     </section>
   </main>

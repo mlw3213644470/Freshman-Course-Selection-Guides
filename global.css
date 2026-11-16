@@ -64,6 +64,7 @@
 
 /* 全局基线：不重置列表样式，保留浏览器原生语义。 */
 *, *::before, *::after { box-sizing: border-box; }
+strong, b { color: var(--color-text); font-weight: var(--weight-bold); }
 html { font-size: 100%; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;

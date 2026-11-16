@@ -90,6 +90,7 @@
 .landing-card__eyebrow { margin: 19px 0 4px; color: var(--ink-faint); font-size: 10px; letter-spacing: .08em; }
 .landing-card h3 { margin: 0; color: var(--ink); font-size: 19px; font-weight: 500; }
 .landing-card__copy { min-height: 46px; margin: 9px 0 15px; color: var(--ink-soft); font-size: 12px; line-height: 1.8; }
+.landing-card__copy strong, .landing-section-heading p strong, .landing-next p strong { color: var(--ink); font-weight: 700; }
 .landing-card > a { display: inline-flex; align-items: center; gap: 12px; color: var(--luojia); font-size: 12px; font-weight: 700; }
 .landing-card > a span { transition: transform .16s ease; }
 .landing-card > a:hover span { transform: translateX(4px); }

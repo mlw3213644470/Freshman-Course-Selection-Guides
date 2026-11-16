@@ -28,6 +28,7 @@
       -webkit-font-smoothing: antialiased;
     }
     button, input, select { font: inherit; }
+    strong, b { color: var(--ink); font-weight: 700; }
     button { cursor: pointer; }
     a { color: inherit; }
     .page { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
@@ -195,7 +196,7 @@
         <div class="hero-copy">
           <p class="eyebrow">INTEREST FIRST · COURSES NEXT</p>
           <h1 id="heroTitle">按兴趣选课<br>让课程树为你盛开</h1>
-          <p>先完成 8 题兴趣探索，再解锁课程图鉴。根据你的偏好推荐课程，不展示 MBTI 人格类型。</p>
+          <p>先完成 8 题兴趣探索，再解锁课程图鉴。根据你的偏好<strong>推荐课程</strong>，<strong>不展示 MBTI 人格类型</strong>。</p>
           <div class="hero-buttons">
             <a class="primary-button" href="#mbti">第 1 步：开始兴趣探索　↓</a>
             <a class="secondary-button" href="#courses">了解第 2 步：课程图鉴</a>
@@ -289,8 +290,8 @@
           <div class="mbti-intro">
             <p class="section-kicker">STEP 01 · INTEREST FIRST</p>
             <h2 id="mbtiTitle">先做兴趣探索，再解锁课程图鉴</h2>
-            <p>回答 8 个关于学习偏好的小问题，看看你更喜欢怎样探索世界。助手会结合你的选择，从课程简介中挑出一些可能合你兴趣的武大通识课。</p>
-            <p class="notice">这是兴趣探索，不是正式心理测评；不会显示 MBTI 人格类型，只呈现兴趣偏好与课程灵感。推荐结果仅供参考。</p>
+            <p>回答 8 个关于学习偏好的小问题，看看你更喜欢怎样探索世界。助手会结合你的选择，从课程简介中挑出<strong>一些可能合你兴趣的武大通识课</strong>。</p>
+            <p class="notice">这是<strong>兴趣探索</strong>，不是正式心理测评；<strong>不会显示 MBTI 人格类型</strong>，只呈现兴趣偏好与课程灵感。推荐结果<strong>仅供参考</strong>。</p>
           </div>
           <div class="quiz" id="quiz">
             <div class="quiz-progress"><span id="questionCounter">第 1 / 8 题</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span></div>
@@ -320,14 +321,14 @@
           <div>
             <p class="section-kicker">STEP 02 · COURSE CATALOG</p>
             <h2 id="coursesTitle">通识课程图鉴</h2>
-            <p class="section-subtitle" id="catalogHint">完成第 1 步兴趣探索后解锁，再按类别、课程名或关键词继续发现。</p>
+            <p class="section-subtitle" id="catalogHint">完成第 1 步兴趣探索后解锁，再按<strong>类别、课程名或关键词</strong>继续发现。</p>
           </div>
           <span class="dataset-badge" id="datasetBadge">待兴趣探索解锁</span>
         </div>
         <div class="course-gate" id="courseGate">
           <span class="course-gate-mark" aria-hidden="true">✿</span>
           <h3>完成兴趣探索，解锁课程图鉴</h3>
-          <p>先回答上方 8 道学习偏好问题，查看兴趣推荐后，就可以浏览全部课程并按类别筛选。</p>
+          <p>先回答上方 8 道学习偏好问题，查看兴趣推荐后，就可以<strong>浏览全部课程并按类别筛选</strong>。</p>
           <a class="primary-button" href="#mbti">开始第 1 步：兴趣探索</a>
         </div>
         <div class="course-catalog" id="courseCatalog" hidden>
@@ -346,7 +347,7 @@
 
     <footer class="footer">
       本页面课程信息依据武汉大学通识教育中心公开资料《“武大通识3.0”课程简介》整理（资料日期：2021-09-02）。<br>
-      课程介绍汇总不等同于当学期实际开课名单；学分、学时及开课安排请以学校教务系统和当期通知为准。
+      <strong>课程介绍汇总不等同于当学期实际开课名单</strong>；学分、学时及开课安排请以<strong>学校教务系统和当期通知</strong>为准。
       <a href="http://gec.whu.edu.cn/info/1027/2412.htm" target="_blank" rel="noreferrer">查看官方资料来源</a>。
     </footer>
   </div>
@@ -415,12 +416,12 @@
         });
         if (unlocked) {
           datasetBadge.textContent = `${courses.length} 门课程 · 8 个类别`;
-          catalogHint.textContent = "兴趣推荐已生成；可点课程树花瓣、按类别筛选，或搜索课程与教师。";
+          catalogHint.innerHTML = "兴趣推荐已生成；可点课程树花瓣、<strong>按类别筛选</strong>，或<strong>搜索课程与教师</strong>。";
         } else {
           activeCategory = "";
           searchInput.value = "";
           datasetBadge.textContent = "待兴趣探索解锁";
-          catalogHint.textContent = "完成第 1 步兴趣探索后解锁，再按类别、课程名或关键词继续发现。";
+          catalogHint.innerHTML = "完成第 1 步兴趣探索后解锁，再按<strong>类别、课程名或关键词</strong>继续发现。";
         }
       }
 
