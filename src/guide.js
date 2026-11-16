@@ -5,11 +5,13 @@ const NAV = [
   { page: 'schedule', href: 'schedule.html', label: '课表安排' },
   { page: 'after', href: 'after.html', label: '选后调整' },
   { page: 'faq', href: 'faq.html', label: '常见问题' },
-  { page: 'training-plan', href: '/pages/training-plan.html', label: '培养方案' },
 ];
 
-function buildNav(current) {
-  return NAV.map(({ page, href, label }) => {
+// 培养方案页不在本站多页构建里，页头单独做成醒目的金色按钮，页脚仍按普通导航展示。
+const PLAN_LINK = { page: 'training-plan', href: '/pages/training-plan.html', label: '培养方案' };
+
+function buildNav(current, extra = []) {
+  return [...NAV, ...extra].map(({ page, href, label }) => {
     const active = page === current ? ' aria-current="page"' : '';
     return `<a href="${href}"${active}>${label}</a>`;
   }).join('');
@@ -31,6 +33,7 @@ function renderHeader(current) {
       </a>
       <nav class="site-nav" aria-label="板块导航">${buildNav(current)}</nav>
       <div class="site-header__features">
+        <a class="site-header__feature site-header__feature--plan" href="${PLAN_LINK.href}">✦ ${PLAN_LINK.label}</a>
         <a class="site-header__feature site-header__feature--sakura" href="课程信息.html">樱下选课</a>
         <a class="site-header__feature site-header__feature--senior" href="学长抢课秘籍.html">学长抢课秘籍</a>
         <a class="site-header__feature site-header__feature--teacher" href="教师推荐.html">教师推荐</a>
@@ -44,7 +47,7 @@ function renderFooter() {
   host.innerHTML = `
     <div class="site-footer__inner">
       <p class="site-footer__note">本站只整理选课方法与判断标准：不提供具体课程数据、评分或外部链接。选课时间、名额与办理规则，一律以当期官方通知为准。</p>
-      <nav class="site-footer__nav" aria-label="页脚导航">${buildNav('')}</nav>
+      <nav class="site-footer__nav" aria-label="页脚导航">${buildNav('', [PLAN_LINK])}</nav>
       <p class="site-footer__meta">内容会随新学年核实后更新，选课规则以当期官方通知为准。</p>
     </div>`;
 }
