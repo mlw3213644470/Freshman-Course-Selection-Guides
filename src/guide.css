@@ -38,6 +38,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ---------- 校园照片背景（粉层淡化，仅指南各页与教师推荐页使用） ---------- */
+
+body.has-campus-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(180deg, rgb(247 244 236 / 70%) 0%, rgb(247 244 236 / 84%) 46%, rgb(247 244 236 / 93%) 100%),
+    var(--page-photo);
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+body.has-campus-bg[data-page="index"] { --page-photo: url("../assets/campus/guide.jpg"); }
+body.has-campus-bg[data-page="prep"] { --page-photo: url("../assets/campus/prep.jpg"); }
+body.has-campus-bg[data-page="course"] { --page-photo: url("../assets/campus/course.jpg"); }
+body.has-campus-bg[data-page="schedule"] { --page-photo: url("../assets/campus/schedule.jpg"); }
+body.has-campus-bg[data-page="after"] { --page-photo: url("../assets/campus/after.jpg"); }
+body.has-campus-bg[data-page="faq"] { --page-photo: url("../assets/campus/faq.jpg"); }
+body.has-campus-bg[data-page="senior-tips"] { --page-photo: url("../assets/campus/senior.jpg"); }
+
 h1, h2, h3 {
   font-family: var(--serif);
   font-weight: 600;

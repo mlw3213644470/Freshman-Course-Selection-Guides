@@ -81,6 +81,24 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
+/* 教师推荐页：使用专属校园照片，按视口固定并叠米色，淡化方式与本文件默认背景一致。 */
+body[data-page="teacher"] {
+  background-image: none;
+}
+
+body[data-page="teacher"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(180deg, rgb(245 242 236 / 66%) 0%, rgb(245 242 236 / 84%) 46%, rgb(245 242 236 / 92%) 100%),
+    url("./assets/campus/teacher.jpg");
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 img, video { display: block; max-width: 100%; height: auto; }
 button, input, select, textarea { font: inherit; color: inherit; }
 button, input, select, textarea { max-width: 100%; }
