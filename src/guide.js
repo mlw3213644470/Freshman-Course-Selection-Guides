@@ -34,7 +34,7 @@ function renderHeader(current) {
       <nav class="site-nav" aria-label="板块导航">${buildNav(current)}</nav>
       <div class="site-header__features">
         <a class="site-header__feature site-header__feature--plan" href="${PLAN_LINK.href}">✦ ${PLAN_LINK.label}</a>
-        <a class="site-header__feature site-header__feature--sakura" href="课程信息.html">樱下选课</a>
+        <a class="site-header__feature site-header__feature--sakura" href="课程信息.html">通识选课</a>
         <a class="site-header__feature site-header__feature--senior" href="学长抢课秘籍.html">学长抢课秘籍</a>
         <a class="site-header__feature site-header__feature--teacher" href="教师推荐.html">教师推荐</a>
       </div>

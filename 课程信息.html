@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="在武汉大学樱花树下探索通识课程，并通过 MBTI 兴趣助手发现适合自己的课程方向。">
-  <title>樱下选课 · 武汉大学通识课程</title>
+  <title>通识选课 · 武汉大学通识课程</title>
   <style>
     :root {
       --ink: #3a3440;
@@ -44,9 +44,12 @@
     .nav .nav-cta { padding: 9px 14px; color: white; background: var(--rose); border-radius: 99px; }
 
     .hero {
-      position: relative; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center;
-      min-height: 420px; overflow: hidden; margin: 24px 0 42px; padding: 42px 54px;
-      background: linear-gradient(115deg, #fff1f4 0%, #fff8f4 56%, #f5f8ed 100%);
+      position: relative; display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); align-items: center;
+      min-height: 520px; gap: 12px; overflow: hidden; margin: 24px 0 42px; padding: 42px 54px;
+      background:
+        linear-gradient(90deg, rgba(255,247,247,.98) 0%, rgba(255,248,244,.93) 39%, rgba(255,248,244,.42) 100%),
+        url("./assets/campus/extra-sakura.jpg") center 43% / cover,
+        linear-gradient(115deg, #fff1f4 0%, #fff8f4 56%, #f5f8ed 100%);
       border: 1px solid #f6e5e9; border-radius: 27px;
     }
     .hero::before, .hero::after { content: ""; position: absolute; border: 1px solid rgba(214,126,157,.15); border-radius: 50%; pointer-events: none; }
@@ -55,6 +58,7 @@
     .hero-copy { position: relative; z-index: 1; align-self: center; padding-bottom: 16px; }
     .eyebrow { margin: 0 0 13px; color: var(--rose-dark); font-size: 11px; font-weight: 700; letter-spacing: .2em; }
     h1 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: clamp(35px, 5vw, 58px); font-weight: 500; letter-spacing: .04em; line-height: 1.22; }
+    .hero h1 { font-size: clamp(34px, 4.2vw, 50px); }
     .hero-copy > p:last-of-type { max-width: 430px; margin: 18px 0 0; color: #776d75; font-size: 14px; line-height: 1.9; }
     .hero-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
     .primary-button, .secondary-button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 0 17px; border-radius: 99px; font-size: 13px; text-decoration: none; transition: .2s ease; }
@@ -62,11 +66,12 @@
     .primary-button:hover { background: #904261; }
     .secondary-button { color: var(--rose-dark); background: rgba(255,255,255,.55); border: 1px solid #e8becb; }
     .secondary-button:hover { background: white; }
-    .sakura-scene { position: relative; width: min(100%, 440px); height: 330px; justify-self: end; }
+    .sakura-scene { position: relative; width: min(100%, 560px); height: auto; aspect-ratio: 56 / 43; justify-self: end; }
     .tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
     .blossom { position: absolute; z-index: 2; display: grid; width: 39px; height: 39px; place-items: center; padding: 0; color: #86556a; background: rgba(255,255,255,.94); border: 1px solid #f3ccd7; border-radius: 50%; box-shadow: 0 5px 16px rgba(148,78,105,.12); font-size: 11px; font-weight: 700; transition: transform .18s ease, box-shadow .18s ease; }
     .blossom:hover, .blossom:focus-visible { z-index: 5; transform: scale(1.18); box-shadow: 0 8px 24px rgba(148,78,105,.22); outline: 2px solid #d67e9d; outline-offset: 3px; }
     .blossom.recommended { color: white; background: var(--rose-dark); border-color: white; animation: glow 1.8s ease-in-out infinite; }
+    .blossom:disabled { cursor: not-allowed; opacity: .7; }
     @keyframes glow { 50% { box-shadow: 0 0 0 7px rgba(214,126,157,.19), 0 8px 20px rgba(148,78,105,.22); } }
     .tree-caption { position: absolute; right: 0; bottom: -2px; left: 0; color: #8a7480; font-family: "STSong", serif; font-size: 13px; letter-spacing: .12em; text-align: center; }
     .tree-caption span { color: var(--rose-dark); font-weight: 700; }
@@ -77,7 +82,7 @@
     .section-subtitle { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
     .dataset-badge { flex: 0 0 auto; padding: 8px 12px; color: #806b75; background: white; border: 1px solid var(--line); border-radius: 99px; font-size: 11px; }
 
-    .mbti-section { margin: 58px 0 62px; padding: 32px; background: linear-gradient(135deg, #fff0f4, #fff8f5 62%, #f7f8ed); border: 1px solid #f2e2e5; border-radius: 22px; }
+    .mbti-section { margin: 58px 0 62px; padding: 32px; background: linear-gradient(105deg, rgba(255,246,248,.96), rgba(255,250,247,.94) 56%, rgba(247,248,237,.82)), url("./assets/campus/course.jpg") center 48% / cover; border: 1px solid #f2e2e5; border-radius: 22px; scroll-margin-top: 20px; }
     .mbti-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(300px, 1.2fr); gap: 30px; align-items: start; }
     .mbti-intro h2 { font-size: 26px; }
     .mbti-intro p { margin: 12px 0 0; color: #766c75; font-size: 13px; line-height: 1.85; }
@@ -95,16 +100,20 @@
     .quiz-actions button:disabled { opacity: .4; cursor: not-allowed; }
     .result-panel { margin-top: 15px; padding: 17px; background: white; border: 1px solid #f0dce3; border-radius: 13px; }
     .result-panel[hidden] { display: none; }
-    .result-type { color: var(--rose-dark); font-family: Georgia, serif; font-size: 29px; font-weight: 700; letter-spacing: .06em; }
     .result-summary { margin: 6px 0 12px; color: #716772; font-size: 12px; line-height: 1.7; }
     .recommend-title { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
     .recommendations { display: grid; gap: 7px; }
     .recommend-card { padding: 10px 11px; background: #fff8fa; border: 1px solid #f5e6eb; border-radius: 10px; }
     .recommend-card strong { display: block; color: #5b3e4c; font-size: 12px; }
     .recommend-card span { display: block; margin-top: 4px; color: #8a7c84; font-size: 10px; line-height: 1.55; }
-    .result-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .result-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 
     .course-section { margin: 0 0 60px; scroll-margin-top: 22px; }
+    .course-catalog[hidden], .course-gate[hidden] { display: none; }
+    .course-gate { display: grid; justify-items: center; gap: 10px; padding: 42px 20px; color: #766b74; background: linear-gradient(135deg, #fff8fa, #fffdf9); border: 1px dashed #e6c6d0; border-radius: 16px; text-align: center; }
+    .course-gate-mark { display: grid; width: 52px; height: 52px; place-items: center; color: var(--rose-dark); background: var(--rose-pale); border-radius: 50%; font-size: 22px; }
+    .course-gate h3 { margin: 0; color: var(--ink); font-family: "STSong", "Songti SC", serif; font-size: 21px; font-weight: 500; }
+    .course-gate p { max-width: 520px; margin: 0; font-size: 12px; line-height: 1.8; }
     .filters { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(190px, 290px); gap: 10px; margin: 20px 0 13px; }
     .filter-input, .filter-select { width: 100%; min-height: 43px; padding: 0 13px; color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 10px; outline: none; font-size: 12px; }
     .filter-input:focus, .filter-select:focus { border-color: #d58ba3; box-shadow: 0 0 0 3px rgba(214,126,157,.12); }
@@ -131,8 +140,8 @@
     .footer a { color: var(--rose-dark); }
 
     @media (max-width: 820px) {
-      .hero { grid-template-columns: 1fr .9fr; padding: 36px; }
-      .sakura-scene { height: 280px; }
+      .hero { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); padding: 36px; }
+      .sakura-scene { width: min(100%, 520px); }
       .mbti-layout { grid-template-columns: 1fr; gap: 18px; }
       .course-list { grid-template-columns: 1fr; }
     }
@@ -148,10 +157,10 @@
       .nav .nav-cta { padding: 8px 11px; }
       .hero { display: flex; flex-direction: column; align-items: stretch; margin: 16px 0 34px; padding: 28px 22px 18px; }
       .hero-copy { padding: 0; }
-      h1 { font-size: 39px; }
+      .hero h1 { font-size: 39px; }
       .hero-copy > p:last-of-type { margin-top: 12px; font-size: 12px; }
       .hero-buttons { margin-top: 16px; }
-      .sakura-scene { align-self: center; width: min(100%, 370px); height: 240px; margin-top: 8px; }
+      .sakura-scene { align-self: center; width: min(calc(100% + 24px), 390px); margin-top: 8px; }
       .tree-caption { bottom: 0; font-size: 11px; }
       .blossom { width: 34px; height: 34px; font-size: 9px; }
       .intro-row { align-items: flex-start; flex-direction: column; gap: 10px; }
@@ -171,72 +180,117 @@
     <header class="topbar">
       <div class="topbar-left">
         <a class="back-link" href="guide.html">← 返回指南</a>
-        <a class="brand" href="#" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+        <a class="brand" href="#" style="text-decoration:none"><span class="brand-mark">通</span><span>武汉大学 · 通识选课</span></a>
       </div>
       <nav class="nav" aria-label="页面导航">
-        <a href="#tree">樱花课程树</a>
-        <a href="#mbti">MBTI 助手</a>
-        <a href="#courses">通识课程</a>
-        <a class="nav-cta" href="#mbti">开始兴趣测试</a>
+        <a href="#tree">课程树</a>
+        <a href="#mbti">第 1 步 · 兴趣 MBTI</a>
+        <a href="#courses">第 2 步 · 课程图鉴</a>
+        <a class="nav-cta" href="#mbti">先做兴趣测试</a>
       </nav>
     </header>
 
     <main>
       <section class="hero" id="tree" aria-labelledby="heroTitle">
         <div class="hero-copy">
-          <p class="eyebrow">WUHAN UNIVERSITY · SAKURA SELECTION</p>
-          <h1 id="heroTitle">樱花树下<br>遇见你的下一门课</h1>
-          <p>把武汉大学通识课程挂上樱花枝头。先做一个轻量兴趣小测，再沿着课程树找到值得探索的方向。</p>
+          <p class="eyebrow">INTEREST FIRST · COURSES NEXT</p>
+          <h1 id="heroTitle">按兴趣选课<br>让课程树为你盛开</h1>
+          <p>先完成 8 题兴趣探索，再解锁课程图鉴。根据你的偏好推荐课程，不展示 MBTI 人格类型。</p>
           <div class="hero-buttons">
-            <a class="primary-button" href="#mbti">测测我的课程人格　↓</a>
-            <a class="secondary-button" href="#courses">浏览全部课程</a>
+            <a class="primary-button" href="#mbti">第 1 步：开始兴趣探索　↓</a>
+            <a class="secondary-button" href="#courses">了解第 2 步：课程图鉴</a>
           </div>
         </div>
         <div class="sakura-scene" role="img" aria-label="以武汉大学樱花为灵感绘制的课程树，花瓣代表课程类别">
           <svg class="tree-svg" viewBox="0 0 440 330" aria-hidden="true">
-            <ellipse cx="227" cy="298" rx="157" ry="15" fill="#eadbd1" opacity=".58"/>
-            <path d="M216 296 C219 259 197 232 203 201 C208 171 237 153 229 125 C224 106 207 92 197 75" fill="none" stroke="#745c49" stroke-width="16" stroke-linecap="round"/>
-            <path d="M214 225 C186 204 164 190 139 185 C118 181 102 168 91 149 M210 204 C237 183 255 168 276 160 C303 150 318 131 326 108 M220 176 C194 153 183 134 172 111 C163 91 145 77 126 71 M228 149 C250 129 267 113 279 91 C287 74 301 62 319 54 M207 234 C183 231 164 237 148 250 M235 194 C257 200 275 214 293 232" fill="none" stroke="#80654e" stroke-width="9" stroke-linecap="round"/>
-            <path d="M207 293 Q218 277 231 293 M201 298 Q217 284 239 298" fill="none" stroke="#9e795c" stroke-width="4" stroke-linecap="round"/>
-            <g fill="#88a67c">
-              <ellipse cx="105" cy="143" rx="12" ry="6" transform="rotate(32 105 143)"/><ellipse cx="145" cy="176" rx="12" ry="6" transform="rotate(28 145 176)"/>
-              <ellipse cx="303" cy="129" rx="12" ry="6" transform="rotate(-32 303 129)"/><ellipse cx="263" cy="168" rx="12" ry="6" transform="rotate(-22 263 168)"/>
-              <ellipse cx="154" cy="94" rx="11" ry="5" transform="rotate(48 154 94)"/><ellipse cx="290" cy="78" rx="12" ry="6" transform="rotate(-42 290 78)"/>
-              <ellipse cx="272" cy="220" rx="12" ry="6" transform="rotate(35 272 220)"/><ellipse cx="165" cy="239" rx="12" ry="6" transform="rotate(-25 165 239)"/>
-              <ellipse cx="190" cy="119" rx="10" ry="5" transform="rotate(-38 190 119)"/><ellipse cx="244" cy="131" rx="10" ry="5" transform="rotate(35 244 131)"/>
+            <defs>
+              <linearGradient id="bark" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#60483b"/>
+                <stop offset=".38" stop-color="#9a7658"/>
+                <stop offset=".7" stop-color="#795842"/>
+                <stop offset="1" stop-color="#503d35"/>
+              </linearGradient>
+              <radialGradient id="canopy">
+                <stop offset="0" stop-color="#f8d2dc" stop-opacity=".85"/>
+                <stop offset="1" stop-color="#eeb2c2" stop-opacity=".18"/>
+              </radialGradient>
+              <g id="sakura-bloom">
+                <ellipse cx="0" cy="-5" rx="3.3" ry="5" fill="#f4b7c8"/>
+                <ellipse cx="4.8" cy="-1.5" rx="3.3" ry="5" transform="rotate(72 4.8 -1.5)" fill="#f8c7d3"/>
+                <ellipse cx="3" cy="4" rx="3.3" ry="5" transform="rotate(144 3 4)" fill="#f2aabd"/>
+                <ellipse cx="-3" cy="4" rx="3.3" ry="5" transform="rotate(216 -3 4)" fill="#f7c1ce"/>
+                <ellipse cx="-4.8" cy="-1.5" rx="3.3" ry="5" transform="rotate(288 -4.8 -1.5)" fill="#eea1b7"/>
+                <circle cy="0" r="2" fill="#ffe9af"/>
+              </g>
+            </defs>
+            <ellipse cx="226" cy="302" rx="155" ry="14" fill="#b9a18e" opacity=".24"/>
+            <g fill="url(#canopy)">
+              <ellipse cx="118" cy="132" rx="49" ry="39"/>
+              <ellipse cx="157" cy="91" rx="53" ry="42"/>
+              <ellipse cx="211" cy="72" rx="57" ry="46"/>
+              <ellipse cx="273" cy="83" rx="56" ry="43"/>
+              <ellipse cx="326" cy="118" rx="49" ry="39"/>
+              <ellipse cx="148" cy="157" rx="47" ry="35"/>
+              <ellipse cx="292" cy="157" rx="52" ry="39"/>
             </g>
-            <g fill="#f3b4c6" opacity=".88">
-              <circle cx="92" cy="119" r="13"/><circle cx="130" cy="104" r="14"/><circle cx="171" cy="83" r="14"/><circle cx="201" cy="57" r="14"/>
-              <circle cx="239" cy="81" r="14"/><circle cx="278" cy="65" r="15"/><circle cx="322" cy="87" r="14"/><circle cx="350" cy="119" r="13"/>
-              <circle cx="118" cy="164" r="12"/><circle cx="154" cy="147" r="14"/><circle cx="184" cy="151" r="13"/><circle cx="256" cy="145" r="14"/>
-              <circle cx="296" cy="151" r="13"/><circle cx="330" cy="176" r="12"/><circle cx="144" cy="211" r="12"/><circle cx="292" cy="202" r="12"/>
+            <g fill="none" stroke="#513e35" stroke-linecap="round" stroke-linejoin="round" opacity=".32">
+              <path d="M222 297 C218 266 205 247 208 220 C210 197 229 179 226 157 C223 136 208 120 202 103" stroke-width="23"/>
+              <path d="M213 225 C187 207 165 190 138 185 C116 181 101 165 89 146 M211 207 C239 187 258 169 282 158 C307 147 322 130 330 105 M223 177 C196 155 183 132 171 108 C160 87 143 74 124 66 M229 153 C252 131 269 112 281 89 C290 72 303 60 322 50 M210 237 C185 232 164 239 145 254 M235 194 C260 200 279 216 300 237" stroke-width="14"/>
             </g>
-            <g fill="#ffe5eb" opacity=".95">
-              <circle cx="92" cy="115" r="5"/><circle cx="130" cy="100" r="5"/><circle cx="171" cy="79" r="5"/><circle cx="201" cy="53" r="5"/>
-              <circle cx="239" cy="77" r="5"/><circle cx="278" cy="61" r="5"/><circle cx="322" cy="83" r="5"/><circle cx="350" cy="115" r="5"/>
-              <circle cx="118" cy="160" r="4"/><circle cx="154" cy="143" r="5"/><circle cx="184" cy="147" r="4"/><circle cx="256" cy="141" r="5"/>
-              <circle cx="296" cy="147" r="4"/><circle cx="330" cy="172" r="4"/>
+            <g fill="none" stroke="url(#bark)" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M222 297 C218 266 205 247 208 220 C210 197 229 179 226 157 C223 136 208 120 202 103" stroke-width="18"/>
+              <path d="M213 225 C187 207 165 190 138 185 C116 181 101 165 89 146 M211 207 C239 187 258 169 282 158 C307 147 322 130 330 105 M223 177 C196 155 183 132 171 108 C160 87 143 74 124 66 M229 153 C252 131 269 112 281 89 C290 72 303 60 322 50 M210 237 C185 232 164 239 145 254 M235 194 C260 200 279 216 300 237" stroke-width="10"/>
+              <path d="M218 288 C216 259 203 244 207 220 C211 197 228 179 224 157 M207 219 C183 203 164 188 139 182 M213 204 C239 184 259 168 281 155 M222 174 C196 151 184 130 169 105 M229 150 C252 127 268 109 280 87" stroke="#c09a74" stroke-width="2.5" opacity=".72"/>
+            </g>
+            <g fill="none" stroke="#6b4d3e" stroke-linecap="round">
+              <path d="M215 297 Q223 285 233 298 M207 300 Q219 290 241 300 M218 296 Q205 289 199 284 M226 297 Q239 287 247 283" stroke-width="4"/>
+              <path d="M202 111 Q196 96 188 91 M282 91 Q289 76 301 70 M139 183 Q126 177 120 166 M283 158 Q297 154 305 143" stroke-width="3"/>
+            </g>
+            <g fill="#6e946b">
+              <ellipse cx="107" cy="153" rx="12" ry="5" transform="rotate(36 107 153)"/>
+              <ellipse cx="145" cy="174" rx="13" ry="5" transform="rotate(24 145 174)"/>
+              <ellipse cx="298" cy="139" rx="13" ry="5" transform="rotate(-38 298 139)"/>
+              <ellipse cx="264" cy="169" rx="12" ry="5" transform="rotate(-21 264 169)"/>
+              <ellipse cx="151" cy="91" rx="12" ry="5" transform="rotate(49 151 91)"/>
+              <ellipse cx="290" cy="77" rx="13" ry="5" transform="rotate(-44 290 77)"/>
+              <ellipse cx="276" cy="220" rx="12" ry="5" transform="rotate(34 276 220)"/>
+              <ellipse cx="163" cy="241" rx="12" ry="5" transform="rotate(-23 163 241)"/>
+              <ellipse cx="190" cy="120" rx="11" ry="4" transform="rotate(-39 190 120)"/>
+              <ellipse cx="246" cy="132" rx="11" ry="4" transform="rotate(36 246 132)"/>
+            </g>
+            <g opacity=".96">
+              <use href="#sakura-bloom" x="96" y="126"/><use href="#sakura-bloom" x="116" y="108"/>
+              <use href="#sakura-bloom" x="137" y="120"/><use href="#sakura-bloom" x="151" y="91"/>
+              <use href="#sakura-bloom" x="171" y="107"/><use href="#sakura-bloom" x="181" y="72"/>
+              <use href="#sakura-bloom" x="205" y="83"/><use href="#sakura-bloom" x="214" y="51"/>
+              <use href="#sakura-bloom" x="238" y="77"/><use href="#sakura-bloom" x="261" y="94"/>
+              <use href="#sakura-bloom" x="278" y="64"/><use href="#sakura-bloom" x="299" y="92"/>
+              <use href="#sakura-bloom" x="324" y="79"/><use href="#sakura-bloom" x="344" y="113"/>
+              <use href="#sakura-bloom" x="125" y="160"/><use href="#sakura-bloom" x="158" y="145"/>
+              <use href="#sakura-bloom" x="187" y="133"/><use href="#sakura-bloom" x="257" y="143"/>
+              <use href="#sakura-bloom" x="291" y="157"/><use href="#sakura-bloom" x="324" y="173"/>
+              <use href="#sakura-bloom" x="150" y="205"/><use href="#sakura-bloom" x="293" y="201"/>
             </g>
           </svg>
-          <button class="blossom" style="left:19%;top:24%" data-category="中华文化与世界文明（核心通识课）" aria-label="查看中华文化与世界文明核心通识课程">文史</button>
-          <button class="blossom" style="left:33%;top:13%" data-category="中华文化与世界文明（一般通识课）" aria-label="查看中华文化与世界文明一般通识课程">文明</button>
-          <button class="blossom" style="left:44%;top:3%" data-category="科学精神与生命关怀（核心通识课）" aria-label="查看科学精神与生命关怀核心通识课程">科学</button>
-          <button class="blossom" style="left:56%;top:12%" data-category="科学精神与生命关怀（一般通识课）" aria-label="查看科学精神与生命关怀一般通识课程">生命</button>
-          <button class="blossom" style="left:68%;top:7%" data-category="社会科学与现代社会（核心通识课）" aria-label="查看社会科学与现代社会核心通识课程">社会</button>
-          <button class="blossom" style="left:79%;top:18%" data-category="社会科学与现代社会（一般通识课）" aria-label="查看社会科学与现代社会一般通识课程">思辨</button>
-          <button class="blossom" style="left:26%;top:38%" data-category="艺术体验与审美鉴赏（核心通识课）" aria-label="查看艺术体验与审美鉴赏核心通识课程">艺术</button>
-          <button class="blossom" style="left:42%;top:40%" data-category="艺术体验与审美鉴赏（一般通识课）" aria-label="查看艺术体验与审美鉴赏一般通识课程">审美</button>
-          <div class="tree-caption">每一朵花，都是一段<span>新的探索</span></div>
+          <button class="blossom" style="left:19%;top:24%" data-category="中华文化与世界文明（核心通识课）" aria-label="完成兴趣探索后查看中华文化与世界文明核心通识课程" disabled>文史</button>
+          <button class="blossom" style="left:33%;top:13%" data-category="中华文化与世界文明（一般通识课）" aria-label="完成兴趣探索后查看中华文化与世界文明一般通识课程" disabled>文明</button>
+          <button class="blossom" style="left:44%;top:3%" data-category="科学精神与生命关怀（核心通识课）" aria-label="完成兴趣探索后查看科学精神与生命关怀核心通识课程" disabled>科学</button>
+          <button class="blossom" style="left:56%;top:12%" data-category="科学精神与生命关怀（一般通识课）" aria-label="完成兴趣探索后查看科学精神与生命关怀一般通识课程" disabled>生命</button>
+          <button class="blossom" style="left:68%;top:7%" data-category="社会科学与现代社会（核心通识课）" aria-label="完成兴趣探索后查看社会科学与现代社会核心通识课程" disabled>社会</button>
+          <button class="blossom" style="left:79%;top:18%" data-category="社会科学与现代社会（一般通识课）" aria-label="完成兴趣探索后查看社会科学与现代社会一般通识课程" disabled>思辨</button>
+          <button class="blossom" style="left:26%;top:38%" data-category="艺术体验与审美鉴赏（核心通识课）" aria-label="完成兴趣探索后查看艺术体验与审美鉴赏核心通识课程" disabled>艺术</button>
+          <button class="blossom" style="left:42%;top:40%" data-category="艺术体验与审美鉴赏（一般通识课）" aria-label="完成兴趣探索后查看艺术体验与审美鉴赏一般通识课程" disabled>审美</button>
+          <div class="tree-caption">完成兴趣探索后，点亮<span>专属推荐花瓣</span></div>
         </div>
       </section>
 
       <section class="mbti-section" id="mbti" aria-labelledby="mbtiTitle">
         <div class="mbti-layout">
           <div class="mbti-intro">
-            <p class="section-kicker">A LITTLE GUIDE FOR YOU</p>
-            <h2 id="mbtiTitle">MBTI 通识选课助手</h2>
+            <p class="section-kicker">STEP 01 · INTEREST FIRST</p>
+            <h2 id="mbtiTitle">先做兴趣探索，再解锁课程图鉴</h2>
             <p>回答 8 个关于学习偏好的小问题，看看你更喜欢怎样探索世界。助手会结合你的选择，从课程简介中挑出一些可能合你兴趣的武大通识课。</p>
-            <p class="notice">这是兴趣探索，不是正式心理测评；MBTI 也不能决定你适合或不适合某门课。推荐结果仅供灵感参考。</p>
+            <p class="notice">这是兴趣探索，不是正式心理测评；不会显示 MBTI 人格类型，只呈现兴趣偏好与课程灵感。推荐结果仅供参考。</p>
           </div>
           <div class="quiz" id="quiz">
             <div class="quiz-progress"><span id="questionCounter">第 1 / 8 题</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span></div>
@@ -247,13 +301,14 @@
               <button id="resetQuiz" type="button">重新开始</button>
             </div>
             <section class="result-panel" id="resultPanel" aria-live="polite" hidden>
-              <div class="result-type" id="resultType"></div>
+              <p class="recommend-title">你的兴趣偏好</p>
               <p class="result-summary" id="resultSummary"></p>
-              <p class="recommend-title">为你挑选的通识课</p>
+              <p class="recommend-title">按兴趣为你推荐的通识课</p>
               <div class="recommendations" id="recommendations"></div>
               <div class="result-actions">
                 <button id="showRecommendations" type="button">在樱花树上标记推荐</button>
-                <button id="clearRecommendations" type="button">清除结果</button>
+                <button id="showCourseCatalog" type="button">查看已解锁课程图鉴</button>
+                <button id="clearRecommendations" type="button">重新探索</button>
               </div>
             </section>
           </div>
@@ -263,21 +318,29 @@
       <section class="course-section" id="courses" aria-labelledby="coursesTitle">
         <div class="intro-row">
           <div>
-            <p class="section-kicker">WHU GENERAL EDUCATION</p>
-            <h2 id="coursesTitle">在课程树下逛一逛</h2>
-            <p class="section-subtitle">点选上方花瓣可按类别浏览。也可以搜索课程名、授课教师、开课单位或课程简介。</p>
+            <p class="section-kicker">STEP 02 · COURSE CATALOG</p>
+            <h2 id="coursesTitle">通识课程图鉴</h2>
+            <p class="section-subtitle" id="catalogHint">完成第 1 步兴趣探索后解锁，再按类别、课程名或关键词继续发现。</p>
           </div>
-          <span class="dataset-badge" id="datasetBadge">正在载入课程资料…</span>
+          <span class="dataset-badge" id="datasetBadge">待兴趣探索解锁</span>
         </div>
-        <div class="filters">
-          <input class="filter-input" id="searchInput" type="search" placeholder="搜索课程、教师、学院或关键词…" aria-label="搜索通识课程">
-          <select class="filter-select" id="categorySelect" aria-label="选择课程类别">
-            <option value="">全部课程类别</option>
-          </select>
+        <div class="course-gate" id="courseGate">
+          <span class="course-gate-mark" aria-hidden="true">✿</span>
+          <h3>完成兴趣探索，解锁课程图鉴</h3>
+          <p>先回答上方 8 道学习偏好问题，查看兴趣推荐后，就可以浏览全部课程并按类别筛选。</p>
+          <a class="primary-button" href="#mbti">开始第 1 步：兴趣探索</a>
         </div>
-        <div class="category-tabs" id="categoryTabs" aria-label="课程类别快捷筛选"></div>
-        <div class="results-line"><span id="resultCount" aria-live="polite">正在载入课程…</span><span id="activeFilter"></span></div>
-        <div class="course-list" id="courseList"></div>
+        <div class="course-catalog" id="courseCatalog" hidden>
+          <div class="filters">
+            <input class="filter-input" id="searchInput" type="search" placeholder="搜索课程、教师、学院或关键词…" aria-label="搜索通识课程">
+            <select class="filter-select" id="categorySelect" aria-label="选择课程类别">
+              <option value="">全部课程类别</option>
+            </select>
+          </div>
+          <div class="category-tabs" id="categoryTabs" aria-label="课程类别快捷筛选"></div>
+          <div class="results-line"><span id="resultCount" aria-live="polite">完成兴趣探索后解锁课程</span><span id="activeFilter"></span></div>
+          <div class="course-list" id="courseList"></div>
+        </div>
       </section>
     </main>
 
@@ -332,11 +395,33 @@
       const courseList = document.getElementById("courseList");
       const resultCount = document.getElementById("resultCount");
       const resultPanel = document.getElementById("resultPanel");
+      const courseCatalog = document.getElementById("courseCatalog");
+      const courseGate = document.getElementById("courseGate");
+      const datasetBadge = document.getElementById("datasetBadge");
+      const catalogHint = document.getElementById("catalogHint");
 
       function escapeHtml(value) {
         return String(value || "").replace(/[&<>"']/g, character => ({
           "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
         })[character]);
+      }
+
+      function setCatalogUnlocked(unlocked) {
+        courseCatalog.hidden = !unlocked;
+        courseGate.hidden = unlocked;
+        document.querySelectorAll(".blossom").forEach(blossom => {
+          blossom.disabled = !unlocked;
+          blossom.title = unlocked ? "按类别查看课程" : "完成兴趣探索后解锁";
+        });
+        if (unlocked) {
+          datasetBadge.textContent = `${courses.length} 门课程 · 8 个类别`;
+          catalogHint.textContent = "兴趣推荐已生成；可点课程树花瓣、按类别筛选，或搜索课程与教师。";
+        } else {
+          activeCategory = "";
+          searchInput.value = "";
+          datasetBadge.textContent = "待兴趣探索解锁";
+          catalogHint.textContent = "完成第 1 步兴趣探索后解锁，再按类别、课程名或关键词继续发现。";
+        }
       }
 
       function renderCategories() {
@@ -402,7 +487,7 @@
         })[question.axis];
         const answers = question.options.map((label, optionIndex) => `
           <button class="answer-button" type="button" data-answer="${optionIndex}">
-            ${escapeHtml(label.replace(/（[EI]）$/, ""))}
+            ${escapeHtml(label.replace(/（[EISNTFJP]）$/, ""))}
           </button>
         `).join("");
         document.getElementById("answerList").innerHTML = answers;
@@ -454,8 +539,9 @@
       }
 
       function finishQuiz() {
+        if (!Array.isArray(courses) || courses.length === 0) return;
         const type = calculateType();
-        const typeDescription = axes.map(axis => {
+        const interestSummary = axes.map(axis => {
           const optionIndex = type.includes(axis[0]) ? 0 : 1;
           return dimensions[axis][optionIndex];
         }).join("");
@@ -463,7 +549,7 @@
           .map(course => ({ course, score: scoreCourse(course, type) }))
           .filter(item => item.score > 0)
           .sort((a, b) => b.score - a.score || a.course.id.localeCompare(b.course.id))
-          .slice(0, 3)
+          .slice(0, 8)
           .map(item => item.course);
 
         document.getElementById("questionCounter").textContent = "兴趣探索完成";
@@ -471,12 +557,14 @@
         document.getElementById("questionText").textContent = "你的课程探索偏好";
         document.getElementById("answerList").innerHTML = "";
         document.getElementById("prevQuestion").disabled = true;
-        document.getElementById("resultType").textContent = type;
-        document.getElementById("resultSummary").textContent = typeDescription;
+        document.getElementById("resultSummary").textContent = interestSummary;
         document.getElementById("recommendations").innerHTML = recommendedCourses.map(course =>
           `<div class="recommend-card"><strong>${escapeHtml(course.title)}</strong><span>${escapeHtml(course.category)} · ${escapeHtml(course.intro.slice(0, 95))}${course.intro.length > 95 ? "…" : ""}</span></div>`
         ).join("");
         resultPanel.hidden = false;
+        setCatalogUnlocked(true);
+        renderCategories();
+        renderCourses();
       }
 
       categorySelect.addEventListener("change", () => {
@@ -524,22 +612,21 @@
         renderQuestion();
       });
 
-      document.getElementById("resetQuiz").addEventListener("click", () => {
+      function resetExploration() {
         questionsAnswered.fill(null);
         questionIndex = 0;
         recommendedCourses = [];
         document.querySelectorAll(".blossom").forEach(blossom => blossom.classList.remove("recommended"));
+        setCatalogUnlocked(false);
         renderQuestion();
-        renderCourses();
-      });
+      }
 
-      document.getElementById("clearRecommendations").addEventListener("click", () => {
-        recommendedCourses = [];
-        questionsAnswered.fill(null);
-        questionIndex = 0;
-        document.querySelectorAll(".blossom").forEach(blossom => blossom.classList.remove("recommended"));
-        renderQuestion();
-        renderCourses();
+      document.getElementById("resetQuiz").addEventListener("click", resetExploration);
+
+      document.getElementById("clearRecommendations").addEventListener("click", resetExploration);
+
+      document.getElementById("showCourseCatalog").addEventListener("click", () => {
+        document.getElementById("courses").scrollIntoView({ behavior: "smooth" });
       });
 
       document.getElementById("showRecommendations").addEventListener("click", () => {
@@ -552,16 +639,14 @@
       });
 
       if (!Array.isArray(courses) || courses.length === 0) {
-        document.getElementById("datasetBadge").textContent = "课程资料未能载入";
+        datasetBadge.textContent = "课程资料未能载入";
         resultCount.textContent = "课程数据文件缺失或为空，请确认课程数据.js 与本页面位于同一文件夹。";
-        courseList.innerHTML = '<div class="empty">暂时无法载入课程资料。请确认课程数据.js 与课程信息.html 位于同一文件夹后重新打开页面。</div>';
+        courseGate.innerHTML = '<span class="course-gate-mark" aria-hidden="true">!</span><h3>课程资料暂时无法载入</h3><p>请确认课程数据.js 与课程信息.html 位于同一文件夹后重新打开页面。</p>';
         renderQuestion();
         return;
       }
 
-      document.getElementById("datasetBadge").textContent = `${courses.length} 门课程 · 8 个类别`;
-      renderCategories();
-      renderCourses();
+      setCatalogUnlocked(false);
       renderQuestion();
     })();
   </script>
