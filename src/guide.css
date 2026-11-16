@@ -810,6 +810,229 @@ a { color: var(--luojia); }
   font-size: .9rem;
 }
 
+/* ---------- 学长抢课秘籍：便利贴 ---------- */
+
+.note-board {
+  display: grid;
+  align-items: start;
+  gap: 32px 26px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 640px) {
+  .note-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 900px) {
+  .note-board--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.sticky-note {
+  --note-bg: #fbe98f;
+  --tilt: -1.1deg;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 26px 21px 20px;
+  background: var(--note-bg);
+  border-radius: 4px 7px 13px 6px;
+  box-shadow: 0 12px 22px rgb(58 44 20 / 16%), 0 2px 3px rgb(58 44 20 / 10%);
+  color: #3a3123;
+  font-size: .92rem;
+  line-height: 1.75;
+  transform: rotate(var(--tilt));
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+/* 便利贴里的内容压在横线纸之上 */
+.sticky-note > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sticky-note p { margin: 0; }
+
+.sticky-note:hover,
+.sticky-note:focus-within {
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 0 18px 30px rgb(58 44 20 / 21%), 0 3px 6px rgb(58 44 20 / 12%);
+}
+
+.sticky-note--taped::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 86px;
+  height: 25px;
+  background: rgb(255 255 255 / 58%);
+  border: 1px solid rgb(255 255 255 / 72%);
+  box-shadow: 0 2px 5px rgb(60 45 20 / 13%);
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.sticky-note--pinned::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 34% 30%, #ff9c8b, #c0402c 60%, #8d2a1b);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgb(60 20 10 / 42%);
+  transform: translateX(-50%);
+}
+
+.sticky-note--lined::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  background-image: repeating-linear-gradient(180deg, rgb(120 100 60 / 13%) 0 1px, transparent 1px 26px);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.sticky-note--folded::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, transparent 48%, rgb(90 60 20 / 16%) 50%);
+  border-bottom-right-radius: 6px;
+}
+
+.note--yellow { --note-bg: #fbe98f; --tilt: -1.2deg; }
+.note--rose { --note-bg: #f8d3d9; --tilt: 1.4deg; }
+.note--mint { --note-bg: #cfe9d6; --tilt: -.7deg; }
+.note--sky { --note-bg: #cfe0f2; --tilt: 1deg; }
+.note--amber { --note-bg: #fcd8a8; --tilt: -1.6deg; }
+.note--lilac { --note-bg: #e0d7f2; --tilt: .9deg; }
+.note--peach { --note-bg: #fbd0b4; --tilt: -.8deg; }
+.note--olive { --note-bg: #dfe6b8; --tilt: 1.2deg; }
+.note--cream { --note-bg: #f5ecd2; --tilt: -1deg; }
+
+.note__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.note__num {
+  display: grid;
+  flex: 0 0 auto;
+  width: 27px;
+  height: 27px;
+  margin-top: 2px;
+  place-items: center;
+  background: rgb(255 255 255 / 56%);
+  border: 1px dashed rgb(70 55 25 / 38%);
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.note__title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.note__body strong { color: #95381f; font-weight: 700; }
+
+.note__slots {
+  display: grid;
+  gap: 5px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: .84rem;
+  line-height: 1.6;
+}
+
+.note__slots li {
+  display: grid;
+  align-items: baseline;
+  gap: 8px;
+  grid-template-columns: 6.4em minmax(0, 1fr);
+  padding: 4px 9px;
+  background: rgb(255 255 255 / 56%);
+  border-radius: 6px;
+}
+
+.note__slots b {
+  color: #5a4423;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.note__chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: .82rem;
+  line-height: 1.6;
+}
+
+.note__chain span {
+  padding: 2px 9px;
+  background: rgb(255 255 255 / 68%);
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.note__chain i {
+  color: rgb(80 60 25 / 55%);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.note__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.note__list li {
+  position: relative;
+  margin: .3em 0;
+  padding-left: 1.05em;
+}
+
+.note__list li::before {
+  content: "\2022";
+  position: absolute;
+  left: 0;
+  color: rgb(80 60 25 / 55%);
+  font-weight: 700;
+}
+
+.note__tag {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 2px 9px;
+  background: rgb(255 255 255 / 52%);
+  border-radius: 999px;
+  color: rgb(70 55 25 / 72%);
+  font-size: .74rem;
+  letter-spacing: .02em;
+}
+
+@media (min-width: 900px) {
+  .note--wide { grid-column: span 2; }
+}
+
+@media (max-width: 420px) {
+  .note__slots li { grid-template-columns: minmax(0, 1fr); gap: 1px; }
+}
+
 /* ---------- pager ---------- */
 
 .pager {
@@ -962,4 +1185,7 @@ a { color: var(--luojia); }
   .button:hover,
   .station:hover,
   .pager__link:hover { transform: none; }
+  .sticky-note { transform: none; }
+  .sticky-note:hover,
+  .sticky-note:focus-within { transform: none; }
 }
