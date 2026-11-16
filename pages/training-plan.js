@@ -12,9 +12,12 @@
   const results = document.querySelector("#analysis-results");
   const resultKeys = ["培养目标", "毕业要求", "课程分类", "学分要求", "注意事项"];
   const maxBytes = 20 * 1024 * 1024;
+  const setupHint = "后端还没配置 DEEPSEEK_API_KEY，暂时无法分析。请在项目根目录复制 .env.example 为 .env，"
+    + "填写 DEEPSEEK_API_KEY=你的密钥，然后重启 python server.py 并刷新本页。";
   let selectedFile = null;
   let dragDepth = 0;
   let busy = false;
+  let keyMissing = false;
 
   function setStatus(message, state = "idle") {
     status.textContent = message;
@@ -25,7 +28,7 @@
     busy = value;
     input.disabled = value;
     remove.disabled = value;
-    analyze.disabled = value;
+    analyze.disabled = value || keyMissing;
     analyze.textContent = value ? "分析中，请稍候…" : "开始分析";
     results.setAttribute("aria-busy", String(value));
     dropzone.classList.toggle("is-busy", value);
@@ -104,6 +107,10 @@
   analyze.addEventListener("click", async (event) => {
     event.preventDefault();
     if (busy) return;
+    if (keyMissing) {
+      setStatus(setupHint, "error");
+      return;
+    }
     if (!selectedFile) {
       setStatus("请先拖入或选择一个 PDF 或 DOCX 文件，再点击开始分析。", "error");
       input.focus();
@@ -191,7 +198,17 @@
       }
       const health = await response.json();
       if (health.provider !== "deepseek") throw new Error("后端尚未更新为 DeepSeek，请重启 server.py 并刷新页面。");
-      if (!health.configured) throw new Error("后端未配置 DEEPSEEK_API_KEY，请填写本地 .env 并重启服务。");
+      if (!health.configured) {
+        keyMissing = true;
+        analyze.disabled = true;
+        analyze.title = "先在 .env 配置 DEEPSEEK_API_KEY 才能分析";
+        setStatus(setupHint, "error");
+        return;
+      }
+      keyMissing = false;
+      analyze.disabled = false;
+      analyze.removeAttribute("title");
+      if (!selectedFile && !busy) setStatus("页面已就绪，请选择 PDF 或 DOCX，再点击开始分析。");
     } catch (error) {
       if (!selectedFile && !busy) setStatus(error instanceof TypeError || error.name === "AbortError"
         ? "无法连接本地后端，请启动 server.py，并通过 Vite 首页或 http://127.0.0.1:8002 访问。" : error.message, "error");

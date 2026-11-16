@@ -41,7 +41,7 @@ npm run preview # 预览构建结果
 
 指南首页（`guide.html`）的「分析培养方案」按钮和导航中的「培养方案」会打开 `/pages/training-plan.html`。Vite 开发服务器将该页面和 `/api` 请求转发到本机 Python 后端。需要同时启动两个服务：
 
-1. 在项目目录配置 `.env` 中的 `DEEPSEEK_API_KEY`（此文件不提交到 Git）。已有 `.env` 的电脑无需重复填写。
+1. 在项目目录把 `.env.example` 复制为 `.env`，填入 `DEEPSEEK_API_KEY=你的密钥`（此文件不提交到 Git）。已有 `.env` 的电脑无需重复填写。
 2. 在一个终端运行 `python -m pip install -r requirements.txt`，然后运行 `python server.py`。后端监听 `http://127.0.0.1:8002`。
 3. 在另一个终端运行 `npm install`（首次运行时），然后运行 `npm run dev`。
 4. 打开 Vite 输出的地址（通常是 `http://localhost:5173`），从封面页进入指南后点击「分析培养方案」。
