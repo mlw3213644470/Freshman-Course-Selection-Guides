@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="武汉大学通识课教师口碑推荐：按过往课程评价整理的教师推荐清单，附评价样本与成绩参考。">
-  <title>教师推荐 · 樱下选课</title>
+  <meta name="description" content="武汉大学通识课教师口碑推荐：按过往课程评价整理的教师推荐清单，附评价样本与授课反馈。">
+  <title>教师推荐 · 通识选课</title>
   <link rel="stylesheet" href="./global.css">
   <style>
     :root {
@@ -58,7 +58,6 @@
     .teacher-card { position: relative; min-width: 0; overflow: hidden; padding: 16px; background: rgba(255,255,255,.88); border: 1px solid #eadfc9; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(105,79,37,.07); }
     .teacher-card::before { content: ""; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a67c37, #e4c783, #c69055); }
     .teacher-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .teacher-rank { color: #a17b36; font-family: Georgia, serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; }
     .teacher-level { padding: 4px 8px; color: #70531e; background: #f5e9c9; border-radius: 99px; font-size: 9px; font-weight: 700; white-space: nowrap; }
     .teacher-level--supplement { color: #69624f; background: #eeece4; }
     .teacher-course-name { min-height: 38px; margin: 11px 0 5px; color: #5f5139; font-size: 12px; font-weight: 600; line-height: 1.55; }
@@ -66,11 +65,6 @@
     .teacher-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
     .teacher-stats span { padding: 4px 7px; color: #766b54; background: #f6f1e5; border-radius: 4px; font-size: 9px; }
     .teacher-stats strong { color: #72531c; font-size: 11px; }
-    .teacher-score-row { display: flex; align-items: center; gap: 10px; }
-    .teacher-score-label { flex: 0 0 auto; color: #897b61; font-size: 9px; }
-    .teacher-score-number { flex: 0 0 auto; color: #9a6d21; font-family: Georgia, serif; font-size: 20px; font-weight: 700; }
-    .teacher-score-track { flex: 1; height: 7px; overflow: hidden; background: #eee5d2; border-radius: 99px; }
-    .teacher-score-track span { display: block; height: 100%; background: linear-gradient(90deg, #d6b66e, #a77a31); border-radius: inherit; }
     .teacher-evidence { display: -webkit-box; overflow: hidden; margin: 9px 0 0; color: #786c55; font-size: 10px; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
     .teacher-details { margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee5d2; }
     .teacher-details summary { color: #87682e; cursor: pointer; font-size: 10px; font-weight: 700; }
@@ -114,7 +108,7 @@
     <header class="topbar">
       <div class="topbar-left">
         <a class="back-link" href="guide.html">← 返回指南</a>
-        <a class="brand" href="./首页.html" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+        <a class="brand" href="./首页.html" style="text-decoration:none"><span class="brand-mark">通</span><span>武汉大学 · 通识选课</span></a>
       </div>
       <nav class="nav" aria-label="页面导航">
         <span class="nav-cta">教师推荐</span>
@@ -123,17 +117,17 @@
 
     <main>
       <section class="page-head" aria-labelledby="pageTitle">
-        <p class="eyebrow">樱下选课 · STUDENT VOICE · TEACHER PICKS</p>
+        <p class="eyebrow">通识选课 · STUDENT VOICE · TEACHER PICKS</p>
         <h1 id="pageTitle">教师推荐</h1>
-        <p class="lede">这里整理的是往届同学在课程评价里留下的教师口碑：只保留教师成绩均分在 90 分以上的记录，看的是评价条数、成绩样本和具体说法，而不是一句话的「好」或「不好」。样本少的时候请谨慎参考，开课学期、考核方式和给分都可能变化，选课前仍要以当期教务信息为准。</p>
+        <p class="lede">这里整理的是往届同学在课程评价里留下的教师口碑，展示评价条数和具体反馈，不对教师作量化打分或排名。样本少的时候请谨慎参考，开课学期、考核方式和给分都可能变化，选课前仍要以当期教务信息为准。</p>
       </section>
 
       <aside class="emphasis" aria-labelledby="emphasisTitle">
-        <p class="emphasis-kicker">选课提醒 · 先想清楚，再比分数</p>
-        <h2 class="emphasis-title" id="emphasisTitle">这里只从「教师评分」的角度给参考，选课不必这么功利</h2>
-        <p>本站的教师推荐只做一件事：把往届评价里的<strong>评价条数、成绩样本和具体说法</strong>摊开，方便你判断一门课的授课风格与自己是否合得来。它不构成「该选哪门课」的结论，也不该被当成刷分攻略。</p>
-        <p>比分数更该先回答的是：<strong>你想学什么、想练什么能力</strong>。真正感兴趣的课，你才愿意多读两小时书、在讨论课上多说几句话，也更容易拿到让自己满意的结果；只按分数选出来的课，常常上完就忘。</p>
-        <p>所以建议的顺序是：<strong>先用兴趣圈定范围，再用这里的评分参考排优先级</strong>。分数只是参考之一，别让它替你决定大学四年想成为什么样的人。</p>
+        <p class="emphasis-kicker">选课提醒 · 先想清楚，再看评价</p>
+        <h2 class="emphasis-title" id="emphasisTitle">了解授课口碑，选课不必只看评价</h2>
+        <p>本站整理往届评价里的<strong>评价条数和具体反馈</strong>，帮助你了解课程授课体验；不对教师作量化打分。评价不构成「该选哪门课」的结论，也不该被当成刷分攻略。</p>
+        <p>比评价更该先回答的是：<strong>你想学什么、想练什么能力</strong>。真正感兴趣的课，你才愿意多读两小时书、在讨论课上多说几句话，也更容易获得适合自己的学习体验。</p>
+        <p>建议先用兴趣圈定课程范围，再结合评价内容了解授课风格。往届经验仅供参考，别让评价替你决定大学四年想成为什么样的人。</p>
       </aside>
 
       <section class="teacher-panel" aria-labelledby="teacherListTitle">
@@ -141,7 +135,7 @@
           <div>
             <p class="section-kicker">TEACHER PICKS</p>
             <h2 id="teacherListTitle">教师口碑推荐清单</h2>
-            <p class="teacher-panel-subtitle">只展示教师成绩均分 ≥ 90 的记录；可以按课程名、教师姓名搜索，也可以只看「优先推荐」。</p>
+            <p class="teacher-panel-subtitle">可以按课程名、教师姓名搜索，也可以按推荐类别筛选；页面不展示教师分数或排名。</p>
           </div>
         </div>
         <div class="filters">
@@ -161,7 +155,7 @@
 
     <footer class="page-footer">
       <p>教师口碑推荐来自课程评价整理，仅作历史参考，不代表学校官方评价，也不代表当期授课承诺。学分、学时及开课安排请以学校教务系统和当期通知为准。</p>
-      <p><a href="课程信息.html">← 回到樱下选课</a> · <a href="guide.html">返回选课指南</a></p>
+      <p><a href="课程信息.html">← 回到通识选课</a> · <a href="guide.html">返回选课指南</a></p>
     </footer>
   </div>
 
@@ -169,18 +163,7 @@
   <script>
     const teacherData = window.WHU_TEACHER_RECOMMENDATIONS;
     const allRecords = teacherData && Array.isArray(teacherData.records) ? teacherData.records : [];
-    const MIN_TEACHER_AVERAGE = 90;
-
-    function teacherAverage(record) {
-      const values = (String(record.teacherAverages || "").match(/\d+(?:\.\d+)?/g) || []).map(Number);
-      return values.length ? Math.max(...values) : NaN;
-    }
-
-    const records = allRecords
-      .filter(record => teacherAverage(record) >= MIN_TEACHER_AVERAGE)
-      .map((record, index) => ({ record, order: index }))
-      .sort((a, b) => Number(b.record.score) - Number(a.record.score) || a.order - b.order)
-      .map(({ record }, index) => ({ ...record, rank: index + 1 }));
+    const records = allRecords;
 
     const grid = document.getElementById("teacherGrid");
     const searchInput = document.getElementById("teacherSearch");
@@ -195,9 +178,12 @@
       })[character]);
     }
 
-    function formatScore(score) {
-      const value = Number(score);
-      return Number.isFinite(value) ? String(Number(value.toFixed(1))) : "—";
+    function ratingFreeEvidence(evidence) {
+      const summary = String(evidence || "")
+        .split("；")
+        .filter(item => !/(?:均分|%\s*为90\+|成绩字段缺失)/.test(item))
+        .join("；");
+      return summary || "暂无更多评价摘要。";
     }
 
     function levelClass(record) {
@@ -205,28 +191,18 @@
     }
 
     function renderCard(record) {
-      const score = Math.max(0, Math.min(100, Number(record.score) || 0));
       return `<article class="teacher-card">
         <div class="teacher-top">
-          <span class="teacher-rank">NO.${String(record.rank).padStart(2, "0")}</span>
           <span class="teacher-level ${levelClass(record)}">${escapeHtml(record.recommendationLevel)}</span>
         </div>
         <p class="teacher-course-name">${escapeHtml(record.courseTitle)}</p>
         <strong class="teacher-name">${escapeHtml(record.teachers)}</strong>
         <div class="teacher-stats">
           <span><strong>${escapeHtml(record.reviewCount)}</strong> 条评价</span>
-          <span><strong>${escapeHtml(record.gradeSampleCount)}</strong> 条有效成绩</span>
         </div>
-        <div class="teacher-score-row">
-          <span class="teacher-score-label">综合参考分</span>
-          <span class="teacher-score-number">${escapeHtml(formatScore(record.score))}</span>
-          <span class="teacher-score-track" role="meter" aria-label="综合参考分，仅用于本页排序" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}"><span style="width:${score}%"></span></span>
-        </div>
-        <p class="teacher-evidence">${escapeHtml(record.evidence || "暂无更多评价摘要。")}</p>
+        <p class="teacher-evidence">${escapeHtml(ratingFreeEvidence(record.evidence))}</p>
         <details class="teacher-details">
-          <summary>成绩参考与选课提醒</summary>
-          <p><strong>成绩均分参考：</strong>${escapeHtml(record.teacherAverages || "未提供")}</p>
-          <p><strong>90+ 比例参考：</strong>${escapeHtml(record.highGradeRates || "未提供")}</p>
+          <summary>选课提醒</summary>
           <p><strong>注意：</strong>${escapeHtml(record.caution || "课程与授课安排可能变化，请以当期信息为准。")}</p>
         </details>
       </article>`;
@@ -242,7 +218,7 @@
       });
 
       grid.innerHTML = matched.map(renderCard).join("");
-      countText.textContent = `教师成绩均分 ≥ ${MIN_TEACHER_AVERAGE} 的共 ${records.length} 条记录，当前显示 ${matched.length} 条`;
+      countText.textContent = `共 ${records.length} 条记录，当前显示 ${matched.length} 条`;
 
       if (matched.length === 0) {
         dataStatus.hidden = false;
@@ -259,7 +235,7 @@
       levelSelect.disabled = true;
       countText.textContent = "";
     } else {
-      dataNote.textContent = `数据源：${teacherData.source || "课程评价整理"}（截至 ${teacherData.updated || "日期未注明"}）。已按教师成绩均分 ≥ ${MIN_TEACHER_AVERAGE} 过滤，成绩缺失或低于该分数的记录不列出；综合参考分只用于本页排序，不代表学校评价，评价条数少的老师请谨慎参考。`;
+      dataNote.textContent = `数据源：${teacherData.source || "课程评价整理"}（截至 ${teacherData.updated || "日期未注明"}）。页面不提供教师量化评分或排名；评价条数少的老师请谨慎参考。`;
       searchInput.addEventListener("input", applyFilters);
       levelSelect.addEventListener("change", applyFilters);
       applyFilters();
