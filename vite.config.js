@@ -19,6 +19,25 @@ const copyLegacyFiles = () => ({
 });
 
 export default defineConfig({
+  server: {
+    proxy: {
+      '/pages/training-plan': 'http://127.0.0.1:8002',
+      '/api': {
+        target: 'http://127.0.0.1:8002',
+        changeOrigin: true,
+        configure(proxy) {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            // Translate only same-origin Vite requests for Flask's origin check.
+            // Keep foreign Origin headers intact so Flask can reject them.
+            const origin = req.headers.origin;
+            if (origin === `http://${req.headers.host}` || origin === `https://${req.headers.host}`) {
+              proxyReq.setHeader('Origin', 'http://127.0.0.1:8002');
+            }
+          });
+        },
+      },
+    },
+  },
   plugins: [copyLegacyFiles()],
   build: {
     rollupOptions: {

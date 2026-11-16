@@ -18,6 +18,7 @@
 | `faq.html` | 常见问题：4 组场景、15 条折叠问答 |
 | `学长抢课秘籍.html` | 学长抢课秘籍：页面骨架，内容待补充 |
 | `教师推荐.html` | 教师推荐：只列教师成绩均分 ≥ 90 的口碑记录，可搜索课程/教师、按推荐等级筛选 |
+| `pages/training-plan.html` | 培养方案：上传 PDF 或 DOCX，由本地 Python 后端调用 DeepSeek 分析 |
 
 板块之间用「上一步 / 下一步」按钮按顺序串联；指南首页与页脚的导航可跳到任意板块。页头「常见问题」右侧另有「樱下选课」（跳到 `课程信息.html`）、「学长抢课秘籍」和「教师推荐」（跳到 `教师推荐.html`）三个入口。
 
@@ -36,12 +37,23 @@ npm run build   # 构建到 dist/
 npm run preview # 预览构建结果
 ```
 
+### 本机演示培养方案分析
+
+指南首页（`guide.html`）的「分析培养方案」按钮和导航中的「培养方案」会打开 `/pages/training-plan.html`。Vite 开发服务器将该页面和 `/api` 请求转发到本机 Python 后端。需要同时启动两个服务：
+
+1. 在项目目录配置 `.env` 中的 `DEEPSEEK_API_KEY`（此文件不提交到 Git）。已有 `.env` 的电脑无需重复填写。
+2. 在一个终端运行 `python -m pip install -r requirements.txt`，然后运行 `python server.py`。后端监听 `http://127.0.0.1:8002`。
+3. 在另一个终端运行 `npm install`（首次运行时），然后运行 `npm run dev`。
+4. 打开 Vite 输出的地址（通常是 `http://localhost:5173`），从封面页进入指南后点击「分析培养方案」。
+
+换电脑演示时，需要在那台电脑单独配置 Key 并安装 Node/Python 依赖。只启动 Vite 时，其他页面可正常打开，但培养方案页和分析接口不可用。部署时应由服务器保存 Key，并将 `/pages/training-plan*` 和 `/api/*` 转发给 Python 后端。
+
 ## 实现说明
 
 - `src/guide.css`：全站样式（珞珈绿 + 米白纸质），含首页路线与移动端时间轴布局。
 - `src/guide.js`：注入页头页脚导航、标记当前板块、问答「全部展开／收起」、滚动渐显。
-- `vite.config.js`：多页构建入口（上面 10 个页面）。
+- `vite.config.js`：多页构建入口（上面 10 个页面），以及本机培养方案页和 API 的开发代理（培养方案页由 Python 后端提供，不进构建）。
 
 ## 旧版文件
 
-`课程信息.html`、`课程数据.js`、`教师推荐数据.js`、`global.css`、`style.css`、`pages/`、`assets/` 为早期实验页面，保留未改动，**不参与打包**；其中 `课程信息.html`、`课程数据.js` 与 `教师推荐数据.js` 由构建脚本原样复制到 `dist/`，供「樱下选课」与「教师推荐」入口使用。
+`课程信息.html`、`课程数据.js`、`教师推荐数据.js`、`global.css`、`style.css`、`pages/` 中除培养方案外的页面为早期实验内容，**不参与打包**；其中 `课程信息.html`、`课程数据.js` 与 `教师推荐数据.js` 由构建脚本原样复制到 `dist/`，供「樱下选课」与「教师推荐」入口使用。培养方案页使用 `global.css` 和 `assets/campus-background.png`，由 Vite 构建处理。
