@@ -5,65 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="在武汉大学樱花树下探索通识课程，并通过 MBTI 兴趣助手发现适合自己的课程方向。">
   <title>樱下选课 · 武汉大学通识课程</title>
+  <link rel="stylesheet" href="./global.css">
   <style>
     :root {
-      --ink: #3a3440;
-      --muted: #847d88;
-      --paper: #fffaf9;
+      --ink: var(--color-text);
+      --muted: var(--color-secondary);
+      --paper: var(--color-background);
       --rose: #d67e9d;
       --rose-dark: #a95275;
       --rose-pale: #f9e9ee;
-      --leaf: #5e8564;
-      --line: #f0e2e6;
-      --shadow: 0 18px 48px rgba(111, 63, 81, .10);
+      --line: var(--color-border);
+      --shadow: var(--shadow-md);
     }
 
-    * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, input, select { font: inherit; }
+    body { -webkit-font-smoothing: antialiased; }
+    .course-page { color: var(--ink); }
     button { cursor: pointer; }
     a { color: inherit; }
     .page { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
 
-    .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: var(--border-default); background: var(--color-surface-glass); }
     .topbar-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
     .back-link { display: inline-flex; align-items: center; flex: 0 0 auto; padding: 8px 14px; border: 1px solid var(--rose); border-radius: 99px; color: var(--rose-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background .16s ease, border-color .16s ease, color .16s ease; }
     .back-link:hover { background: var(--rose); border-color: var(--rose); color: #fff; }
     .brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 700; letter-spacing: .04em; }
-    .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; color: white; background: var(--rose); border-radius: 50% 50% 47% 53%; font-size: 18px; }
-    .nav { display: flex; align-items: center; gap: 25px; color: #766b74; font-size: 13px; }
+    .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; color: var(--color-on-primary); background: var(--color-primary); border-radius: 50% 50% 47% 53%; font-size: 18px; }
+    .nav { display: flex; align-items: center; gap: 25px; color: var(--color-secondary); font-size: 13px; }
     .nav a { text-decoration: none; }
-    .nav a:hover { color: var(--rose-dark); }
-    .nav .nav-cta { padding: 9px 14px; color: white; background: var(--rose); border-radius: 99px; }
+    .nav a:hover { color: var(--color-primary); }
+    .nav .nav-cta { padding: 9px 14px; color: var(--color-on-primary); background: var(--color-primary); border-radius: var(--radius-sm); }
 
     .hero {
-      position: relative; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center;
-      min-height: 420px; overflow: hidden; margin: 24px 0 42px; padding: 42px 54px;
+      --rose: #d67e9d;
+      --rose-dark: #a95275;
+      position: relative; display: grid; grid-template-columns: 1fr; align-items: center;
+      min-height: 0; overflow: hidden; margin: 24px 0 26px; padding: 24px 44px 38px;
       background: linear-gradient(115deg, #fff1f4 0%, #fff8f4 56%, #f5f8ed 100%);
       border: 1px solid #f6e5e9; border-radius: 27px;
     }
     .hero::before, .hero::after { content: ""; position: absolute; border: 1px solid rgba(214,126,157,.15); border-radius: 50%; pointer-events: none; }
     .hero::before { width: 360px; height: 360px; left: -205px; bottom: -240px; box-shadow: 0 0 0 30px rgba(214,126,157,.035), 0 0 0 62px rgba(214,126,157,.03); }
     .hero::after { width: 300px; height: 300px; right: 20px; top: -220px; box-shadow: 0 0 0 28px rgba(214,126,157,.035); }
-    .hero-copy { position: relative; z-index: 1; align-self: center; padding-bottom: 16px; }
+    .hero-copy { position: relative; z-index: 1; grid-row: 2; align-self: center; padding: 0; text-align: center; }
     .eyebrow { margin: 0 0 13px; color: var(--rose-dark); font-size: 11px; font-weight: 700; letter-spacing: .2em; }
     h1 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: clamp(35px, 5vw, 58px); font-weight: 500; letter-spacing: .04em; line-height: 1.22; }
-    .hero-copy > p:last-of-type { max-width: 430px; margin: 18px 0 0; color: #776d75; font-size: 14px; line-height: 1.9; }
-    .hero-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .hero-copy > p:last-of-type { max-width: 600px; margin: 14px auto 0; color: #776d75; font-size: 14px; line-height: 1.9; }
+    .hero-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
     .primary-button, .secondary-button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 0 17px; border-radius: 99px; font-size: 13px; text-decoration: none; transition: .2s ease; }
     .primary-button { color: white; background: var(--rose-dark); border: 1px solid var(--rose-dark); }
     .primary-button:hover { background: #904261; }
     .secondary-button { color: var(--rose-dark); background: rgba(255,255,255,.55); border: 1px solid #e8becb; }
     .secondary-button:hover { background: white; }
-    .sakura-scene { position: relative; width: min(100%, 440px); height: 330px; justify-self: end; }
-    .tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .sakura-scene { position: relative; grid-row: 1; width: min(100%, 760px); height: 570px; justify-self: center; perspective: 1100px; }
+    .tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 20px 20px rgba(100, 65, 69, .14)); transform: rotateX(2deg); transform-origin: center bottom; }
+    .falling-petal { transform-box: fill-box; transform-origin: center; animation: petal-drift 6s ease-in-out infinite alternate; }
+    .falling-petal:nth-of-type(2n) { animation-delay: -2.5s; animation-duration: 7.5s; }
+    @keyframes petal-drift { from { translate: 0 -7px; rotate: -18deg; } to { translate: 12px 18px; rotate: 35deg; } }
     .blossom { position: absolute; z-index: 2; display: grid; width: 39px; height: 39px; place-items: center; padding: 0; color: #86556a; background: rgba(255,255,255,.94); border: 1px solid #f3ccd7; border-radius: 50%; box-shadow: 0 5px 16px rgba(148,78,105,.12); font-size: 11px; font-weight: 700; transition: transform .18s ease, box-shadow .18s ease; }
     .blossom:hover, .blossom:focus-visible { z-index: 5; transform: scale(1.18); box-shadow: 0 8px 24px rgba(148,78,105,.22); outline: 2px solid #d67e9d; outline-offset: 3px; }
     .blossom.recommended { color: white; background: var(--rose-dark); border-color: white; animation: glow 1.8s ease-in-out infinite; }
@@ -71,70 +69,133 @@
     .tree-caption { position: absolute; right: 0; bottom: -2px; left: 0; color: #8a7480; font-family: "STSong", serif; font-size: 13px; letter-spacing: .12em; text-align: center; }
     .tree-caption span { color: var(--rose-dark); font-weight: 700; }
 
+    .journey-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0 0; }
+    .journey-step { position: relative; display: flex; align-items: center; gap: 11px; min-width: 0; padding: 13px 15px; color: var(--color-secondary); background: var(--color-surface-glass); border: var(--border-default); border-radius: var(--radius-md); transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
+    .journey-step::after { content: "→"; position: absolute; right: -9px; z-index: 1; display: grid; width: 18px; height: 18px; place-items: center; color: var(--color-secondary); background: var(--color-background); border-radius: 50%; font-size: 11px; }
+    .journey-step:last-child::after { display: none; }
+    .journey-step[aria-current="step"] { color: var(--color-primary); background: var(--color-primary-soft); border-color: var(--color-primary); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+    .journey-step.is-complete .journey-number { color: var(--color-on-primary); background: var(--color-primary); }
+    .journey-number { flex: 0 0 29px; width: 29px; height: 29px; display: grid; place-items: center; color: var(--color-primary); background: var(--color-primary-soft); border-radius: 50%; font-family: Georgia, serif; font-size: 12px; font-weight: 700; }
+    .journey-label { min-width: 0; }
+    .journey-label strong, .journey-label small { display: block; }
+    .journey-label strong { font-size: 12px; }
+    .journey-label small { margin-top: 2px; color: var(--muted); font-size: 10px; }
+
     .intro-row { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
-    .section-kicker { margin: 0 0 5px; color: var(--rose-dark); font-size: 10px; font-weight: 700; letter-spacing: .17em; }
+    .section-kicker { margin: 0 0 5px; color: var(--color-primary); font-size: 10px; font-weight: 700; letter-spacing: .17em; }
     h2 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: 27px; font-weight: 500; }
     .section-subtitle { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
-    .dataset-badge { flex: 0 0 auto; padding: 8px 12px; color: #806b75; background: white; border: 1px solid var(--line); border-radius: 99px; font-size: 11px; }
+    .dataset-badge { flex: 0 0 auto; padding: 8px 12px; color: var(--color-secondary); background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-md); font-size: 11px; }
 
-    .mbti-section { margin: 58px 0 62px; padding: 32px; background: linear-gradient(135deg, #fff0f4, #fff8f5 62%, #f7f8ed); border: 1px solid #f2e2e5; border-radius: 22px; }
+    .mbti-section { margin: 34px 0 48px; padding: 32px; background: var(--color-surface-glass); border: var(--border-default); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); scroll-margin-top: 20px; }
+    .stage-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .stage-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; color: var(--color-primary); background: var(--color-primary-soft); border-radius: 99px; font-size: 10px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+    .stage-heading h2 { margin: 0; }
     .mbti-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(300px, 1.2fr); gap: 30px; align-items: start; }
-    .mbti-intro h2 { font-size: 26px; }
-    .mbti-intro p { margin: 12px 0 0; color: #766c75; font-size: 13px; line-height: 1.85; }
-    .notice { margin-top: 14px !important; color: #957789 !important; font-size: 11px !important; }
-    .quiz { padding: 21px; background: rgba(255,255,255,.83); border: 1px solid #f0e0e5; border-radius: 16px; }
+    .mbti-intro h3 { margin: 0 0 10px; font-size: var(--font-xl); }
+    .mbti-intro p { margin: 12px 0 0; color: var(--color-secondary); font-size: 13px; line-height: 1.85; }
+    .notice { margin-top: 14px !important; color: var(--color-secondary) !important; font-size: 11px !important; }
+    .quiz { padding: 21px; background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-md); }
     .quiz-progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 15px; color: var(--muted); font-size: 11px; }
-    .progress-track { flex: 1; height: 5px; overflow: hidden; background: #f2e9ec; border-radius: 99px; }
-    .progress-fill { width: 0; height: 100%; background: var(--rose); border-radius: inherit; transition: width .25s ease; }
+    .progress-track { flex: 1; height: 5px; overflow: hidden; background: var(--color-primary-soft); border-radius: 99px; }
+    .progress-fill { width: 0; height: 100%; background: var(--color-accent); border-radius: inherit; transition: width .25s ease; }
     .question { min-height: 47px; margin: 0 0 14px; font-size: 15px; font-weight: 600; line-height: 1.65; }
     .answer-list { display: grid; gap: 8px; }
-    .answer-button { padding: 11px 13px; color: #544a52; background: white; border: 1px solid #eee2e6; border-radius: 10px; text-align: left; font-size: 12px; line-height: 1.55; transition: .18s ease; }
-    .answer-button:hover, .answer-button:focus-visible { color: var(--rose-dark); background: #fff9fa; border-color: #dfaaba; outline: none; }
+    .answer-button { padding: 11px 13px; color: var(--color-text); background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-sm); text-align: left; font-size: 12px; line-height: 1.55; transition: .18s ease; }
+    .answer-button:hover, .answer-button:focus-visible { color: var(--color-primary); background: var(--color-primary-soft); border-color: var(--color-primary); outline: none; }
+    .answer-button[aria-pressed="true"] { color: var(--color-primary); background: var(--color-primary-soft); border-color: var(--color-primary); box-shadow: inset 3px 0 var(--color-primary); }
     .quiz-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 14px; }
-    .quiz-actions button, .result-actions button { min-height: 35px; padding: 0 13px; color: #7a5364; background: white; border: 1px solid #e6c6d0; border-radius: 99px; font-size: 11px; }
+    .quiz-actions button, .result-actions button { min-height: 35px; padding: 0 13px; color: var(--color-primary); background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-sm); font-size: 11px; }
     .quiz-actions button:disabled { opacity: .4; cursor: not-allowed; }
-    .result-panel { margin-top: 15px; padding: 17px; background: white; border: 1px solid #f0dce3; border-radius: 13px; }
+    .result-panel { margin-top: 15px; padding: 17px; background: var(--color-surface-glass); border: var(--border-default); border-radius: var(--radius-md); animation: reveal-result .45s ease both; }
+    @keyframes reveal-result { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     .result-panel[hidden] { display: none; }
-    .result-type { color: var(--rose-dark); font-family: Georgia, serif; font-size: 29px; font-weight: 700; letter-spacing: .06em; }
-    .result-summary { margin: 6px 0 12px; color: #716772; font-size: 12px; line-height: 1.7; }
+    .result-type { color: var(--color-primary); font-family: Georgia, serif; font-size: 29px; font-weight: 700; letter-spacing: .06em; }
+    .result-summary { margin: 6px 0 12px; color: var(--color-secondary); font-size: 12px; line-height: 1.7; }
     .recommend-title { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
-    .recommendations { display: grid; gap: 7px; }
-    .recommend-card { padding: 10px 11px; background: #fff8fa; border: 1px solid #f5e6eb; border-radius: 10px; }
-    .recommend-card strong { display: block; color: #5b3e4c; font-size: 12px; }
-    .recommend-card span { display: block; margin-top: 4px; color: #8a7c84; font-size: 10px; line-height: 1.55; }
-    .result-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .recommendations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .recommend-card { min-width: 0; padding: 11px; background: var(--color-primary-soft); border: var(--border-default); border-radius: var(--radius-sm); }
+    .recommend-card strong { display: block; color: var(--color-primary-hover); font-size: 12px; }
+    .recommend-card .recommend-reason { display: block; margin-top: 5px; color: var(--color-primary); font-size: 10px; font-weight: 700; line-height: 1.55; }
+    .recommend-card .recommend-teacher-line { display: block; margin-top: 7px; padding-top: 6px; color: #80602d; border-top: 1px solid rgba(169,130,61,.2); font-size: 10px; font-weight: 700; line-height: 1.55; }
+    .recommend-card .recommend-detail { display: block; margin-top: 4px; color: var(--color-secondary); font-size: 10px; line-height: 1.55; }
+    .result-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .result-actions .atlas-button { color: var(--color-on-primary); background: var(--color-primary); border-color: var(--color-primary); font-weight: 700; }
+    .result-actions .atlas-button:hover { background: var(--color-primary-hover); }
 
     .course-section { margin: 0 0 60px; scroll-margin-top: 22px; }
+    .course-section[hidden] { display: none; }
+    .course-stage-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .teacher-panel { margin: 18px 0 24px; padding: 21px; background: linear-gradient(135deg, #fff8eb, #fffdf8 58%, #f9f2df); border: 1px solid #e8d7b4; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .teacher-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
+    .teacher-panel-heading h3 { margin: 0; color: #594728; font-family: "STSong", "Songti SC", serif; font-size: 23px; font-weight: 600; }
+    .teacher-panel-heading .section-kicker { color: #9b7131; }
+    .teacher-panel-subtitle { margin: 5px 0 0; color: #75684e; font-size: 11px; line-height: 1.65; }
+    .teacher-filter-button { flex: 0 0 auto; min-height: 40px; padding: 0 14px; color: #614920; background: #fffaf0; border: 1px solid #c9a765; border-radius: 99px; font-size: 11px; font-weight: 700; transition: .18s ease; }
+    .teacher-filter-button:hover, .teacher-filter-button[aria-pressed="true"] { color: #fff; background: #89682e; border-color: #89682e; }
+    .teacher-filter-button:disabled { opacity: .5; cursor: not-allowed; }
+    .teacher-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .teacher-highlight-card { position: relative; min-width: 0; overflow: hidden; padding: 15px; background: rgba(255,255,255,.82); border: 1px solid #eadfc9; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(105,79,37,.07); }
+    .teacher-highlight-card::before { content: ""; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a67c37, #e4c783, #c69055); }
+    .teacher-highlight-top, .teacher-rec-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .teacher-rank { color: #a17b36; font-family: Georgia, serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+    .teacher-level { padding: 4px 8px; color: #70531e; background: #f5e9c9; border-radius: 99px; font-size: 9px; font-weight: 700; white-space: nowrap; }
+    .teacher-level--supplement { color: #69624f; background: #eeece4; }
+    .teacher-course-name { min-height: 38px; margin: 11px 0 5px; color: #5f5139; font-size: 12px; font-weight: 600; line-height: 1.55; }
+    .teacher-name { display: block; overflow-wrap: anywhere; color: #463513; font-family: "STSong", "Songti SC", serif; font-size: 19px; font-weight: 700; line-height: 1.4; }
+    .teacher-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .teacher-stats span { padding: 4px 7px; color: #766b54; background: #f6f1e5; border-radius: 4px; font-size: 9px; }
+    .teacher-stats strong { color: #72531c; font-size: 11px; }
+    .teacher-score-row { display: flex; align-items: center; gap: 10px; }
+    .teacher-score-label { flex: 0 0 auto; color: #897b61; font-size: 9px; }
+    .teacher-score-number { flex: 0 0 auto; color: #9a6d21; font-family: Georgia, serif; font-size: 20px; font-weight: 700; }
+    .teacher-score-track { flex: 1; height: 7px; overflow: hidden; background: #eee5d2; border-radius: 99px; }
+    .teacher-score-track span { display: block; height: 100%; background: linear-gradient(90deg, #d6b66e, #a77a31); border-radius: inherit; }
+    .teacher-evidence { display: -webkit-box; overflow: hidden; margin: 9px 0 0; color: #786c55; font-size: 10px; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+    .teacher-details { margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee5d2; }
+    .teacher-details summary { color: #87682e; cursor: pointer; font-size: 10px; font-weight: 700; }
+    .teacher-details p { margin: 7px 0 0; color: #71664f; font-size: 10px; line-height: 1.65; }
+    .teacher-data-note, .teacher-data-status { margin: 13px 0 0; color: #786d57; font-size: 10px; line-height: 1.7; }
+    .teacher-data-status { padding: 12px; background: #fff4e8; border: 1px solid #e7c696; border-radius: var(--radius-sm); }
+    .teacher-data-status[hidden] { display: none; }
     .filters { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(190px, 290px); gap: 10px; margin: 20px 0 13px; }
-    .filter-input, .filter-select { width: 100%; min-height: 43px; padding: 0 13px; color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 10px; outline: none; font-size: 12px; }
-    .filter-input:focus, .filter-select:focus { border-color: #d58ba3; box-shadow: 0 0 0 3px rgba(214,126,157,.12); }
+    .filter-input, .filter-select { width: 100%; min-height: var(--control-min-height); padding: 0 13px; color: var(--color-text); background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-sm); outline: none; font-size: 12px; }
+    .filter-input:focus, .filter-select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-soft); }
     .category-tabs { display: flex; gap: 7px; overflow-x: auto; padding: 2px 0 12px; scrollbar-width: thin; }
-    .category-tab { flex: 0 0 auto; padding: 7px 11px; color: #756d75; background: white; border: 1px solid var(--line); border-radius: 99px; font-size: 10px; }
-    .category-tab.active { color: white; background: var(--rose-dark); border-color: var(--rose-dark); }
+    .category-tab { flex: 0 0 auto; padding: 7px 11px; color: var(--color-secondary); background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-sm); font-size: 10px; }
+    .category-tab.active { color: var(--color-on-primary); background: var(--color-primary); border-color: var(--color-primary); }
     .results-line { display: flex; justify-content: space-between; gap: 12px; margin: 4px 0 12px; color: var(--muted); font-size: 11px; }
     .course-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
-    .course-card { min-width: 0; padding: 16px; background: white; border: 1px solid var(--line); border-radius: 13px; transition: transform .18s ease, box-shadow .18s ease; }
+    .course-card { min-width: 0; padding: 16px; background: var(--color-surface-glass); border: var(--border-default); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); transition: transform .18s ease, box-shadow .18s ease; }
     .course-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
     .course-head { display: flex; align-items: flex-start; gap: 11px; }
-    .course-number { flex: 0 0 42px; padding: 5px 3px; color: var(--rose-dark); background: var(--rose-pale); border-radius: 8px; font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-align: center; }
+    .course-number { flex: 0 0 42px; padding: 5px 3px; color: var(--color-primary); background: var(--color-primary-soft); border-radius: var(--radius-sm); font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-align: center; }
     .course-title-wrap { min-width: 0; flex: 1; }
     .course-title { margin: 1px 0 4px; font-size: 15px; line-height: 1.5; }
-    .course-source-category { color: #8b8189; font-size: 10px; line-height: 1.5; }
-    .course-facts { display: flex; flex-wrap: wrap; gap: 6px 13px; margin: 12px 0 0; color: #766e76; font-size: 10px; }
-    .course-facts span::before { content: "·"; margin-right: 5px; color: var(--rose); font-weight: 700; }
-    .match-tag { padding: 3px 7px; color: #92506a; background: #fff0f4; border-radius: 99px; font-size: 9px; }
-    .course-details { margin-top: 11px; padding-top: 9px; border-top: 1px solid #f4ecef; }
-    .course-details summary { color: var(--rose-dark); cursor: pointer; font-size: 10px; font-weight: 600; }
-    .course-details p { margin: 8px 0 0; color: #716a72; font-size: 11px; line-height: 1.75; }
-    .empty { grid-column: 1 / -1; padding: 44px 20px; color: var(--muted); background: white; border: 1px dashed #e6ccd5; border-radius: 13px; text-align: center; font-size: 12px; line-height: 1.8; }
-    .footer { margin: 0 0 30px; padding: 19px 0; color: #8e858c; border-top: 1px solid var(--line); font-size: 10px; line-height: 1.8; text-align: center; }
-    .footer a { color: var(--rose-dark); }
+    .course-source-category { color: var(--color-secondary); font-size: 10px; line-height: 1.5; }
+    .course-facts { display: flex; flex-wrap: wrap; gap: 6px 13px; margin: 12px 0 0; color: var(--color-secondary); font-size: 10px; }
+    .course-facts span::before { content: "·"; margin-right: 5px; color: var(--color-accent); font-weight: 700; }
+    .match-tag { padding: 3px 7px; color: var(--color-primary-hover); background: var(--color-primary-soft); border-radius: var(--radius-sm); font-size: 9px; }
+    .course-teacher-rec { margin-top: 12px; padding: 11px 12px; background: linear-gradient(105deg, #fff8e9, #fffdf7); border: 1px solid #eadbbd; border-left: 4px solid #bb9147; border-radius: var(--radius-sm); }
+    .course-teacher-rec .teacher-rec-top { justify-content: flex-start; }
+    .course-teacher-rec .teacher-rec-label { color: #87672e; font-size: 10px; font-weight: 700; }
+    .course-teacher-rec .teacher-level { margin-left: auto; }
+    .course-teacher-rec .teacher-name { margin-top: 6px; font-size: 16px; }
+    .course-teacher-rec .teacher-stats { margin: 7px 0 0; }
+    .course-teacher-rec .teacher-details { margin-top: 8px; }
+    .course-details { margin-top: 11px; padding-top: 9px; border-top: var(--border-default); }
+    .course-details summary { color: var(--color-primary); cursor: pointer; font-size: 10px; font-weight: 600; }
+    .course-details p { margin: 8px 0 0; color: var(--color-secondary); font-size: 11px; line-height: 1.75; }
+    .empty { grid-column: 1 / -1; padding: 44px 20px; color: var(--muted); background: var(--color-surface); border: 1px dashed var(--color-border); border-radius: var(--radius-md); text-align: center; font-size: 12px; line-height: 1.8; }
+    .footer { margin: 0 0 30px; padding: 19px 0; color: var(--color-secondary); border-top: var(--border-default); font-size: 10px; line-height: 1.8; text-align: center; }
+    .footer a { color: var(--color-primary); }
 
     @media (max-width: 820px) {
-      .hero { grid-template-columns: 1fr .9fr; padding: 36px; }
-      .sakura-scene { height: 280px; }
+      .hero { padding-inline: 32px; }
+      .sakura-scene { width: min(100%, 640px); height: 480px; }
       .mbti-layout { grid-template-columns: 1fr; gap: 18px; }
       .course-list { grid-template-columns: 1fr; }
+      .teacher-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 600px) {
       .page { width: min(100% - 30px, 500px); }
@@ -146,18 +207,31 @@
       .nav { gap: 11px; font-size: 10px; }
       .nav a:not(.nav-cta) { display: none; }
       .nav .nav-cta { padding: 8px 11px; }
-      .hero { display: flex; flex-direction: column; align-items: stretch; margin: 16px 0 34px; padding: 28px 22px 18px; }
-      .hero-copy { padding: 0; }
+      .journey-track { gap: 6px; margin-top: 14px; }
+      .journey-step { flex-direction: column; align-items: flex-start; gap: 7px; padding: 10px; }
+      .journey-step::after { right: -8px; }
+      .journey-label strong { font-size: 10px; }
+      .journey-label small { font-size: 9px; line-height: 1.4; }
+      .hero { display: flex; flex-direction: column; align-items: stretch; margin: 16px 0 24px; padding: 20px 14px 24px; }
+      .hero-copy { order: 2; padding: 0; }
       h1 { font-size: 39px; }
       .hero-copy > p:last-of-type { margin-top: 12px; font-size: 12px; }
       .hero-buttons { margin-top: 16px; }
-      .sakura-scene { align-self: center; width: min(100%, 370px); height: 240px; margin-top: 8px; }
+      .sakura-scene { order: 1; align-self: center; width: min(100%, 500px); height: min(75vw, 375px); min-height: 245px; margin-top: 0; }
       .tree-caption { bottom: 0; font-size: 11px; }
       .blossom { width: 34px; height: 34px; font-size: 9px; }
+      .journey-step small { display: none; }
+      .stage-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
       .intro-row { align-items: flex-start; flex-direction: column; gap: 10px; }
       h2 { font-size: 24px; }
-      .mbti-section { margin: 38px 0 46px; padding: 22px 16px; border-radius: 17px; }
+      .mbti-section { margin: 26px 0 36px; padding: 22px 16px; border-radius: 17px; }
       .quiz { padding: 15px; }
+      .recommendations { grid-template-columns: 1fr; }
+      .teacher-panel { padding: 17px 13px; }
+      .teacher-panel-heading { align-items: flex-start; flex-direction: column; }
+      .teacher-panel-heading h3 { font-size: 21px; }
+      .teacher-highlights { grid-template-columns: 1fr; }
+      .teacher-course-name { min-height: 0; }
       .filters { grid-template-columns: 1fr; }
       .course-card { padding: 14px; }
     }
@@ -166,56 +240,204 @@
     }
   </style>
 </head>
-<body>
+<body class="course-page">
   <div class="page">
     <header class="topbar">
       <div class="topbar-left">
         <a class="back-link" href="index.html">← 返回指南</a>
-        <a class="brand" href="#" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+        <a class="brand" href="./首页.html" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
       </div>
       <nav class="nav" aria-label="页面导航">
-        <a href="#tree">樱花课程树</a>
-        <a href="#mbti">MBTI 助手</a>
-        <a href="#courses">通识课程</a>
-        <a class="nav-cta" href="#mbti">开始兴趣测试</a>
+        <a href="#tree">回到樱花树</a>
+        <span class="nav-cta">春日选课冒险</span>
       </nav>
     </header>
 
     <main>
       <section class="hero" id="tree" aria-labelledby="heroTitle">
         <div class="hero-copy">
-          <p class="eyebrow">WUHAN UNIVERSITY · SAKURA SELECTION</p>
+          <p class="eyebrow">第一站 · WUHAN UNIVERSITY · SAKURA QUEST</p>
           <h1 id="heroTitle">樱花树下<br>遇见你的下一门课</h1>
-          <p>把武汉大学通识课程挂上樱花枝头。先做一个轻量兴趣小测，再沿着课程树找到值得探索的方向。</p>
+          <p>沿着花枝开启选课冒险。先完成 MBTI 兴趣探索，解锁为你挑选的通识课，再打开完整课程图鉴。</p>
           <div class="hero-buttons">
-            <a class="primary-button" href="#mbti">测测我的课程人格　↓</a>
-            <a class="secondary-button" href="#courses">浏览全部课程</a>
+            <a class="primary-button" id="startQuiz" href="#mbti">进入第二关：MBTI 兴趣探索　↓</a>
           </div>
         </div>
-        <div class="sakura-scene" role="img" aria-label="以武汉大学樱花为灵感绘制的课程树，花瓣代表课程类别">
-          <svg class="tree-svg" viewBox="0 0 440 330" aria-hidden="true">
-            <ellipse cx="227" cy="298" rx="157" ry="15" fill="#eadbd1" opacity=".58"/>
-            <path d="M216 296 C219 259 197 232 203 201 C208 171 237 153 229 125 C224 106 207 92 197 75" fill="none" stroke="#745c49" stroke-width="16" stroke-linecap="round"/>
-            <path d="M214 225 C186 204 164 190 139 185 C118 181 102 168 91 149 M210 204 C237 183 255 168 276 160 C303 150 318 131 326 108 M220 176 C194 153 183 134 172 111 C163 91 145 77 126 71 M228 149 C250 129 267 113 279 91 C287 74 301 62 319 54 M207 234 C183 231 164 237 148 250 M235 194 C257 200 275 214 293 232" fill="none" stroke="#80654e" stroke-width="9" stroke-linecap="round"/>
-            <path d="M207 293 Q218 277 231 293 M201 298 Q217 284 239 298" fill="none" stroke="#9e795c" stroke-width="4" stroke-linecap="round"/>
-            <g fill="#88a67c">
-              <ellipse cx="105" cy="143" rx="12" ry="6" transform="rotate(32 105 143)"/><ellipse cx="145" cy="176" rx="12" ry="6" transform="rotate(28 145 176)"/>
-              <ellipse cx="303" cy="129" rx="12" ry="6" transform="rotate(-32 303 129)"/><ellipse cx="263" cy="168" rx="12" ry="6" transform="rotate(-22 263 168)"/>
-              <ellipse cx="154" cy="94" rx="11" ry="5" transform="rotate(48 154 94)"/><ellipse cx="290" cy="78" rx="12" ry="6" transform="rotate(-42 290 78)"/>
-              <ellipse cx="272" cy="220" rx="12" ry="6" transform="rotate(35 272 220)"/><ellipse cx="165" cy="239" rx="12" ry="6" transform="rotate(-25 165 239)"/>
-              <ellipse cx="190" cy="119" rx="10" ry="5" transform="rotate(-38 190 119)"/><ellipse cx="244" cy="131" rx="10" ry="5" transform="rotate(35 244 131)"/>
+        <div class="sakura-scene" role="group" aria-label="以武汉大学樱花为灵感绘制的课程树，选择花瓣查看课程类别">
+          <svg class="tree-svg" viewBox="0 0 760 570" aria-hidden="true">
+            <defs>
+              <linearGradient id="trunkGradient" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#4f382f"/>
+                <stop offset=".2" stop-color="#76513d"/>
+                <stop offset=".48" stop-color="#a57858"/>
+                <stop offset=".7" stop-color="#80583f"/>
+                <stop offset="1" stop-color="#503a32"/>
+              </linearGradient>
+              <linearGradient id="branchGradient" x1="0" x2="1" y1="0" y2="1">
+                <stop stop-color="#51392f"/>
+                <stop offset=".48" stop-color="#886047"/>
+                <stop offset="1" stop-color="#594034"/>
+              </linearGradient>
+              <linearGradient id="roofGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop stop-color="#815448"/>
+                <stop offset="1" stop-color="#a56c59"/>
+              </linearGradient>
+              <radialGradient id="blossomCloud">
+                <stop stop-color="#fff5f5" stop-opacity=".96"/>
+                <stop offset=".68" stop-color="#f6c6d1" stop-opacity=".72"/>
+                <stop offset="1" stop-color="#e99caf" stop-opacity=".12"/>
+              </radialGradient>
+              <radialGradient id="petalGradient" cx=".35" cy=".28">
+                <stop stop-color="#fffdfc"/>
+                <stop offset=".42" stop-color="#ffdfe7"/>
+                <stop offset="1" stop-color="#e99ab1"/>
+              </radialGradient>
+              <radialGradient id="petalCenter" cx=".35" cy=".3">
+                <stop stop-color="#fff9cd"/>
+                <stop offset="1" stop-color="#dfa54c"/>
+              </radialGradient>
+              <filter id="softShadow" x="-.3" y="-.3" width="1.6" height="1.8">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+                <feOffset dy="9"/>
+                <feComponentTransfer><feFuncA type="linear" slope=".18"/></feComponentTransfer>
+                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="distantBlur"><feGaussianBlur stdDeviation="2.4"/></filter>
+              <g id="cherryFlower">
+                <ellipse cx="0" cy="-7.2" rx="4.4" ry="7" fill="url(#petalGradient)"/>
+                <ellipse cx="6.8" cy="-2.2" rx="4.4" ry="7" transform="rotate(72 6.8 -2.2)" fill="url(#petalGradient)"/>
+                <ellipse cx="4.2" cy="5.8" rx="4.4" ry="7" transform="rotate(144 4.2 5.8)" fill="url(#petalGradient)"/>
+                <ellipse cx="-4.2" cy="5.8" rx="4.4" ry="7" transform="rotate(216 -4.2 5.8)" fill="url(#petalGradient)"/>
+                <ellipse cx="-6.8" cy="-2.2" rx="4.4" ry="7" transform="rotate(288 -6.8 -2.2)" fill="url(#petalGradient)"/>
+                <circle r="2.6" fill="url(#petalCenter)"/>
+                <circle cx="-.7" cy="-.9" r=".65" fill="#fff"/>
+              </g>
+            </defs>
+
+            <ellipse cx="380" cy="527" rx="284" ry="24" fill="#a88a79" opacity=".16" filter="url(#distantBlur)"/>
+            <ellipse cx="380" cy="522" rx="253" ry="18" fill="#d6b69e" opacity=".34"/>
+
+            <g opacity=".44" filter="url(#distantBlur)">
+              <path d="M136 408 L136 338 Q136 328 146 328 L614 328 Q624 328 624 338 L624 408Z" fill="#f3e5d7"/>
+              <path d="M112 336 L380 272 L648 336 L634 349 L380 296 L126 349Z" fill="url(#roofGradient)"/>
+              <path d="M171 336 L380 289 L589 336" fill="none" stroke="#70483f" stroke-width="5"/>
+              <path d="M183 347 L183 408 M238 347 L238 408 M522 347 L522 408 M577 347 L577 408" stroke="#c1a68d" stroke-width="7"/>
+              <path d="M339 408 L339 365 Q380 311 421 365 L421 408Z" fill="#947565"/>
+              <path d="M352 408 L352 369 Q380 331 408 369 L408 408Z" fill="#d8c0aa"/>
+              <path d="M158 409 H602" stroke="#b8997f" stroke-width="7"/>
+              <path d="M126 416 H634" stroke="#d2bba3" stroke-width="6"/>
             </g>
-            <g fill="#f3b4c6" opacity=".88">
-              <circle cx="92" cy="119" r="13"/><circle cx="130" cy="104" r="14"/><circle cx="171" cy="83" r="14"/><circle cx="201" cy="57" r="14"/>
-              <circle cx="239" cy="81" r="14"/><circle cx="278" cy="65" r="15"/><circle cx="322" cy="87" r="14"/><circle cx="350" cy="119" r="13"/>
-              <circle cx="118" cy="164" r="12"/><circle cx="154" cy="147" r="14"/><circle cx="184" cy="151" r="13"/><circle cx="256" cy="145" r="14"/>
-              <circle cx="296" cy="151" r="13"/><circle cx="330" cy="176" r="12"/><circle cx="144" cy="211" r="12"/><circle cx="292" cy="202" r="12"/>
+
+            <g fill="url(#blossomCloud)" opacity=".8">
+              <ellipse cx="190" cy="211" rx="111" ry="85"/>
+              <ellipse cx="288" cy="143" rx="122" ry="91"/>
+              <ellipse cx="450" cy="132" rx="126" ry="91"/>
+              <ellipse cx="565" cy="206" rx="110" ry="83"/>
+              <ellipse cx="275" cy="244" rx="111" ry="78"/>
+              <ellipse cx="478" cy="235" rx="125" ry="80"/>
+              <ellipse cx="375" cy="93" rx="91" ry="67"/>
             </g>
-            <g fill="#ffe5eb" opacity=".95">
-              <circle cx="92" cy="115" r="5"/><circle cx="130" cy="100" r="5"/><circle cx="171" cy="79" r="5"/><circle cx="201" cy="53" r="5"/>
-              <circle cx="239" cy="77" r="5"/><circle cx="278" cy="61" r="5"/><circle cx="322" cy="83" r="5"/><circle cx="350" cy="115" r="5"/>
-              <circle cx="118" cy="160" r="4"/><circle cx="154" cy="143" r="5"/><circle cx="184" cy="147" r="4"/><circle cx="256" cy="141" r="5"/>
-              <circle cx="296" cy="147" r="4"/><circle cx="330" cy="172" r="4"/>
+
+            <g fill="none" stroke="url(#branchGradient)" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+              <path d="M382 510 C340 460 305 421 269 377 C225 325 185 292 122 267 C91 255 69 230 54 196" stroke-width="24"/>
+              <path d="M381 508 C421 454 462 417 508 383 C561 344 599 302 628 246 C644 215 657 185 662 153" stroke-width="25"/>
+              <path d="M365 459 C361 399 368 351 385 303 C403 251 421 209 418 162 C415 122 395 90 366 60" stroke-width="29"/>
+              <path d="M367 402 C324 358 290 329 254 299 C218 269 191 235 178 197 C168 169 157 143 133 119" stroke-width="16"/>
+              <path d="M385 357 C435 320 469 286 493 245 C515 208 530 173 561 149 C586 130 612 118 643 111" stroke-width="17"/>
+              <path d="M393 291 C362 253 343 220 335 184 C328 151 331 122 349 91" stroke-width="12"/>
+              <path d="M416 322 C453 287 488 268 529 256 C565 245 592 225 607 194" stroke-width="12"/>
+              <path d="M307 424 C273 405 241 395 208 393 C176 390 146 378 121 357" stroke-width="11"/>
+              <path d="M455 424 C490 411 520 401 550 381 C575 364 595 341 609 313" stroke-width="10"/>
+              <path d="M247 297 C215 281 187 268 162 246 C140 227 126 205 119 181" stroke-width="8"/>
+              <path d="M493 245 C516 221 532 197 542 172" stroke-width="8"/>
+            </g>
+            <g fill="none" stroke="#d4aa7f" stroke-linecap="round" opacity=".44">
+              <path d="M370 487 C338 445 303 406 270 369 C220 315 171 285 112 262" stroke-width="5"/>
+              <path d="M391 488 C431 442 470 407 514 374 C567 333 606 287 633 235" stroke-width="5"/>
+              <path d="M371 444 C368 389 376 347 393 301 C412 249 430 206 426 161" stroke-width="5"/>
+            </g>
+
+            <g fill="none" stroke="url(#trunkGradient)" stroke-linecap="round" stroke-linejoin="round" filter="url(#softShadow)">
+              <path d="M381 526 C374 486 368 451 371 414 C374 373 392 340 402 302 C413 262 413 225 402 190 C393 161 375 131 352 105" stroke-width="47"/>
+              <path d="M379 500 C350 511 330 520 308 528 M382 501 C406 512 429 519 454 527 M373 512 C360 522 353 530 348 539 M392 511 C408 524 415 532 419 540" stroke-width="14"/>
+              <path d="M378 449 C354 418 327 386 302 359 M394 398 C418 372 442 345 458 319 M402 314 C380 287 365 260 360 231" stroke-width="15"/>
+            </g>
+            <path d="M379 478 C376 434 379 396 392 355 C405 316 408 277 402 240 C397 209 385 179 369 151" fill="none" stroke="#d9b18a" stroke-width="5" stroke-linecap="round" opacity=".62"/>
+            <path d="M353 526 Q378 516 401 526" fill="none" stroke="#f0d1ad" stroke-width="3" opacity=".8"/>
+
+            <g fill="#64805b" opacity=".84">
+              <ellipse cx="107" cy="252" rx="20" ry="8" transform="rotate(30 107 252)"/>
+              <ellipse cx="150" cy="274" rx="23" ry="8" transform="rotate(-22 150 274)"/>
+              <ellipse cx="210" cy="299" rx="22" ry="8" transform="rotate(30 210 299)"/>
+              <ellipse cx="282" cy="354" rx="22" ry="8" transform="rotate(43 282 354)"/>
+              <ellipse cx="583" cy="289" rx="22" ry="8" transform="rotate(-43 583 289)"/>
+              <ellipse cx="550" cy="332" rx="23" ry="8" transform="rotate(25 550 332)"/>
+              <ellipse cx="497" cy="377" rx="24" ry="8" transform="rotate(-24 497 377)"/>
+              <ellipse cx="459" cy="277" rx="22" ry="8" transform="rotate(-46 459 277)"/>
+              <ellipse cx="234" cy="224" rx="22" ry="8" transform="rotate(48 234 224)"/>
+              <ellipse cx="525" cy="188" rx="22" ry="8" transform="rotate(-44 525 188)"/>
+              <ellipse cx="333" cy="180" rx="18" ry="7" transform="rotate(42 333 180)"/>
+              <ellipse cx="429" cy="214" rx="19" ry="7" transform="rotate(-46 429 214)"/>
+            </g>
+            <g fill="#9aaa72" opacity=".78">
+              <ellipse cx="119" cy="247" rx="13" ry="4" transform="rotate(30 119 247)"/>
+              <ellipse cx="161" cy="269" rx="14" ry="4" transform="rotate(-22 161 269)"/>
+              <ellipse cx="220" cy="295" rx="13" ry="4" transform="rotate(30 220 295)"/>
+              <ellipse cx="291" cy="350" rx="14" ry="4" transform="rotate(43 291 350)"/>
+              <ellipse cx="573" cy="294" rx="14" ry="4" transform="rotate(-43 573 294)"/>
+              <ellipse cx="540" cy="337" rx="14" ry="4" transform="rotate(25 540 337)"/>
+              <ellipse cx="488" cy="380" rx="14" ry="4" transform="rotate(-24 488 380)"/>
+              <ellipse cx="450" cy="273" rx="13" ry="4" transform="rotate(-46 450 273)"/>
+              <ellipse cx="244" cy="219" rx="14" ry="4" transform="rotate(48 244 219)"/>
+              <ellipse cx="516" cy="184" rx="13" ry="4" transform="rotate(-44 516 184)"/>
+            </g>
+
+            <g filter="url(#softShadow)">
+              <use href="#cherryFlower" transform="translate(126 172) scale(1.45)"/>
+              <use href="#cherryFlower" transform="translate(157 145) scale(1.15)"/>
+              <use href="#cherryFlower" transform="translate(181 194) scale(1.25)"/>
+              <use href="#cherryFlower" transform="translate(213 124) scale(1.35)"/>
+              <use href="#cherryFlower" transform="translate(242 157) scale(1.5)"/>
+              <use href="#cherryFlower" transform="translate(279 112) scale(1.1)"/>
+              <use href="#cherryFlower" transform="translate(302 173) scale(1.4)"/>
+              <use href="#cherryFlower" transform="translate(330 91) scale(1.2)"/>
+              <use href="#cherryFlower" transform="translate(358 133) scale(1.45)"/>
+              <use href="#cherryFlower" transform="translate(388 78) scale(1.3)"/>
+              <use href="#cherryFlower" transform="translate(418 117) scale(1.4)"/>
+              <use href="#cherryFlower" transform="translate(450 88) scale(1.05)"/>
+              <use href="#cherryFlower" transform="translate(478 143) scale(1.45)"/>
+              <use href="#cherryFlower" transform="translate(511 105) scale(1.25)"/>
+              <use href="#cherryFlower" transform="translate(543 163) scale(1.45)"/>
+              <use href="#cherryFlower" transform="translate(577 186) scale(1.1)"/>
+              <use href="#cherryFlower" transform="translate(600 214) scale(1.35)"/>
+              <use href="#cherryFlower" transform="translate(565 235) scale(1.2)"/>
+              <use href="#cherryFlower" transform="translate(522 215) scale(1.35)"/>
+              <use href="#cherryFlower" transform="translate(482 198) scale(1.1)"/>
+              <use href="#cherryFlower" transform="translate(442 184) scale(1.3)"/>
+              <use href="#cherryFlower" transform="translate(400 159) scale(1.1)"/>
+              <use href="#cherryFlower" transform="translate(367 196) scale(1.1)"/>
+              <use href="#cherryFlower" transform="translate(322 213) scale(1.25)"/>
+              <use href="#cherryFlower" transform="translate(283 205) scale(1.05)"/>
+              <use href="#cherryFlower" transform="translate(245 231) scale(1.3)"/>
+              <use href="#cherryFlower" transform="translate(202 245) scale(1.1)"/>
+              <use href="#cherryFlower" transform="translate(161 222) scale(1.25)"/>
+              <use href="#cherryFlower" transform="translate(120 213) scale(1.05)"/>
+              <use href="#cherryFlower" transform="translate(185 107) scale(.9)"/>
+              <use href="#cherryFlower" transform="translate(262 88) scale(.9)"/>
+              <use href="#cherryFlower" transform="translate(344 56) scale(.95)"/>
+              <use href="#cherryFlower" transform="translate(468 70) scale(.9)"/>
+              <use href="#cherryFlower" transform="translate(534 126) scale(.9)"/>
+              <use href="#cherryFlower" transform="translate(617 170) scale(.85)"/>
+              <use href="#cherryFlower" transform="translate(594 251) scale(.9)"/>
+            </g>
+
+            <g fill="#f4b4c4" opacity=".9">
+              <path class="falling-petal" d="M82 309 C73 298 78 287 89 286 C98 292 95 303 82 309Z"/>
+              <path class="falling-petal" d="M642 329 C631 321 635 310 647 307 C657 314 654 324 642 329Z"/>
+              <path class="falling-petal" d="M256 404 C245 398 247 387 259 383 C270 390 268 399 256 404Z"/>
+              <path class="falling-petal" d="M531 430 C519 422 523 411 535 409 C545 416 543 425 531 430Z"/>
+              <path class="falling-petal" d="M177 358 C169 352 171 344 180 342 C188 348 186 355 177 358Z"/>
+              <path class="falling-petal" d="M602 382 C593 375 596 367 606 365 C615 372 612 379 602 382Z"/>
             </g>
           </svg>
           <button class="blossom" style="left:19%;top:24%" data-category="中华文化与世界文明（核心通识课）" aria-label="查看中华文化与世界文明核心通识课程">文史</button>
@@ -230,16 +452,35 @@
         </div>
       </section>
 
+      <nav class="journey-track" aria-label="选课探索进度">
+        <div class="journey-step" data-journey-step="1" aria-current="step">
+          <span class="journey-number">01</span>
+          <span class="journey-label"><strong>樱花树下</strong><small>开启春日探索</small></span>
+        </div>
+        <div class="journey-step" data-journey-step="2">
+          <span class="journey-number">02</span>
+          <span class="journey-label"><strong>MBTI 测试</strong><small>发现学习偏好</small></span>
+        </div>
+        <div class="journey-step" data-journey-step="3">
+          <span class="journey-number">03</span>
+          <span class="journey-label"><strong>课程图鉴</strong><small>解锁 406 门课程</small></span>
+        </div>
+      </nav>
+
       <section class="mbti-section" id="mbti" aria-labelledby="mbtiTitle">
+        <div class="stage-heading">
+          <span class="stage-badge">第二站 · 兴趣探索</span>
+          <h2 id="mbtiTitle">测出你的课程探索类型</h2>
+        </div>
         <div class="mbti-layout">
           <div class="mbti-intro">
-            <p class="section-kicker">A LITTLE GUIDE FOR YOU</p>
-            <h2 id="mbtiTitle">MBTI 通识选课助手</h2>
+            <p class="section-kicker">MBTI COURSE QUEST</p>
+            <h3>MBTI 通识选课助手</h3>
             <p>回答 8 个关于学习偏好的小问题，看看你更喜欢怎样探索世界。助手会结合你的选择，从课程简介中挑出一些可能合你兴趣的武大通识课。</p>
             <p class="notice">这是兴趣探索，不是正式心理测评；MBTI 也不能决定你适合或不适合某门课。推荐结果仅供灵感参考。</p>
           </div>
           <div class="quiz" id="quiz">
-            <div class="quiz-progress"><span id="questionCounter">第 1 / 8 题</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span></div>
+            <div class="quiz-progress"><span id="questionCounter">第 1 / 8 题</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span><span id="bloomScore">🌸 0 / 8</span></div>
             <p class="question" id="questionText"></p>
             <div class="answer-list" id="answerList"></div>
             <div class="quiz-actions">
@@ -253,22 +494,41 @@
               <div class="recommendations" id="recommendations"></div>
               <div class="result-actions">
                 <button id="showRecommendations" type="button">在樱花树上标记推荐</button>
-                <button id="clearRecommendations" type="button">清除结果</button>
+                <button class="atlas-button" id="openCourseAtlas" type="button">领取推荐，打开课程图鉴　→</button>
+                <button id="clearRecommendations" type="button">重新探索</button>
               </div>
             </section>
           </div>
         </div>
       </section>
 
-      <section class="course-section" id="courses" aria-labelledby="coursesTitle">
+      <section class="course-section" id="courses" aria-labelledby="coursesTitle" hidden>
+        <div class="course-stage-heading">
+          <span class="stage-badge">第三站 · 课程图鉴已解锁</span>
+          <h2 id="coursesTitle">武汉大学通识课程图鉴</h2>
+        </div>
         <div class="intro-row">
           <div>
             <p class="section-kicker">WHU GENERAL EDUCATION</p>
-            <h2 id="coursesTitle">在课程树下逛一逛</h2>
             <p class="section-subtitle">点选上方花瓣可按类别浏览。也可以搜索课程名、授课教师、开课单位或课程简介。</p>
           </div>
           <span class="dataset-badge" id="datasetBadge">正在载入课程资料…</span>
         </div>
+        <section class="teacher-panel" aria-labelledby="teacherPanelTitle">
+          <div class="teacher-panel-heading">
+            <div>
+              <p class="section-kicker">STUDENT VOICE · TEACHER PICKS</p>
+              <h3 id="teacherPanelTitle">好老师口碑推荐</h3>
+              <p class="teacher-panel-subtitle">按过往评价整理，样本数和成绩参考一起呈现；点“只看推荐课程”可浏览匹配课程。</p>
+            </div>
+            <button class="teacher-filter-button" id="teacherFilterToggle" type="button" aria-pressed="false" disabled>
+              🌟 <span id="teacherFilterLabel">只看推荐课程</span> <span id="teacherFilterCount">载入中</span>
+            </button>
+          </div>
+          <div class="teacher-highlights" id="teacherHighlights" aria-live="polite"></div>
+          <p class="teacher-data-note" id="teacherDataNote"></p>
+          <p class="teacher-data-status" id="teacherDataStatus" role="status" hidden></p>
+        </section>
         <div class="filters">
           <input class="filter-input" id="searchInput" type="search" placeholder="搜索课程、教师、学院或关键词…" aria-label="搜索通识课程">
           <select class="filter-select" id="categorySelect" aria-label="选择课程类别">
@@ -284,11 +544,13 @@
     <footer class="footer">
       本页面课程信息依据武汉大学通识教育中心公开资料《“武大通识3.0”课程简介》整理（资料日期：2021-09-02）。<br>
       课程介绍汇总不等同于当学期实际开课名单；学分、学时及开课安排请以学校教务系统和当期通知为准。
+      教师口碑推荐来自淘课啦课程评价整理（截至 2024-02-25），仅作历史参考，不代表学校官方评价或当期授课承诺。<br>
       <a href="http://gec.whu.edu.cn/info/1027/2412.htm" target="_blank" rel="noreferrer">查看官方资料来源</a>。
     </footer>
   </div>
 
   <script src="课程数据.js"></script>
+  <script src="教师推荐数据.js"></script>
   <script>
     (() => {
       "use strict";
@@ -306,20 +568,30 @@
       ];
       const axes = ["EI", "SN", "TF", "JP"];
       const questions = [
-        { axis: "EI", options: ["和同学交流想法、讨论中获得灵感（E）", "独自阅读和整理思路后形成观点（I）"] },
-        { axis: "SN", options: ["从具体案例、史料和真实经验开始（S）", "先了解概念、理论和整体图景（N）"] },
-        { axis: "TF", options: ["关注论证是否严谨、结论是否合理（T）", "关注议题对人的影响与情感共鸣（F）"] },
-        { axis: "JP", options: ["喜欢目标清晰、结构明确的课程（J）", "喜欢开放探索、允许临场发现的课程（P）"] },
-        { axis: "EI", options: ["课堂讨论、展示和协作会让我更投入（E）", "留有安静思考和个人阅读的时间更适合我（I）"] },
-        { axis: "SN", options: ["更想学可观察、可验证的现象与方法（S）", "更想追问新可能、抽象联系与未来问题（N）"] },
-        { axis: "TF", options: ["我会被逻辑、系统和问题解决吸引（T）", "我会被文化、价值和人的故事吸引（F）"] },
-        { axis: "JP", options: ["我喜欢循序推进、阶段安排明确（J）", "我喜欢自由联想、跨领域连接（P）"] }
+        { axis: "EI", options: ["和同学交流想法、讨论中获得灵感", "独自阅读和整理思路后形成观点"] },
+        { axis: "SN", options: ["从具体案例、史料和真实经验开始", "先了解概念、理论和整体图景"] },
+        { axis: "TF", options: ["关注论证是否严谨、结论是否合理", "关注议题对人的影响与情感共鸣"] },
+        { axis: "JP", options: ["喜欢目标清晰、结构明确的课程", "喜欢开放探索、允许临场发现的课程"] },
+        { axis: "EI", options: ["课堂讨论、展示和协作会让我更投入", "留有安静思考和个人阅读的时间更适合我"] },
+        { axis: "SN", options: ["更想学可观察、可验证的现象与方法", "更想追问新可能、抽象联系与未来问题"] },
+        { axis: "TF", options: ["我会被逻辑、系统和问题解决吸引", "我会被文化、价值和人的故事吸引"] },
+        { axis: "JP", options: ["我喜欢循序推进、阶段安排明确", "我喜欢自由联想、跨领域连接"] }
       ];
       const dimensions = {
         EI: ["更倾向在交流与协作中获得能量，也愿意分享和讨论。", "更倾向通过独立观察与思考形成自己的理解。"],
         SN: ["更容易被具体经验、可见细节和现实案例吸引。", "更容易被概念、想象力和抽象关联吸引。"],
         TF: ["更看重逻辑分析、证据与清晰的推理过程。", "更看重人的体验、价值关怀与情感共鸣。"],
         JP: ["偏好有结构、方向明确、便于规划的学习路径。", "偏好开放探索、灵活联想和多种可能性。"]
+      };
+      const scoreProfiles = {
+        E: ["社会与经济", "艺术与审美"],
+        I: ["思辨与逻辑", "心理与生命关怀"],
+        S: ["科学探索", "社会与经济", "历史与文明"],
+        N: ["历史与文明", "思辨与逻辑", "科学探索"],
+        T: ["思辨与逻辑", "科学探索", "社会与经济"],
+        F: ["艺术与审美", "心理与生命关怀", "历史与文明"],
+        J: ["社会与经济", "科学探索", "历史与文明"],
+        P: ["艺术与审美", "思辨与逻辑"]
       };
 
       const questionsAnswered = Array(questions.length).fill(null);
@@ -330,13 +602,126 @@
       const categoryTabs = document.getElementById("categoryTabs");
       const searchInput = document.getElementById("searchInput");
       const courseList = document.getElementById("courseList");
+      const courseSection = document.getElementById("courses");
       const resultCount = document.getElementById("resultCount");
       const resultPanel = document.getElementById("resultPanel");
+      const teacherData = window.WHU_TEACHER_RECOMMENDATIONS;
+      const teacherRecords = teacherData && Array.isArray(teacherData.records) ? teacherData.records : [];
+      const teacherByCourse = new Map(teacherRecords.map(record => [record.courseTitle, record]));
+      const teacherHighlights = document.getElementById("teacherHighlights");
+      const teacherFilterToggle = document.getElementById("teacherFilterToggle");
+      const teacherFilterLabel = document.getElementById("teacherFilterLabel");
+      let teacherFilterOnly = false;
+
+      function setJourneyStep(currentStep) {
+        document.querySelectorAll("[data-journey-step]").forEach(step => {
+          const number = Number(step.dataset.journeyStep);
+          step.classList.toggle("is-complete", number < currentStep);
+          if (number === currentStep) step.setAttribute("aria-current", "step");
+          else step.removeAttribute("aria-current");
+        });
+      }
 
       function escapeHtml(value) {
         return String(value || "").replace(/[&<>"']/g, character => ({
           "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
         })[character]);
+      }
+
+      function shortenText(value, limit) {
+        const characters = Array.from(String(value || ""));
+        return characters.length > limit ? `${characters.slice(0, limit).join("")}…` : characters.join("");
+      }
+
+      function formatScore(score) {
+        const value = Number(score);
+        return Number.isFinite(value) ? String(Number(value.toFixed(1))) : "—";
+      }
+
+      function recommendationLevelClass(record) {
+        return record.recommendationLevel === "口碑补充" ? "teacher-level--supplement" : "";
+      }
+
+      function renderTeacherRecommendation(record) {
+        const caution = record.caution || "课程与授课安排可能变化，请以当期信息为准。";
+        const evidence = record.evidence || "暂无更多评价摘要。";
+        return `<aside class="course-teacher-rec" aria-label="历史教师评价推荐">
+          <div class="teacher-rec-top">
+            <span class="teacher-rec-label">🌟 老师口碑推荐</span>
+            <span class="teacher-level ${recommendationLevelClass(record)}">${escapeHtml(record.recommendationLevel)}</span>
+          </div>
+          <strong class="teacher-name">${escapeHtml(record.teachers)}</strong>
+          <div class="teacher-stats">
+            <span><strong>${escapeHtml(record.reviewCount)}</strong> 条评价</span>
+            <span><strong>${escapeHtml(record.gradeSampleCount)}</strong> 条有效成绩</span>
+            <span><strong>${escapeHtml(formatScore(record.score))}</strong> 综合参考分</span>
+          </div>
+          <details class="teacher-details">
+            <summary>查看推荐依据与注意事项</summary>
+            <p><strong>评价摘要：</strong>${escapeHtml(evidence)}</p>
+            <p><strong>成绩均分参考：</strong>${escapeHtml(record.teacherAverages || "未提供")}</p>
+            <p><strong>90+ 比例参考：</strong>${escapeHtml(record.highGradeRates || "未提供")}</p>
+            <p><strong>注意：</strong>${escapeHtml(caution)}</p>
+          </details>
+        </aside>`;
+      }
+
+      function renderTeacherHighlights() {
+        if (!teacherData || !Array.isArray(teacherData.records)) {
+          document.getElementById("teacherDataStatus").hidden = false;
+          document.getElementById("teacherDataStatus").textContent = "老师推荐数据未能载入。请确认教师推荐数据.js 与课程信息.html 位于同一文件夹。";
+          teacherFilterToggle.disabled = true;
+          return;
+        }
+
+        teacherFilterToggle.disabled = teacherRecords.length === 0;
+        const matchedCourseCount = courses.filter(course => teacherByCourse.has(course.title)).length;
+        document.getElementById("teacherFilterCount").textContent = `${matchedCourseCount} 门`;
+        document.getElementById("teacherDataNote").textContent =
+          `匹配 ${teacherRecords.length} 份课程教师推荐记录，覆盖本页 ${matchedCourseCount} 个课程目录项 · 数据源：${teacherData.source || "课程评价整理"}（截至 ${teacherData.updated || "日期未注明"}）。综合分仅用于原表内部排序；样本较少时请谨慎参考。`;
+
+        if (teacherRecords.length === 0) {
+          document.getElementById("teacherDataStatus").hidden = false;
+          document.getElementById("teacherDataStatus").textContent = "暂时没有能与本页课程名匹配的老师推荐记录。";
+          return;
+        }
+
+        const wellSampled = teacherRecords
+          .filter(record => record.recommendationLevel === "优先推荐" && Number(record.reviewCount) >= 5)
+          .sort((a, b) => Number(b.score) - Number(a.score) || Number(b.reviewCount) - Number(a.reviewCount));
+        const featured = (wellSampled.length ? wellSampled : [...teacherRecords].sort((a, b) => Number(b.score) - Number(a.score))).slice(0, 6);
+        teacherHighlights.innerHTML = featured.map((record, index) => {
+          const course = courses.find(item => item.title === record.courseTitle);
+          const score = Math.max(0, Math.min(100, Number(record.score) || 0));
+          return `<article class="teacher-highlight-card">
+            <div class="teacher-highlight-top">
+              <span class="teacher-rank">口碑精选 ${String(index + 1).padStart(2, "0")}</span>
+              <span class="teacher-level ${recommendationLevelClass(record)}">${escapeHtml(record.recommendationLevel)}</span>
+            </div>
+            <p class="teacher-course-name">${escapeHtml(record.courseTitle)}</p>
+            <strong class="teacher-name">${escapeHtml(record.teachers)}</strong>
+            <div class="teacher-stats">
+              <span><strong>${escapeHtml(record.reviewCount)}</strong> 条评价</span>
+              <span><strong>${escapeHtml(record.gradeSampleCount)}</strong> 条有效成绩</span>
+            </div>
+            <div class="teacher-score-row">
+              <span class="teacher-score-label">综合参考分</span>
+              <span class="teacher-score-number">${escapeHtml(formatScore(record.score))}</span>
+              <div class="teacher-score-track" role="meter" aria-label="综合参考分，仅用于表内排序" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}">
+                <span style="width:${score}%"></span>
+              </div>
+            </div>
+            <p class="teacher-evidence">${escapeHtml(shortenText(record.evidence, 105))}</p>
+            <details class="teacher-details">
+              <summary>成绩参考与选课提醒</summary>
+              <p><strong>课程类别：</strong>${escapeHtml(course ? course.category : "未注明")}</p>
+              <p><strong>成绩均分参考：</strong>${escapeHtml(record.teacherAverages || "未提供")}</p>
+              <p><strong>90+ 比例参考：</strong>${escapeHtml(record.highGradeRates || "未提供")}</p>
+              <p><strong>评价依据：</strong>${escapeHtml(record.evidence || "未提供")}</p>
+              <p><strong>注意：</strong>${escapeHtml(record.caution || "课程安排可能变化，请以当期信息为准。")}</p>
+            </details>
+          </article>`;
+        }).join("");
       }
 
       function renderCategories() {
@@ -350,21 +735,30 @@
 
       function renderCourses() {
         const keyword = searchInput.value.trim().toLocaleLowerCase();
-        const visible = courses.filter(course => {
+        const baseCourses = teacherFilterOnly
+          ? courses.filter(course => teacherByCourse.has(course.title))
+          : courses;
+        const visible = baseCourses.filter(course => {
           const matchesCategory = !activeCategory || course.category === activeCategory;
-          const searchable = `${course.id} ${course.title} ${course.category} ${course.teacher} ${course.department} ${course.intro}`.toLocaleLowerCase();
+          const teacherRecommendation = teacherByCourse.get(course.title);
+          const recommendedTeacher = teacherRecommendation ? teacherRecommendation.teachers : "";
+          const searchable = `${course.id} ${course.title} ${course.category} ${course.teacher} ${recommendedTeacher} ${course.department} ${course.intro}`.toLocaleLowerCase();
           return matchesCategory && (!keyword || searchable.includes(keyword));
         });
 
-        resultCount.textContent = `显示 ${visible.length} / ${courses.length} 门课程`;
-        document.getElementById("activeFilter").textContent = activeCategory ? `当前类别：${activeCategory}` : "";
+        resultCount.textContent = `显示 ${visible.length} / ${baseCourses.length} 门课程`;
+        const filters = [];
+        if (activeCategory) filters.push(`当前类别：${activeCategory}`);
+        if (teacherFilterOnly) filters.push("仅显示教师口碑推荐课程");
+        document.getElementById("activeFilter").textContent = filters.join(" · ");
         if (!visible.length) {
           courseList.innerHTML = '<div class="empty">没有找到符合条件的课程。<br>试试更换分类或搜索关键词。</div>';
           return;
         }
 
         courseList.innerHTML = visible.map(course => {
-          const recommendation = recommendedCourses.some(item => item.id === course.id);
+          const recommendation = recommendedCourses.some(item => item.course.id === course.id);
+          const teacherRecommendation = teacherByCourse.get(course.title);
           const teacherDepartment = [course.teacher, course.department].filter(Boolean).join(" · ") || "课程资料未注明";
           return `<article class="course-card">
             <div class="course-head">
@@ -381,6 +775,7 @@
               <span>学时：${escapeHtml(course.hours || "原文未标注")}</span>
               ${course.sourcePage ? `<span>资料第 ${escapeHtml(course.sourcePage)} 页</span>` : ""}
             </div>
+            ${teacherRecommendation ? renderTeacherRecommendation(teacherRecommendation) : ""}
             <details class="course-details">
               <summary>查看课程简介${course.assessment ? "与考核信息" : ""}</summary>
               <p>${escapeHtml(course.intro || "原资料未提供课程简介。")}</p>
@@ -394,6 +789,7 @@
         const question = questions[questionIndex];
         document.getElementById("questionCounter").textContent = `第 ${questionIndex + 1} / ${questions.length} 题`;
         document.getElementById("progressFill").style.width = `${(questionIndex / questions.length) * 100}%`;
+        document.getElementById("bloomScore").textContent = `🌸 ${questionsAnswered.filter(answer => answer !== null).length} / ${questions.length}`;
         document.getElementById("questionText").textContent = question.text || ({
           EI: "哪种学习场景更容易让你进入状态？",
           SN: "什么样的课程内容更容易吸引你？",
@@ -401,8 +797,8 @@
           JP: "你更喜欢怎样的课程节奏？"
         })[question.axis];
         const answers = question.options.map((label, optionIndex) => `
-          <button class="answer-button" type="button" data-answer="${optionIndex}">
-            ${escapeHtml(label.replace(/（[EI]）$/, ""))}
+          <button class="answer-button" type="button" data-answer="${optionIndex}" aria-pressed="${questionsAnswered[questionIndex] === optionIndex}">
+            ${escapeHtml(label)}
           </button>
         `).join("");
         document.getElementById("answerList").innerHTML = answers;
@@ -433,28 +829,26 @@
 
       function scoreCourse(course, type) {
         const themes = getCourseThemes(course);
-        const profile = new Set();
         const [energy, style, decision, pace] = type.split("");
-
-        if (style === "N") ["历史与文明", "思辨与逻辑", "科学探索"].forEach(theme => profile.add(theme));
-        else ["科学探索", "社会与经济", "历史与文明"].forEach(theme => profile.add(theme));
-        if (decision === "F") ["艺术与审美", "心理与生命关怀", "历史与文明"].forEach(theme => profile.add(theme));
-        else ["思辨与逻辑", "科学探索", "社会与经济"].forEach(theme => profile.add(theme));
-        if (energy === "E") ["社会与经济", "艺术与审美"].forEach(theme => profile.add(theme));
-        if (pace === "P") ["艺术与审美", "思辨与逻辑"].forEach(theme => profile.add(theme));
-
-        let score = [...themes].filter(theme => profile.has(theme)).length * 3;
+        const preferences = [energy, style, decision, pace];
+        const weights = [1, 2, 3, 4];
+        let score = preferences.reduce((total, preference, index) =>
+          total + [...themes].filter(theme => scoreProfiles[preference].includes(theme)).length * weights[index], 0);
         const category = course.category || "";
         if (style === "N" && category.includes("中华文化")) score += 1;
         if (style === "S" && category.includes("科学精神")) score += 1;
         if (decision === "F" && (category.includes("艺术体验") || category.includes("中华文化"))) score += 2;
         if (decision === "T" && (category.includes("科学精神") || category.includes("社会科学"))) score += 2;
+        if (energy === "E" && (category.includes("社会科学") || category.includes("艺术体验"))) score += 1;
+        if (energy === "I" && (category.includes("科学精神") || category.includes("中华文化"))) score += 1;
+        if (pace === "J" && category.includes("社会科学")) score += 1;
         if (pace === "P" && category.includes("艺术体验")) score += 1;
         return score;
       }
 
       function finishQuiz() {
         const type = calculateType();
+        const matchingThemes = new Set(type.split("").flatMap(preference => scoreProfiles[preference]));
         const typeDescription = axes.map(axis => {
           const optionIndex = type.includes(axis[0]) ? 0 : 1;
           return dimensions[axis][optionIndex];
@@ -463,20 +857,37 @@
           .map(course => ({ course, score: scoreCourse(course, type) }))
           .filter(item => item.score > 0)
           .sort((a, b) => b.score - a.score || a.course.id.localeCompare(b.course.id))
-          .slice(0, 3)
-          .map(item => item.course);
+          .reduce((selected, item) => {
+            if (selected.length >= 8) return selected;
+            const categoryCount = selected.filter(entry => entry.course.category === item.course.category).length;
+            if (categoryCount < 2) selected.push({
+              course: item.course,
+              reasons: [...getCourseThemes(item.course)].filter(theme => matchingThemes.has(theme)).slice(0, 2)
+            });
+            return selected;
+          }, []);
 
         document.getElementById("questionCounter").textContent = "兴趣探索完成";
         document.getElementById("progressFill").style.width = "100%";
+        document.getElementById("bloomScore").textContent = `🌸 ${questions.length} / ${questions.length}`;
         document.getElementById("questionText").textContent = "你的课程探索偏好";
         document.getElementById("answerList").innerHTML = "";
         document.getElementById("prevQuestion").disabled = true;
         document.getElementById("resultType").textContent = type;
         document.getElementById("resultSummary").textContent = typeDescription;
-        document.getElementById("recommendations").innerHTML = recommendedCourses.map(course =>
-          `<div class="recommend-card"><strong>${escapeHtml(course.title)}</strong><span>${escapeHtml(course.category)} · ${escapeHtml(course.intro.slice(0, 95))}${course.intro.length > 95 ? "…" : ""}</span></div>`
-        ).join("");
+        document.getElementById("recommendations").innerHTML = recommendedCourses.map(({ course, reasons }, index) => {
+          const teacher = teacherByCourse.get(course.title);
+          return `<article class="recommend-card">
+            <span class="recommend-rank">🌸 0${index + 1}</span>
+            <strong>${escapeHtml(course.title)}</strong>
+            <span>${escapeHtml(course.category)}</span>
+            <span>${escapeHtml(course.intro.slice(0, 110))}${course.intro.length > 110 ? "…" : ""}</span>
+            <span class="recommend-reason">与你的兴趣呼应：${escapeHtml(reasons.length ? reasons.join("、") : "课程主题探索")}</span>
+            ${teacher ? `<span class="recommend-teacher-line">🌟 历史教师口碑：${escapeHtml(teacher.teachers)} · ${escapeHtml(teacher.reviewCount)} 条评价（${escapeHtml(teacherData.updated)}）</span>` : ""}
+          </article>`;
+        }).join("");
         resultPanel.hidden = false;
+        setJourneyStep(2);
       }
 
       categorySelect.addEventListener("change", () => {
@@ -501,10 +912,20 @@
         categorySelect.value = activeCategory;
         renderCategories();
         renderCourses();
-        document.getElementById("courses").scrollIntoView({ behavior: "smooth" });
+        setJourneyStep(2);
+        document.getElementById("mbti").scrollIntoView({ behavior: "smooth" });
       });
 
+      document.getElementById("startQuiz").addEventListener("click", () => setJourneyStep(2));
+
       searchInput.addEventListener("input", renderCourses);
+
+      teacherFilterToggle.addEventListener("click", () => {
+        teacherFilterOnly = !teacherFilterOnly;
+        teacherFilterToggle.setAttribute("aria-pressed", String(teacherFilterOnly));
+        teacherFilterLabel.textContent = teacherFilterOnly ? "显示全部课程" : "只看推荐课程";
+        renderCourses();
+      });
 
       document.getElementById("answerList").addEventListener("click", event => {
         const button = event.target.closest("[data-answer]");
@@ -528,7 +949,9 @@
         questionsAnswered.fill(null);
         questionIndex = 0;
         recommendedCourses = [];
+        courseSection.hidden = true;
         document.querySelectorAll(".blossom").forEach(blossom => blossom.classList.remove("recommended"));
+        setJourneyStep(2);
         renderQuestion();
         renderCourses();
       });
@@ -537,7 +960,9 @@
         recommendedCourses = [];
         questionsAnswered.fill(null);
         questionIndex = 0;
+        courseSection.hidden = true;
         document.querySelectorAll(".blossom").forEach(blossom => blossom.classList.remove("recommended"));
+        setJourneyStep(2);
         renderQuestion();
         renderCourses();
       });
@@ -545,10 +970,17 @@
       document.getElementById("showRecommendations").addEventListener("click", () => {
         document.querySelectorAll(".blossom").forEach(blossom => {
           const category = blossom.dataset.category;
-          const recommended = recommendedCourses.some(course => course.category === category);
+          const recommended = recommendedCourses.some(item => item.course.category === category);
           blossom.classList.toggle("recommended", recommended);
         });
         document.getElementById("tree").scrollIntoView({ behavior: "smooth" });
+      });
+
+      document.getElementById("openCourseAtlas").addEventListener("click", () => {
+        courseSection.hidden = false;
+        setJourneyStep(3);
+        renderCourses();
+        courseSection.scrollIntoView({ behavior: "smooth" });
       });
 
       if (!Array.isArray(courses) || courses.length === 0) {
@@ -561,6 +993,7 @@
 
       document.getElementById("datasetBadge").textContent = `${courses.length} 门课程 · 8 个类别`;
       renderCategories();
+      renderTeacherHighlights();
       renderCourses();
       renderQuestion();
     })();
