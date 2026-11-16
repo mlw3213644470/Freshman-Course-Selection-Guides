@@ -178,7 +178,7 @@
   // 启动时只探测本地后端，不接触 DeepSeek，不上传任何文件。
   async function checkBackend() {
     if (!["http:", "https:"].includes(location.protocol)) {
-      setStatus("请启动 server.py，并通过 http://127.0.0.1:8002 打开页面。", "error");
+      setStatus("请启动 Python 后端，并通过 Vite 首页或 http://127.0.0.1:8002 打开页面。", "error");
       return;
     }
     let timer;
@@ -187,14 +187,14 @@
       timer = setTimeout(() => controller.abort(), 5000);
       const response = await fetch("/api/health", { signal: controller.signal, cache: "no-store" });
       if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("请通过 http://127.0.0.1:8002 打开页面，Live Server 无法提供分析接口。");
+        throw new Error("分析接口不可用，请启动 Python 后端，并通过 Vite 首页或后端地址打开页面。");
       }
       const health = await response.json();
       if (health.provider !== "deepseek") throw new Error("后端尚未更新为 DeepSeek，请重启 server.py 并刷新页面。");
       if (!health.configured) throw new Error("后端未配置 DEEPSEEK_API_KEY，请填写本地 .env 并重启服务。");
     } catch (error) {
       if (!selectedFile && !busy) setStatus(error instanceof TypeError || error.name === "AbortError"
-        ? "无法连接本地后端，请启动 server.py 并通过 http://127.0.0.1:8002 访问。" : error.message, "error");
+        ? "无法连接本地后端，请启动 server.py，并通过 Vite 首页或 http://127.0.0.1:8002 访问。" : error.message, "error");
     } finally { clearTimeout(timer); }
   }
   setBusy(false);
