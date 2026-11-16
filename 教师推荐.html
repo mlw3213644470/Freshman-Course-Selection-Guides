@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="武汉大学通识课教师口碑推荐：按过往课程评价整理的教师推荐清单，附评价样本与成绩参考。">
+  <title>教师推荐 · 樱下选课</title>
+  <link rel="stylesheet" href="./global.css">
+  <style>
+    :root {
+      --ink: var(--color-text);
+      --muted: var(--color-secondary);
+      --rose: #d67e9d;
+      --rose-dark: #a95275;
+      --line: var(--color-border);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; }
+    .course-page { color: var(--ink); }
+    a { color: inherit; }
+    .page { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
+
+    .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: var(--border-default); background: var(--color-surface-glass); }
+    .topbar-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .back-link { display: inline-flex; align-items: center; flex: 0 0 auto; padding: 8px 14px; border: 1px solid var(--rose); border-radius: 99px; color: var(--rose-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background .16s ease, border-color .16s ease, color .16s ease; }
+    .back-link:hover { background: var(--rose); border-color: var(--rose); color: #fff; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 700; letter-spacing: .04em; }
+    .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; color: var(--color-on-primary); background: var(--color-primary); border-radius: 50% 50% 47% 53%; font-size: 18px; }
+    .nav { display: flex; align-items: center; gap: 25px; color: var(--color-secondary); font-size: 13px; }
+    .nav a { text-decoration: none; }
+    .nav a:hover { color: var(--color-primary); }
+    .nav .nav-cta { padding: 9px 14px; color: var(--color-on-primary); background: var(--color-primary); border-radius: var(--radius-sm); }
+
+    .page-head { margin: 26px 0 22px; padding: 30px 34px; background: linear-gradient(135deg, #fff8eb, #fffdf8 58%, #f7f4ea); border: 1px solid #ecdfc4; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .eyebrow { margin: 0 0 12px; color: #9b7131; font-size: 11px; font-weight: 700; letter-spacing: .2em; }
+    .page-head h1 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: clamp(30px, 4vw, 42px); font-weight: 600; letter-spacing: .04em; }
+    .page-head .lede { max-width: 760px; margin: 13px 0 0; color: #776a53; font-size: 13px; line-height: 1.9; }
+
+    .teacher-panel { margin: 0 0 26px; padding: 22px; background: linear-gradient(135deg, #fff8eb, #fffdf8 58%, #f9f2df); border: 1px solid #e8d7b4; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .teacher-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
+    .section-kicker { margin: 0; color: #9b7131; font-size: 10px; font-weight: 700; letter-spacing: .18em; }
+    .teacher-panel-heading h2 { margin: 6px 0 0; color: #594728; font-family: "STSong", "Songti SC", serif; font-size: 23px; font-weight: 600; }
+    .teacher-panel-subtitle { margin: 5px 0 0; color: #75684e; font-size: 11px; line-height: 1.65; }
+
+    .filters { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(170px, 240px); gap: 10px; margin: 4px 0 12px; }
+    .filter-input, .filter-select { width: 100%; min-height: var(--control-min-height); padding: 0 13px; color: var(--color-text); background: #fffdf7; border: 1px solid #ded0b3; border-radius: var(--radius-sm); font: inherit; font-size: 13px; }
+    .filter-input:focus, .filter-select:focus { border-color: #a67c37; box-shadow: 0 0 0 3px rgba(166,124,55,.16); outline: none; }
+    .list-status { margin: 0 0 12px; color: #7b6d54; font-size: 11px; }
+
+    .teacher-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+    .teacher-card { position: relative; min-width: 0; overflow: hidden; padding: 16px; background: rgba(255,255,255,.88); border: 1px solid #eadfc9; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(105,79,37,.07); }
+    .teacher-card::before { content: ""; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a67c37, #e4c783, #c69055); }
+    .teacher-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .teacher-rank { color: #a17b36; font-family: Georgia, serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+    .teacher-level { padding: 4px 8px; color: #70531e; background: #f5e9c9; border-radius: 99px; font-size: 9px; font-weight: 700; white-space: nowrap; }
+    .teacher-level--supplement { color: #69624f; background: #eeece4; }
+    .teacher-course-name { min-height: 38px; margin: 11px 0 5px; color: #5f5139; font-size: 12px; font-weight: 600; line-height: 1.55; }
+    .teacher-name { display: block; overflow-wrap: anywhere; color: #463513; font-family: "STSong", "Songti SC", serif; font-size: 19px; font-weight: 700; line-height: 1.4; }
+    .teacher-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .teacher-stats span { padding: 4px 7px; color: #766b54; background: #f6f1e5; border-radius: 4px; font-size: 9px; }
+    .teacher-stats strong { color: #72531c; font-size: 11px; }
+    .teacher-score-row { display: flex; align-items: center; gap: 10px; }
+    .teacher-score-label { flex: 0 0 auto; color: #897b61; font-size: 9px; }
+    .teacher-score-number { flex: 0 0 auto; color: #9a6d21; font-family: Georgia, serif; font-size: 20px; font-weight: 700; }
+    .teacher-score-track { flex: 1; height: 7px; overflow: hidden; background: #eee5d2; border-radius: 99px; }
+    .teacher-score-track span { display: block; height: 100%; background: linear-gradient(90deg, #d6b66e, #a77a31); border-radius: inherit; }
+    .teacher-evidence { display: -webkit-box; overflow: hidden; margin: 9px 0 0; color: #786c55; font-size: 10px; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+    .teacher-details { margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee5d2; }
+    .teacher-details summary { color: #87682e; cursor: pointer; font-size: 10px; font-weight: 700; }
+    .teacher-details p { margin: 7px 0 0; color: #71664f; font-size: 10px; line-height: 1.65; }
+
+    .teacher-data-note, .teacher-data-status { margin: 14px 0 0; color: #786d57; font-size: 10px; line-height: 1.7; }
+    .teacher-data-status { padding: 12px; background: #fff4e8; border: 1px solid #e7c696; border-radius: var(--radius-sm); }
+    .teacher-data-status[hidden] { display: none; }
+
+    .page-footer { margin: 8px 0 46px; padding-top: 16px; border-top: var(--border-default); color: var(--color-secondary); font-size: 11px; line-height: 1.8; }
+    .page-footer a { color: var(--rose-dark); font-weight: 700; text-decoration: none; }
+    .page-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 980px) {
+      .teacher-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .page { width: min(100% - 30px, 500px); }
+      .topbar { height: 62px; }
+      .topbar-left { gap: 10px; }
+      .back-link { padding: 6px 10px; font-size: 11px; }
+      .brand { font-size: 12px; }
+      .brand-mark { width: 31px; height: 31px; }
+      .nav { gap: 11px; font-size: 10px; }
+      .nav a:not(.nav-cta) { display: none; }
+      .nav .nav-cta { padding: 8px 11px; }
+      .page-head { margin-top: 16px; padding: 21px 16px; }
+      .teacher-panel { padding: 17px 13px; }
+      .teacher-panel-heading { align-items: flex-start; flex-direction: column; }
+      .teacher-panel-heading h2 { font-size: 21px; }
+      .filters { grid-template-columns: 1fr; }
+      .teacher-grid { grid-template-columns: 1fr; }
+      .teacher-course-name { min-height: 0; }
+    }
+  </style>
+</head>
+<body class="course-page">
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-left">
+        <a class="back-link" href="guide.html">← 返回指南</a>
+        <a class="brand" href="./首页.html" style="text-decoration:none"><span class="brand-mark">樱</span><span>武汉大学 · 樱下选课</span></a>
+      </div>
+      <nav class="nav" aria-label="页面导航">
+        <a href="课程信息.html#tree">回到樱花树</a>
+        <a href="课程信息.html#mbti">MBTI 助手</a>
+        <span class="nav-cta">教师推荐</span>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-head" aria-labelledby="pageTitle">
+        <p class="eyebrow">樱下选课 · STUDENT VOICE · TEACHER PICKS</p>
+        <h1 id="pageTitle">教师推荐</h1>
+        <p class="lede">这里整理的是往届同学在课程评价里留下的教师口碑：看的是评价条数、成绩样本和具体说法，而不是一句话的「好」或「不好」。样本少的时候请谨慎参考，开课学期、考核方式和给分都可能变化，选课前仍要以当期教务信息为准。</p>
+      </section>
+
+      <section class="teacher-panel" aria-labelledby="teacherListTitle">
+        <div class="teacher-panel-heading">
+          <div>
+            <p class="section-kicker">TEACHER PICKS</p>
+            <h2 id="teacherListTitle">教师口碑推荐清单</h2>
+            <p class="teacher-panel-subtitle">可以按课程名、教师姓名搜索，也可以只看「优先推荐」的记录。</p>
+          </div>
+        </div>
+        <div class="filters">
+          <input class="filter-input" id="teacherSearch" type="search" placeholder="搜索课程或教师姓名…" aria-label="搜索课程或教师姓名">
+          <select class="filter-select" id="teacherLevel" aria-label="按推荐等级筛选">
+            <option value="">全部推荐等级</option>
+            <option value="优先推荐">优先推荐</option>
+            <option value="口碑补充">口碑补充</option>
+          </select>
+        </div>
+        <p class="list-status" id="teacherCount" role="status"></p>
+        <div class="teacher-grid" id="teacherGrid"></div>
+        <p class="teacher-data-note" id="teacherDataNote"></p>
+        <p class="teacher-data-status" id="teacherDataStatus" role="status" hidden></p>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>教师口碑推荐来自课程评价整理，仅作历史参考，不代表学校官方评价，也不代表当期授课承诺。学分、学时及开课安排请以学校教务系统和当期通知为准。</p>
+      <p><a href="课程信息.html">← 回到樱下选课</a> · <a href="guide.html">返回选课指南</a></p>
+    </footer>
+  </div>
+
+  <script src="教师推荐数据.js"></script>
+  <script>
+    const teacherData = window.WHU_TEACHER_RECOMMENDATIONS;
+    const allRecords = teacherData && Array.isArray(teacherData.records) ? teacherData.records : [];
+    const records = allRecords
+      .map((record, index) => ({ record, order: index }))
+      .sort((a, b) => Number(b.record.score) - Number(a.record.score) || a.order - b.order)
+      .map(({ record }, index) => ({ ...record, rank: index + 1 }));
+
+    const grid = document.getElementById("teacherGrid");
+    const searchInput = document.getElementById("teacherSearch");
+    const levelSelect = document.getElementById("teacherLevel");
+    const countText = document.getElementById("teacherCount");
+    const dataNote = document.getElementById("teacherDataNote");
+    const dataStatus = document.getElementById("teacherDataStatus");
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      })[character]);
+    }
+
+    function formatScore(score) {
+      const value = Number(score);
+      return Number.isFinite(value) ? String(Number(value.toFixed(1))) : "—";
+    }
+
+    function levelClass(record) {
+      return record.recommendationLevel === "口碑补充" ? "teacher-level--supplement" : "";
+    }
+
+    function renderCard(record) {
+      const score = Math.max(0, Math.min(100, Number(record.score) || 0));
+      return `<article class="teacher-card">
+        <div class="teacher-top">
+          <span class="teacher-rank">NO.${String(record.rank).padStart(2, "0")}</span>
+          <span class="teacher-level ${levelClass(record)}">${escapeHtml(record.recommendationLevel)}</span>
+        </div>
+        <p class="teacher-course-name">${escapeHtml(record.courseTitle)}</p>
+        <strong class="teacher-name">${escapeHtml(record.teachers)}</strong>
+        <div class="teacher-stats">
+          <span><strong>${escapeHtml(record.reviewCount)}</strong> 条评价</span>
+          <span><strong>${escapeHtml(record.gradeSampleCount)}</strong> 条有效成绩</span>
+        </div>
+        <div class="teacher-score-row">
+          <span class="teacher-score-label">综合参考分</span>
+          <span class="teacher-score-number">${escapeHtml(formatScore(record.score))}</span>
+          <span class="teacher-score-track" role="meter" aria-label="综合参考分，仅用于本页排序" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}"><span style="width:${score}%"></span></span>
+        </div>
+        <p class="teacher-evidence">${escapeHtml(record.evidence || "暂无更多评价摘要。")}</p>
+        <details class="teacher-details">
+          <summary>成绩参考与选课提醒</summary>
+          <p><strong>成绩均分参考：</strong>${escapeHtml(record.teacherAverages || "未提供")}</p>
+          <p><strong>90+ 比例参考：</strong>${escapeHtml(record.highGradeRates || "未提供")}</p>
+          <p><strong>注意：</strong>${escapeHtml(record.caution || "课程与授课安排可能变化，请以当期信息为准。")}</p>
+        </details>
+      </article>`;
+    }
+
+    function applyFilters() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      const level = levelSelect.value;
+      const matched = records.filter(record => {
+        if (level && record.recommendationLevel !== level) return false;
+        if (!keyword) return true;
+        return `${record.courseTitle} ${record.teachers}`.toLowerCase().includes(keyword);
+      });
+
+      grid.innerHTML = matched.map(renderCard).join("");
+      countText.textContent = `共 ${records.length} 条记录，当前显示 ${matched.length} 条`;
+
+      if (matched.length === 0) {
+        dataStatus.hidden = false;
+        dataStatus.textContent = "没有符合当前筛选条件的推荐记录，试试换个关键词或清空推荐等级。";
+      } else {
+        dataStatus.hidden = true;
+      }
+    }
+
+    if (records.length === 0) {
+      dataStatus.hidden = false;
+      dataStatus.textContent = "教师推荐数据未能载入。请确认 教师推荐数据.js 与 教师推荐.html 位于同一文件夹。";
+      searchInput.disabled = true;
+      levelSelect.disabled = true;
+      countText.textContent = "";
+    } else {
+      dataNote.textContent = `数据源：${teacherData.source || "课程评价整理"}（截至 ${teacherData.updated || "日期未注明"}）。综合参考分只用于本页排序，不代表学校评价；评价条数少的老师请谨慎参考。`;
+      searchInput.addEventListener("input", applyFilters);
+      levelSelect.addEventListener("change", applyFilters);
+      applyFilters();
+    }
+  </script>
+</body>
+</html>

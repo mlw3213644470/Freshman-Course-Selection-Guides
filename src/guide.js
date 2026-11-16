@@ -32,6 +32,7 @@ function renderHeader(current) {
       <div class="site-header__features">
         <a class="site-header__feature site-header__feature--sakura" href="课程信息.html">樱下选课</a>
         <a class="site-header__feature site-header__feature--senior" href="学长抢课秘籍.html">学长抢课秘籍</a>
+        <a class="site-header__feature site-header__feature--teacher" href="教师推荐.html">教师推荐</a>
       </div>
     </div>`;
 }

@@ -231,6 +231,10 @@ a { color: var(--luojia); }
   background: linear-gradient(135deg, #e3b45f, #b57d24);
 }
 
+.site-header__feature--teacher {
+  background: linear-gradient(135deg, #7fb0a2, #2f6a5c);
+}
+
 /* ---------- hero ---------- */
 
 .hero {
