@@ -37,6 +37,12 @@
     .page-head h1 { margin: 0; font-family: "STSong", "Songti SC", serif; font-size: clamp(30px, 4vw, 42px); font-weight: 600; letter-spacing: .04em; }
     .page-head .lede { max-width: 760px; margin: 13px 0 0; color: #776a53; font-size: 13px; line-height: 1.9; }
 
+    .emphasis { position: relative; margin: 0 0 24px; padding: 22px 26px 24px 30px; color: #5c3f4a; background: linear-gradient(135deg, #fff4f7, #fffcf7 62%, #fff8ec); border: 1px solid #f2cdd8; border-left: 6px solid var(--rose); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .emphasis-kicker { margin: 0 0 8px; color: var(--rose-dark); font-size: 11px; font-weight: 700; letter-spacing: .18em; }
+    .emphasis h2 { margin: 0 0 12px; color: #4c3540; font-family: "STSong", "Songti SC", serif; font-size: clamp(19px, 2.4vw, 25px); font-weight: 600; line-height: 1.5; }
+    .emphasis p { margin: 10px 0 0; font-size: 13px; line-height: 1.95; }
+    .emphasis strong { color: var(--rose-dark); font-weight: 700; }
+
     .teacher-panel { margin: 0 0 26px; padding: 22px; background: linear-gradient(135deg, #fff8eb, #fffdf8 58%, #f9f2df); border: 1px solid #e8d7b4; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
     .teacher-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
     .section-kicker { margin: 0; color: #9b7131; font-size: 10px; font-weight: 700; letter-spacing: .18em; }
@@ -92,6 +98,8 @@
       .nav a:not(.nav-cta) { display: none; }
       .nav .nav-cta { padding: 8px 11px; }
       .page-head { margin-top: 16px; padding: 21px 16px; }
+      .emphasis { padding: 18px 16px 20px 18px; border-left-width: 5px; }
+      .emphasis p { font-size: 12px; }
       .teacher-panel { padding: 17px 13px; }
       .teacher-panel-heading { align-items: flex-start; flex-direction: column; }
       .teacher-panel-heading h2 { font-size: 21px; }
@@ -119,6 +127,14 @@
         <h1 id="pageTitle">教师推荐</h1>
         <p class="lede">这里整理的是往届同学在课程评价里留下的教师口碑：只保留教师成绩均分在 90 分以上的记录，看的是评价条数、成绩样本和具体说法，而不是一句话的「好」或「不好」。样本少的时候请谨慎参考，开课学期、考核方式和给分都可能变化，选课前仍要以当期教务信息为准。</p>
       </section>
+
+      <aside class="emphasis" aria-labelledby="emphasisTitle">
+        <p class="emphasis-kicker">选课提醒 · 先想清楚，再比分数</p>
+        <h2 class="emphasis-title" id="emphasisTitle">这里只从「教师评分」的角度给参考，选课不必这么功利</h2>
+        <p>本站的教师推荐只做一件事：把往届评价里的<strong>评价条数、成绩样本和具体说法</strong>摊开，方便你判断一门课的授课风格与自己是否合得来。它不构成「该选哪门课」的结论，也不该被当成刷分攻略。</p>
+        <p>比分数更该先回答的是：<strong>你想学什么、想练什么能力</strong>。真正感兴趣的课，你才愿意多读两小时书、在讨论课上多说几句话，也更容易拿到让自己满意的结果；只按分数选出来的课，常常上完就忘。</p>
+        <p>所以建议的顺序是：<strong>先用兴趣圈定范围，再用这里的评分参考排优先级</strong>。分数只是参考之一，别让它替你决定大学四年想成为什么样的人。</p>
+      </aside>
 
       <section class="teacher-panel" aria-labelledby="teacherListTitle">
         <div class="teacher-panel-heading">
