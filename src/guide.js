@@ -1,5 +1,5 @@
 const NAV = [
-  { page: 'index', href: 'index.html', label: '首页' },
+  { page: 'index', href: 'guide.html', label: '首页' },
   { page: 'prep', href: 'prep.html', label: '选前准备' },
   { page: 'course', href: 'course-info.html', label: '课程信息' },
   { page: 'schedule', href: 'schedule.html', label: '课表安排' },
@@ -19,12 +19,12 @@ function renderHeader(current) {
   if (!host) return;
   const backLink = {
     index: '<a class="site-header__back" href="首页.html">← 返回封面</a>',
-    'senior-tips': '<a class="site-header__back" href="index.html">← 返回指南</a>',
+    'senior-tips': '<a class="site-header__back" href="guide.html">← 返回指南</a>',
   }[current] || '';
   host.innerHTML = `
     <div class="site-header__inner">
       ${backLink}
-      <a class="brand" href="index.html">
+      <a class="brand" href="guide.html">
         <span class="brand__mark" aria-hidden="true">珞</span>
         <span class="brand__text">选课经验<small>武汉大学</small></span>
       </a>
