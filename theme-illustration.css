@@ -57,8 +57,8 @@
   --color-border: var(--line);
   --color-focus: var(--rose-deep);
   --color-selection: #f7d9c9;
-  --background-image: none;
-  --background-overlay: transparent;
+  --background-image: url("./assets/campus-background.png");
+  --background-overlay: rgb(253 246 234 / 86%);
   --radius-md: var(--radius-sm);
   --radius-lg: var(--radius);
   --border-default: 2px solid var(--line);
@@ -116,9 +116,24 @@ body {
   color: var(--ink);
 }
 
-/* 绘本风不使用照片背景，这里把旧的照片层收掉 */
-body.has-campus-bg::before,
-body[data-page="teacher"]::before { background-image: none; }
+/* 校园照片保留为背景，压一层暖色纸感，让插画元素浮在照片之上 */
+body.has-campus-bg::before {
+  background-image:
+    linear-gradient(180deg, rgb(253 246 234 / 80%) 0%, rgb(253 243 233 / 86%) 46%, rgb(251 242 232 / 92%) 100%),
+    var(--page-photo);
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+body[data-page="teacher"]::before {
+  background-image:
+    linear-gradient(180deg, rgb(253 246 234 / 80%) 0%, rgb(253 243 233 / 86%) 46%, rgb(251 242 232 / 92%) 100%),
+    url("./assets/campus/teacher.jpg");
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
 /* ---------- 排版：标题手写感，正文圆润无衬线 ---------- */
 
@@ -188,8 +203,7 @@ body,
 .quiz,
 .result-panel,
 .topbar,
-.site-header,
-.landing-header {
+.site-header {
   border: 2px solid var(--line);
   box-shadow: var(--shadow-sm);
   background: var(--paper-raised);
@@ -467,115 +481,15 @@ main a:not(.button):not(.landing-button):not(.landing-outline-button):not(.stati
 .skip-link { background: var(--accent); border-radius: 0 0 12px 12px; }
 .noscript { background: var(--cream); color: #8a5f1c; }
 
-/* ---------- 封面 ---------- */
+/* ---------- 封面 ----------
+   上半部分（页头 + Hero）保持原来的照片 + 深色遮罩 + 宋体白字，
+   这里只把标题字体锁回宋体（本主题的 --serif 已换成手写体），
+   其余排版全部交还给 src/home.css。 */
 
-.landing-header {
-  background: rgb(255 250 241 / 92%);
-  border-bottom: 2px solid var(--line);
-  color: var(--ink);
+.landing-hero h1,
+.landing-meta strong {
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
 }
-
-.landing-brand { color: var(--ink) !important; }
-.landing-brand__mark {
-  background: var(--rose);
-  border: 2px solid #fff;
-  color: #fff;
-  box-shadow: 0 4px 0 rgb(191 109 128 / 28%);
-}
-.landing-brand__text { font-family: var(--hand); font-size: 19px; }
-.landing-brand__text small { color: var(--ink-faint); font-family: var(--sans); }
-
-/* Hero 插画：整幅画作为视觉中心 */
-.landing-hero {
-  display: block;
-  min-height: 0;
-  padding: 26px max(20px, calc((100vw - 1200px) / 2)) 0;
-  background: transparent;
-  color: var(--ink);
-  overflow: visible;
-}
-
-.landing-hero__shade { display: none; }
-
-.landing-hero__content {
-  position: relative;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 0 10px;
-  text-align: center;
-}
-
-.hero-art {
-  width: min(100%, 1180px);
-  margin: 0 auto;
-  padding: 0 0 12px;
-}
-
-.hero-art svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 18px 26px rgb(176 137 90 / 18%));
-}
-
-/* 插画内部元素的轻柔浮动 */
-.illu-cloud--1 { animation: illu-drift 16s ease-in-out infinite; }
-.illu-cloud--1 > path:nth-child(2) { animation: illu-drift 21s ease-in-out infinite reverse; }
-.illu-cloud--1 > path:nth-child(3) { animation: illu-drift 26s ease-in-out infinite; }
-.illu-character { animation: illu-breathe 6s ease-in-out infinite; transform-origin: center bottom; }
-.illu-gate { animation: illu-breathe 9s ease-in-out infinite; }
-.illu-tree > g { animation: illu-sway 12s ease-in-out infinite; transform-origin: 250px 240px; }
-
-@keyframes illu-drift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(18px); }
-}
-
-@keyframes illu-breathe {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
-@keyframes illu-sway {
-  0%, 100% { transform: rotate(-1.2deg); }
-  50% { transform: rotate(1.2deg); }
-}
-
-.landing-eyebrow {
-  justify-content: center;
-  color: var(--rose-deep);
-  font-family: var(--sans);
-}
-
-.landing-eyebrow span { background: var(--rose); }
-
-.landing-hero h1 {
-  color: var(--ink);
-  font-family: var(--hand);
-  font-size: clamp(2rem, 4.6vw, 3.4rem);
-  text-shadow: none;
-}
-
-.landing-lede { margin-inline: auto; color: var(--ink-soft); text-align: center; }
-.landing-actions { justify-content: center; }
-
-.landing-button {
-  background: var(--accent);
-  border: 2px solid #fff;
-  border-radius: 999px;
-  color: #fff !important;
-  box-shadow: 0 6px 0 rgb(226 114 91 / 32%);
-}
-
-.landing-button:hover { background: #d8664f; transform: translateY(-2px); box-shadow: 0 9px 0 rgb(226 114 91 / 30%); }
-
-.landing-meta { justify-content: center; gap: 14px; }
-.landing-meta strong { color: var(--ink); font-family: var(--hand); font-size: 19px; }
-.landing-meta small { color: var(--ink-faint); }
-.landing-meta i { background: var(--line); }
-.landing-scroll,
-.landing-caption { color: var(--ink-faint) !important; }
-.landing-scroll span { background: var(--line); }
 
 /* 封面正文区顶部加一条云朵带 */
 .landing-guide {
@@ -994,25 +908,32 @@ main a:not(.button):not(.landing-button):not(.landing-outline-button):not(.stati
 
 .plan-page .plan-result-item + .plan-result-item { border-top: 2px dashed var(--line); }
 
-/* ---------- 滚动浮现 / 视差（由 illustration.js 驱动） ---------- */
+/* ---------- 滚动浮现 / 视差（由 illustration.js 驱动） ----------
+   元素默认完全可见，脚本只额外播一段入场动画，不存在"藏起来"的状态。 */
 
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity .7s ease, transform .7s cubic-bezier(.22, .61, .36, 1);
+@keyframes illu-in {
+  from { opacity: .55; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
 }
 
-.reveal.is-visible { opacity: 1; transform: none; }
+.illu-in {
+  /* 不设 fill-mode：动画被挂起时元素保持自身的正常样式（不透明），
+     只有真正播放时才出现 0 → 1 的过程。 */
+  animation: illu-in .7s cubic-bezier(.22, .61, .36, 1);
+}
+
+/* 旧版（guide.css）的隐藏式淡入在本主题里关掉：内容默认可见，
+   动画只在额外的 .illu-in 上播放。 */
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
 
 [data-parallax] { will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
-  .illu-cloud--1,
-  .illu-cloud--1 > path,
-  .illu-character,
-  .illu-gate,
-  .illu-tree > g { animation: none !important; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .illu-in { animation: none !important; }
   .cards > *,
   .landing-cards > * { transform: none !important; }
 }

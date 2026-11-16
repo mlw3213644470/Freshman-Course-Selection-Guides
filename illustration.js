@@ -62,29 +62,46 @@
     }
   }
 
-  /* ---------- 2. 滚动淡入 ---------- */
+  /* ---------- 2. 滚动入场动画（只加动画，不隐藏内容） ---------- */
   function initReveal() {
-    var targets = document.querySelectorAll(
-      '.section, .cards > *, .landing-guide, .landing-cards > *, .page-head, .emphasis, .teacher-panel, ' +
-      '.course-section, .mbti-section, .plan-header, .plan-upload, .plan-results'
-    );
-    if (!('IntersectionObserver' in window) || prefersReducedMotion) {
-      return;
-    }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    var targets = Array.prototype.slice.call(document.querySelectorAll(
+      '.section, .cards > *, .landing-cards > *, .page-head, .emphasis, .plan-header, .plan-upload, .plan-results'
+    ));
+    if (prefersReducedMotion || !targets.length) return;
 
-    targets.forEach(function (el) {
-      if (el.classList.contains('reveal')) return;
-      el.classList.add('reveal');
-      observer.observe(el);
-    });
+    var pending = targets.filter(function (el) { return !el.classList.contains('illu-in'); });
+    var ticking = false;
+
+    function play(el) {
+      el.classList.add('illu-in');
+    }
+
+    function update() {
+      ticking = false;
+      var limit = window.innerHeight || document.documentElement.clientHeight;
+      pending = pending.filter(function (el) {
+        var box = el.getBoundingClientRect();
+        if (box.top < limit * 0.94 && box.bottom > -80) {
+          play(el);
+          return false;
+        }
+        return true;
+      });
+      if (!pending.length) {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      }
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
   }
 
   /* ---------- 3. Hero 插画视差 ---------- */
