@@ -26,9 +26,11 @@ async function boot(apiFetch, protocol = 'http:') {
   const nodes = {};
   const requests = [];
   const window = {};
+  const documentHandlers = {};
   const document = {
     querySelector: (selector) => nodes[selector] ??= element(),
-    createElement: element, addEventListener() {},
+    createElement: element,
+    addEventListener(type, fn) { (documentHandlers[type] ??= []).push(fn); },
   };
   const sandbox = {
     document, window, location: { protocol }, TypeError,
@@ -50,6 +52,10 @@ async function boot(apiFetch, protocol = 'http:') {
       nodes['#plan-file'].handlers.change();
     },
     click: () => nodes['#analyze-button'].handlers.click({ preventDefault() {} }),
+    drop(files) {
+      const event = { preventDefault() {}, dataTransfer: { types: ['Files'], files } };
+      for (const fn of documentHandlers.drop ?? []) fn(event);
+    },
   };
 }
 
@@ -73,6 +79,13 @@ async function main() {
   assert.equal(app.nodes['#selected-file'].hidden, true);
   app.select('bad.exe');
   assert.equal(app.nodes['#file-status'].dataset.state, 'error');
+
+  // Dropping anywhere on the page selects the file, not just the dropzone.
+  app = await boot(success);
+  app.drop([{ name: 'dragged.pdf', size: 100 }]);
+  assert.match(app.nodes['#file-status'].textContent, /已选择：dragged\.pdf/);
+  await app.click();
+  assert.equal(app.requests.at(-1).options.body.file.name, 'dragged.pdf');
 
   const structured = Object.fromEntries(keys.map(key => [key, [{ text: '原文未说明', source: null }]]));
   structured['培养目标'] = [{ text: '目标一', source: null }, { text: '目标二', source: null }];
@@ -140,7 +153,7 @@ async function main() {
   assert.equal(nodes['file-status'].dataset.state, 'error');
   nodes['analyze-button'].handlers.click();
   assert.match(nodes['file-status'].textContent, /初始化/);
-  console.log('前端离线回归通过：按钮绑定、PDF/DOCX、请求发送、五项渲染、加载与失败状态、恢复、重复点击、脚本失败兜底。');
+  console.log('前端离线回归通过：整页拖放、按钮绑定、PDF/DOCX、请求发送、五项渲染、加载与失败状态、恢复、重复点击、脚本失败兜底。');
 }
 module.exports = main;
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });

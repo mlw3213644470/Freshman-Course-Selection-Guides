@@ -78,7 +78,12 @@ class OfflineTests(unittest.TestCase):
         }, **kwargs)
 
     def test_static_and_secrets(self):
-        self.assertEqual(self.client.get("/").location, "/pages/training-plan.html")
+        with self.client.get("/") as response:
+            self.assertEqual(response.status_code, 200)
+            self.assertIn("新生选课指南", response.text)
+        # Built pages are served from dist/ by the same backend.
+        with self.client.get("/guide.html") as response:
+            self.assertEqual(response.status_code, 200)
         for path in ("/pages/training-plan.html", "/global.css", "/assets/campus-background.png",
                      "/Freshman-Course-Selection-Guides/pages/training-plan.html",
                      "/Freshman-Course-Selection-Guides/global.css"):
@@ -113,6 +118,22 @@ class OfflineTests(unittest.TestCase):
 
     def test_reject_cross_origin(self):
         self.assertEqual(self.post(headers={"Origin": "https://other.example"}).status_code, 403)
+
+    def test_reverse_proxy_public_host_origin(self):
+        # The proxy replaces Host with an internal name, but the browser keeps
+        # the public origin. An explicitly configured host must be accepted.
+        with patch.object(server, "PUBLIC_APP_HOST", "guide.example"):
+            response = self.post(data=b"fake", filename="fake.pdf",
+                                 headers={"Origin": "https://guide.example"})
+        self.assertEqual(response.status_code, 400)
+
+    def test_sharecode_is_kept_on_internal_links(self):
+        with self.client.get("/?sharecode=abc123") as response:
+            self.assertEqual(response.status_code, 200)
+            self.assertIn("URLSearchParams(location.search)", response.text)
+            self.assertIn("querySelectorAll", response.text)
+        with self.client.get("/?sharecode=%3Cscript%3Ealert(1)%3C%2Fscript%3E") as response:
+            self.assertNotIn("alert(1)", response.text)
 
     def test_invalid_files(self):
         for data, name in ((b"word", "plan.docx"), (b"fake", "fake.pdf"), (b"%PDF-1.7\nbroken", "broken.pdf"),

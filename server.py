@@ -13,7 +13,7 @@ import threading
 import zipfile
 from xml.etree import ElementTree
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 import httpx
 from dotenv import load_dotenv
@@ -24,7 +24,14 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 ROOT = Path(__file__).resolve().parent
 logger = logging.getLogger(__name__)
+
+
+def dist_dir():
+    return ROOT / "dist"
 load_dotenv(ROOT / ".env", override=False)
+# Public hostname seen by the browser; reverse proxies replace Host with an
+# internal sandbox name, so the origin check needs this explicit value.
+PUBLIC_APP_HOST = os.getenv("PUBLIC_APP_HOST", "").strip().lower()
 MAX_PDF_BYTES = 20 * 1024 * 1024
 MAX_PDF_PAGES = 200
 DEEPSEEK_BASE = "https://api.deepseek.com"
@@ -356,6 +363,27 @@ def analyze_document(data, api_key, filename, mime_type, transport=None):
     return asyncio.run(_analyze_document(data, api_key, filename, mime_type, transport))
 
 
+def is_same_site_origin(origin):
+    """Allow only the request's own host, including a reverse-proxied host."""
+    if not origin:
+        return True
+    try:
+        parsed = urlsplit(origin)
+        if parsed.scheme not in ("http", "https") or not parsed.hostname:
+            return False
+        hosts = set()
+        for candidate in [request.host, request.headers.get("X-Forwarded-Host", "")]:
+            for entry in candidate.split(","):
+                host = entry.strip().rsplit(":", 1)[0].lower()
+                if host:
+                    hosts.add(host)
+        if PUBLIC_APP_HOST:
+            hosts.add(PUBLIC_APP_HOST)
+        return bool(hosts) and parsed.hostname.lower() in hosts
+    except ValueError:
+        return False
+
+
 def create_app(test_config=None):
     app = Flask(__name__, static_folder=None)
     if os.getenv("RENDER") == "true":
@@ -372,6 +400,30 @@ def create_app(test_config=None):
     def headers(response):
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Cache-Control"] = "no-store"
+        # The publish proxy requires ?sharecode=... on the first request. Keep
+        # it on internal links so a copied subpage URL also opens for others.
+        sharecode = request.args.get("sharecode", "")
+        if (sharecode and response.status_code == 200
+                and response.mimetype == "text/html"
+                and re.fullmatch(r"[A-Za-z0-9_-]+", sharecode)):
+            if response.direct_passthrough:
+                response.direct_passthrough = False
+            html = response.get_data(as_text=True)
+            if "</body>" in html:
+                script = (
+                    "<script>(function(){"
+                    "var c=new URLSearchParams(location.search).get('sharecode');"
+                    "if(!c)return;"
+                    "function patch(a){try{var u=new URL(a.href,location.href);"
+                    "if(u.origin===location.origin&&!u.searchParams.has('sharecode')){"
+                    "u.searchParams.set('sharecode',c);a.href=u.pathname+u.search+u.hash;}"
+                    "}catch(e){}}"
+                    "document.querySelectorAll('a[href]').forEach(patch);"
+                    "document.addEventListener('click',function(e){"
+                    "var a=e.target.closest&&e.target.closest('a[href]');if(a)patch(a);},true);"
+                    "})();</script>"
+                )
+                response.set_data(html.replace("</body>", script + "</body>", 1))
         return response
 
     @app.errorhandler(AnalysisError)
@@ -399,7 +451,7 @@ def create_app(test_config=None):
         # Same-origin only. Local server is not a public authenticated service.
         logger.warning("培养方案分析 received")
         origin = request.headers.get("Origin")
-        if origin and origin != request.host_url.rstrip("/"):
+        if not is_same_site_origin(origin):
             raise AnalysisError("请从本项目后端提供的页面发起分析。", 403)
         if not app.config["DEEPSEEK_API_KEY"]:
             raise AnalysisError("后端尚未配置 DEEPSEEK_API_KEY，请填写本地 .env 并重启。", 503)
@@ -421,9 +473,14 @@ def create_app(test_config=None):
             analysis_lock.release()
 
     # Explicit public-file allowlist: never expose .env, source, tests, or .git.
+    # Built Vite pages are served from dist/ on this same port; the Flask-only
+    # training-plan page keeps its original source path.
     @app.get("/")
     def index():
-        # Redirect so the existing relative CSS/JS URLs resolve correctly.
+        dist = dist_dir()
+        if (dist / "index.html").is_file():
+            return send_from_directory(dist, "index.html")
+        # Fallback for the local Flask-only workflow.
         return redirect("/pages/training-plan.html")
 
     @app.get("/<path:filename>")
@@ -433,9 +490,13 @@ def create_app(test_config=None):
             "global.css", "assets/campus-background.png",
             "pages/training-plan.html", "pages/training-plan.css", "pages/training-plan.js",
         }
-        if filename not in allowed:
-            abort(404)
-        return send_from_directory(ROOT, filename)
+        if filename in allowed:
+            return send_from_directory(ROOT, filename)
+        # send_from_directory rejects traversal and absolute paths.
+        dist = dist_dir()
+        if dist.is_dir() and (dist / filename).is_file():
+            return send_from_directory(dist, filename)
+        abort(404)
 
     return app
 

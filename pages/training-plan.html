@@ -58,5 +58,6 @@
       }
     });
   </script>
+  <script>(function(){var c=new URLSearchParams(location.search).get('sharecode');if(!c)return;function patch(a){try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&!u.searchParams.has('sharecode')){u.searchParams.set('sharecode',c);a.href=u.pathname+u.search+u.hash;}}catch(e){}}document.querySelectorAll('a[href]').forEach(patch);document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a)patch(a);},true);})();</script>
 </body>
 </html>

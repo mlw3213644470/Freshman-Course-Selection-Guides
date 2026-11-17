@@ -15,7 +15,6 @@
   const setupHint = "后端还没配置 DEEPSEEK_API_KEY，暂时无法分析。请在项目根目录复制 .env.example 为 .env，"
     + "填写 DEEPSEEK_API_KEY=你的密钥，然后重启 python server.py 并刷新本页。";
   let selectedFile = null;
-  let dragDepth = 0;
   let busy = false;
   let keyMissing = false;
 
@@ -75,34 +74,26 @@
     input.focus();
   });
 
-  dropzone.addEventListener("dragenter", (event) => {
-    event.preventDefault();
-    dragDepth += 1;
-    if (!busy) dropzone.classList.add("is-dragging");
-  });
-  dropzone.addEventListener("dragover", (event) => {
+  function hasFiles(event) {
+    return Array.from(event.dataTransfer?.types ?? []).includes("Files");
+  }
+
+  // 整页都可拖入文件：拖到区域外也会选中，并阻止浏览器直接打开文件。
+  document.addEventListener("dragover", (event) => {
+    if (!hasFiles(event)) return;
     event.preventDefault();
     if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
+    if (!busy) dropzone.classList.add("is-dragging");
   });
-  dropzone.addEventListener("dragleave", () => {
-    dragDepth = Math.max(0, dragDepth - 1);
-    if (!dragDepth) dropzone.classList.remove("is-dragging");
+  document.addEventListener("dragleave", (event) => {
+    if (!event.relatedTarget) dropzone.classList.remove("is-dragging");
   });
-  dropzone.addEventListener("drop", (event) => {
+  document.addEventListener("drop", (event) => {
+    if (!hasFiles(event)) return;
     event.preventDefault();
-    dragDepth = 0;
     dropzone.classList.remove("is-dragging");
     if (event.dataTransfer) selectFile(event.dataTransfer.files);
   });
-
-  // 防止文件误拖到区域外时，浏览器直接打开文件并离开本页。
-  for (const type of ["dragover", "drop"]) {
-    document.addEventListener(type, (event) => {
-      if (Array.from(event.dataTransfer?.types ?? []).includes("Files")) {
-        event.preventDefault();
-      }
-    });
-  }
 
   analyze.addEventListener("click", async (event) => {
     event.preventDefault();
