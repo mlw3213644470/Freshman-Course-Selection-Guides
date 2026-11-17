@@ -12,8 +12,12 @@
   const results = document.querySelector("#analysis-results");
   const resultKeys = ["培养目标", "毕业要求", "课程分类", "学分要求", "注意事项"];
   const maxBytes = 20 * 1024 * 1024;
-  const setupHint = "后端还没配置 DEEPSEEK_API_KEY，暂时无法分析。请在项目根目录复制 .env.example 为 .env，"
-    + "填写 DEEPSEEK_API_KEY=你的密钥，然后重启 python server.py 并刷新本页。";
+  const setupHint = "分析服务暂未配置完成，请联系站点维护者。";
+  // 发布网关要求每次请求都带分享码；不能只依赖首页写入的 Cookie。
+  function apiUrl(path) {
+    const code = new URLSearchParams(location.search).get("sharecode");
+    return code ? `${path}?sharecode=${encodeURIComponent(code)}` : path;
+  }
   let selectedFile = null;
   let busy = false;
   let keyMissing = false;
@@ -108,7 +112,7 @@
       return;
     }
     if (!["http:", "https:"].includes(location.protocol)) {
-      setStatus("请启动后端，并通过 http://127.0.0.1:8002 打开页面。", "error");
+      setStatus("请通过浏览器访问本站链接后重试。", "error");
       return;
     }
     let timer;
@@ -121,15 +125,15 @@
       timer = setTimeout(() => controller.abort(), 12 * 60 * 1000);
       const body = new FormData();
       body.append("file", selectedFile);
-      const response = await fetch("/api/training-plan/analyze", {
+      const response = await fetch(apiUrl("/api/training-plan/analyze"), {
         method: "POST", body, signal: controller.signal,
       });
       if (!response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("未连接到分析后端，请通过 http://127.0.0.1:8002 打开页面，而非 Live Server。");
+        throw new Error("未连接到分析后端，请从完整分享链接重新进入后重试。");
       }
       let payload;
       try { payload = await response.json(); }
-      catch { throw new Error("后端返回了无效 JSON，请查看运行 server.py 的终端日志。"); }
+      catch { throw new Error("后端返回了无效数据，请稍后重试。"); }
       if (!response.ok) throw new Error(payload?.error || "分析失败，请稍后重试。");
       const validItem = (item) => item && typeof item.text === "string" && item.text.trim()
         && !/[\r\n]/.test(item.text)
@@ -176,16 +180,16 @@
   // 启动时只探测本地后端，不接触 DeepSeek，不上传任何文件。
   async function checkBackend() {
     if (!["http:", "https:"].includes(location.protocol)) {
-      setStatus("请启动 Python 后端，并通过 Vite 首页或 http://127.0.0.1:8002 打开页面。", "error");
+      setStatus("请通过本站链接访问培养方案页面。", "error");
       return;
     }
     let timer;
     try {
       const controller = new AbortController();
       timer = setTimeout(() => controller.abort(), 5000);
-      const response = await fetch("/api/health", { signal: controller.signal, cache: "no-store" });
+      const response = await fetch(apiUrl("/api/health"), { signal: controller.signal, cache: "no-store" });
       if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("分析接口不可用，请启动 Python 后端，并通过 Vite 首页或后端地址打开页面。");
+        throw new Error("分析接口暂不可用，请从完整分享链接重新进入后重试。");
       }
       const health = await response.json();
       if (health.provider !== "deepseek") throw new Error("后端尚未更新为 DeepSeek，请重启 server.py 并刷新页面。");
@@ -202,7 +206,7 @@
       if (!selectedFile && !busy) setStatus("页面已就绪，请选择 PDF 或 DOCX，再点击开始分析。");
     } catch (error) {
       if (!selectedFile && !busy) setStatus(error instanceof TypeError || error.name === "AbortError"
-        ? "无法连接本地后端，请启动 server.py，并通过 Vite 首页或 http://127.0.0.1:8002 访问。" : error.message, "error");
+        ? "无法连接分析后端，请检查网络后重试。" : error.message, "error");
     } finally { clearTimeout(timer); }
   }
   setBusy(false);

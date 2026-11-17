@@ -22,9 +22,10 @@ function element(tagName = 'div') {
 function reply(payload, ok = true, contentType = 'application/json') {
   return { ok, headers: { get: () => contentType }, json: async () => payload };
 }
-async function boot(apiFetch, protocol = 'http:') {
+async function boot(apiFetch, protocol = 'http:', search = '') {
   const nodes = {};
   const requests = [];
+  const healthCalls = [];
   const window = {};
   const documentHandlers = {};
   const document = {
@@ -33,11 +34,14 @@ async function boot(apiFetch, protocol = 'http:') {
     addEventListener(type, fn) { (documentHandlers[type] ??= []).push(fn); },
   };
   const sandbox = {
-    document, window, location: { protocol }, TypeError,
+    document, window, location: { protocol, search }, TypeError, URLSearchParams,
     AbortController, setTimeout, clearTimeout,
     FormData: class { append(key, value) { this[key] = value; } },
     fetch: async (url, options) => {
-      if (url === '/api/health') return reply({ provider: 'deepseek', configured: true });
+      if (url.startsWith('/api/health')) {
+        healthCalls.push(url);
+        return reply({ provider: 'deepseek', configured: true });
+      }
       requests.push({ url, options });
       return apiFetch(url, options);
     },
@@ -46,7 +50,7 @@ async function boot(apiFetch, protocol = 'http:') {
   await new Promise(setImmediate);
   assert.equal(window.trainingPlanReady, true);
   return {
-    nodes, requests,
+    nodes, requests, healthCalls,
     select(name = 'plan.pdf', size = 100) {
       nodes['#plan-file'].files = [{ name, size }];
       nodes['#plan-file'].handlers.change();
@@ -87,6 +91,13 @@ async function main() {
   await app.click();
   assert.equal(app.requests.at(-1).options.body.file.name, 'dragged.pdf');
 
+  // Both health and upload requests carry the sharecode from the page URL.
+  app = await boot(success, 'http:', '?sharecode=abc123');
+  app.select();
+  await app.click();
+  assert.equal(app.healthCalls[0], '/api/health?sharecode=abc123');
+  assert.equal(app.requests.at(-1).url, '/api/training-plan/analyze?sharecode=abc123');
+
   const structured = Object.fromEntries(keys.map(key => [key, [{ text: '原文未说明', source: null }]]));
   structured['培养目标'] = [{ text: '目标一', source: null }, { text: '目标二', source: null }];
   structured['课程分类'] = [{ text: '通识课程', source: null }, { text: '专业课程', source: null }];
@@ -109,9 +120,9 @@ async function main() {
 
   const failures = [
     [() => reply({ error: 'Key未配置' }, false), /Key未配置/],
-    [() => reply({}, false, 'text/html'), /8002/],
+    [() => reply({}, false, 'text/html'), /完整分享链接/],
     [() => { throw new TypeError('offline'); }, /无法连接后端/],
-    [() => ({ ...reply({}), json: async () => { throw new SyntaxError(); } }), /无效 JSON/],
+    [() => ({ ...reply({}), json: async () => { throw new SyntaxError(); } }), /无效数据/],
     [() => reply({ result: {} }), /不完整/],
     [() => reply({ result: Object.fromEntries(keys.map(key => [key, '旧版字符串'])) }), /不完整/],
     [() => { const error = new Error(); error.name = 'AbortError'; throw error; }, /超时/],
@@ -140,7 +151,7 @@ async function main() {
   app = await boot(success, 'file:');
   app.select();
   await app.click();
-  assert.match(app.nodes['#file-status'].textContent, /8002/);
+  assert.match(app.nodes['#file-status'].textContent, /本站链接/);
   assert.equal(app.requests.length, 0);
 
   // Check the independent inline fallback when the external script never runs.
@@ -153,7 +164,7 @@ async function main() {
   assert.equal(nodes['file-status'].dataset.state, 'error');
   nodes['analyze-button'].handlers.click();
   assert.match(nodes['file-status'].textContent, /初始化/);
-  console.log('前端离线回归通过：整页拖放、按钮绑定、PDF/DOCX、请求发送、五项渲染、加载与失败状态、恢复、重复点击、脚本失败兜底。');
+  console.log('前端离线回归通过：整页拖放、分享码透传、按钮绑定、PDF/DOCX、请求发送、五项渲染、加载与失败状态、恢复、重复点击、脚本失败兜底。');
 }
 module.exports = main;
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
