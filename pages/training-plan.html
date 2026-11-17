@@ -9,6 +9,18 @@
   <script src="./training-plan.js?v=deepseek-1" defer></script>
 </head>
 <body class="plan-page">
+  <nav class="navbar" aria-label="全站导航">
+    <a class="nav-link" href="/">首页</a>
+    <a class="nav-link" href="/guide.html">选课指南</a>
+    <a class="nav-link" href="/prep.html">选前准备</a>
+    <a class="nav-link" href="/course-info.html">课程信息</a>
+    <a class="nav-link" href="/schedule.html">课表安排</a>
+    <a class="nav-link" href="/after.html">选后调整</a>
+    <a class="nav-link" href="/faq.html">常见问题</a>
+    <a class="nav-link" href="/glossary.html">术语词典</a>
+    <a class="nav-link" href="/game.html">信息侦探</a>
+    <a class="nav-link" href="/pages/training-plan.html" aria-current="page">培养方案</a>
+  </nav>
   <main class="container section plan-layout">
     <header class="plan-header">
       <h1>培养方案</h1>
@@ -58,6 +70,6 @@
       }
     });
   </script>
-  <script>(function(){var c=new URLSearchParams(location.search).get('sharecode');if(!c)return;function patch(a){try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&!u.searchParams.has('sharecode')){u.searchParams.set('sharecode',c);a.href=u.pathname+u.search+u.hash;}}catch(e){}}document.querySelectorAll('a[href]').forEach(patch);document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a)patch(a);},true);})();</script>
+  <script>(function(){var FALLBACK='6KMLYOQLVS';function code(){var c=new URLSearchParams(location.search).get('sharecode');if(c)return c;try{var m=document.cookie.match(/(?:^|;\s*)wb_sharecode=([^;]+)/);if(m)return decodeURIComponent(m[1]);}catch(e){}return FALLBACK;}var c=code();function patch(a){try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&!u.searchParams.has('sharecode')){u.searchParams.set('sharecode',c);a.href=u.pathname+u.search+u.hash;}}catch(e){}}document.querySelectorAll('a[href]').forEach(patch);document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a)patch(a);},true);})();</script>
 </body>
 </html>

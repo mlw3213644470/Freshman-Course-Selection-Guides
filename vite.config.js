@@ -8,7 +8,7 @@ const PAGES = ['index', 'guide', 'prep', 'course-info', 'schedule', 'after', 'fa
 const LEGACY_FILES = ['课程信息.html', '课程数据.js', '教师推荐数据.js'];
 // The publish proxy requires ?sharecode=... on entry but strips it before the
 // app sees it. Keep it on internal links browser-side so copied links work too.
-const SHARECODE_SCRIPT = `<script>(function(){var c=new URLSearchParams(location.search).get('sharecode');if(!c)return;function patch(a){try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&!u.searchParams.has('sharecode')){u.searchParams.set('sharecode',c);a.href=u.pathname+u.search+u.hash;}}catch(e){}}document.querySelectorAll('a[href]').forEach(patch);document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a)patch(a);},true);})();</script>`;
+const SHARECODE_SCRIPT = `<script>(function(){var FALLBACK='6KMLYOQLVS';function code(){var c=new URLSearchParams(location.search).get('sharecode');if(c)return c;try{var m=document.cookie.match(/(?:^|;\\s*)wb_sharecode=([^;]+)/);if(m)return decodeURIComponent(m[1]);}catch(e){}return FALLBACK;}var c=code();function patch(a){try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&!u.searchParams.has('sharecode')){u.searchParams.set('sharecode',c);a.href=u.pathname+u.search+u.hash;}}catch(e){}}document.querySelectorAll('a[href]').forEach(patch);document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a)patch(a);},true);})();</script>`;
 const file = (name) => fileURLToPath(new URL(`./${name}`, import.meta.url));
 const page = (name) => file(`${name}.html`);
 
