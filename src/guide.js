@@ -21,7 +21,7 @@ function renderHeader(current) {
   const host = document.querySelector('[data-site-header]');
   if (!host) return;
   const backLink = {
-    index: '<a class="site-header__back" href="首页.html">← 返回封面</a>',
+    index: '<a class="site-header__back" href="index.html">← 返回封面</a>',
     'senior-tips': '<a class="site-header__back" href="guide.html">← 返回指南</a>',
   }[current] || '';
   host.innerHTML = `
@@ -48,7 +48,7 @@ function renderFooter() {
     <div class="site-footer__inner">
       <p class="site-footer__note">本站只整理选课方法与判断标准：不提供具体课程数据、评分或外部链接。选课时间、名额与办理规则，一律以当期官方通知为准。</p>
       <nav class="site-footer__nav" aria-label="页脚导航">${buildNav('', [PLAN_LINK])}</nav>
-      <p class="site-footer__meta">内容会随新学年核实后更新，选课规则以当期官方通知为准。</p>
+      <p class="site-footer__meta">内容核实于 2026 年 11 月。内容会随新学年核实后更新，选课规则以当期官方通知为准。</p>
     </div>`;
 }
 

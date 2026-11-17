@@ -105,9 +105,10 @@
 .landing-button--small { min-height: 40px; padding-inline: 15px; font-size: 11px; }
 .landing-note { margin: 18px 0 0; padding: 13px 15px; border-left: 3px solid #c5aa7d; background: #f2eee5; color: var(--ink-soft); font-size: 10px; line-height: 1.7; }
 .landing-note strong { color: var(--ink); }
-.landing-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-top: 19px; padding-bottom: 25px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: 10px; }
+.landing-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; padding-top: 19px; padding-bottom: 25px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: 10px; }
 .landing-footer a:first-child { color: var(--luojia); font-size: 12px; font-weight: 700; }
 .landing-footer a:last-child { color: var(--luojia); }
+.landing-footer__meta { flex-basis: 100%; margin: 0; }
 
 @media (max-width: 760px) {
   .landing-header { min-height: 70px; padding-inline: 20px; }
