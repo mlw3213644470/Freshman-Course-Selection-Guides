@@ -26,9 +26,10 @@ async function boot(apiFetch, protocol = 'http:', search = '') {
   const nodes = {};
   const requests = [];
   const healthCalls = [];
-  const window = {};
+  const window = { TRAINING_PLAN_POLL_MS: 1 };
   const documentHandlers = {};
   const document = {
+    cookie: '',
     querySelector: (selector) => nodes[selector] ??= element(),
     createElement: element,
     addEventListener(type, fn) { (documentHandlers[type] ??= []).push(fn); },
@@ -75,7 +76,7 @@ async function main() {
     await app.click();
     assert.equal(app.nodes['#file-status'].dataset.state, 'success');
     assert.equal(app.nodes['#analysis-results'].children.length, 5);
-    assert.equal(app.requests.at(-1).url, '/api/training-plan/analyze');
+    assert.match(app.requests.at(-1).url, /^\/api\/training-plan\/analyze\/async\?sharecode=/);
     assert.equal(app.requests.at(-1).options.method, 'POST');
     assert.equal(app.requests.at(-1).options.body.file.name, filename);
   }
@@ -96,7 +97,26 @@ async function main() {
   app.select();
   await app.click();
   assert.equal(app.healthCalls[0], '/api/health?sharecode=abc123');
-  assert.equal(app.requests.at(-1).url, '/api/training-plan/analyze?sharecode=abc123');
+  assert.equal(app.requests.at(-1).url, '/api/training-plan/analyze/async?sharecode=abc123');
+
+  // Even if the address bar lost the code, the published link fallback is used.
+  app = await boot(success);
+  app.select();
+  await app.click();
+  assert.equal(app.healthCalls[0], '/api/health?sharecode=6KMLYOQLVS');
+  assert.equal(app.requests.at(-1).url, '/api/training-plan/analyze/async?sharecode=6KMLYOQLVS');
+
+  // Async flow: submit returns a job id, the browser polls until done.
+  const pollResult = Object.fromEntries(keys.map(key => [key, [{ text: '原文未说明', source: null }]]));
+  app = await boot((url) => {
+    if (url.startsWith('/api/training-plan/analyze/async')) return reply({ job_id: 'job-1' });
+    if (url.includes('/status/job-1')) return reply({ status: 'done', result: pollResult });
+    return reply({});
+  });
+  app.select();
+  await app.click();
+  assert.equal(app.nodes['#file-status'].dataset.state, 'success');
+  assert.match(app.requests.at(-1).url, /\/api\/training-plan\/analyze\/status\/job-1\?sharecode=/);
 
   const structured = Object.fromEntries(keys.map(key => [key, [{ text: '原文未说明', source: null }]]));
   structured['培养目标'] = [{ text: '目标一', source: null }, { text: '目标二', source: null }];
@@ -164,7 +184,7 @@ async function main() {
   assert.equal(nodes['file-status'].dataset.state, 'error');
   nodes['analyze-button'].handlers.click();
   assert.match(nodes['file-status'].textContent, /初始化/);
-  console.log('前端离线回归通过：整页拖放、分享码透传、按钮绑定、PDF/DOCX、请求发送、五项渲染、加载与失败状态、恢复、重复点击、脚本失败兜底。');
+  console.log('前端离线回归通过：整页拖放、分享码透传与兜底、异步提交轮询、按钮绑定、PDF/DOCX、五项渲染、加载与失败状态、恢复、重复点击、脚本失败兜底。');
 }
 module.exports = main;
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });

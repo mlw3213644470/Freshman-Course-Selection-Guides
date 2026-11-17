@@ -13,9 +13,22 @@
   const resultKeys = ["培养目标", "毕业要求", "课程分类", "学分要求", "注意事项"];
   const maxBytes = 20 * 1024 * 1024;
   const setupHint = "分析服务暂未配置完成，请联系站点维护者。";
-  // 发布网关要求每次请求都带分享码；不能只依赖首页写入的 Cookie。
+  // 发布网关要求每次请求都带分享码；URL、本地 Cookie 与发布链接兜底依次尝试。
+  const FALLBACK_SHARECODE = "6KMLYOQLVS";
+  function currentSharecode() {
+    const fromUrl = new URLSearchParams(location.search).get("sharecode");
+    if (fromUrl) {
+      try { document.cookie = `wb_sharecode=${encodeURIComponent(fromUrl)}; path=/; max-age=2592000; SameSite=Lax`; } catch (_) {}
+      return fromUrl;
+    }
+    const match = document.cookie.match(/(?:^|;\s*)wb_sharecode=([^;]+)/);
+    if (match) {
+      try { return decodeURIComponent(match[1]); } catch (_) { return match[1]; }
+    }
+    return FALLBACK_SHARECODE;
+  }
   function apiUrl(path) {
-    const code = new URLSearchParams(location.search).get("sharecode");
+    const code = currentSharecode();
     return code ? `${path}?sharecode=${encodeURIComponent(code)}` : path;
   }
   let selectedFile = null;
@@ -125,16 +138,45 @@
       timer = setTimeout(() => controller.abort(), 12 * 60 * 1000);
       const body = new FormData();
       body.append("file", selectedFile);
-      const response = await fetch(apiUrl("/api/training-plan/analyze"), {
-        method: "POST", body, signal: controller.signal,
+      const response = await fetch(apiUrl("/api/training-plan/analyze/async"), {
+        method: "POST", body, signal: controller.signal, credentials: "include",
       });
       if (!response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("未连接到分析后端，请从完整分享链接重新进入后重试。");
+        throw new Error(`分析接口返回了网页而非数据（HTTP ${response.status}），请从完整分享链接重新进入后重试。`);
       }
       let payload;
       try { payload = await response.json(); }
       catch { throw new Error("后端返回了无效数据，请稍后重试。"); }
       if (!response.ok) throw new Error(payload?.error || "分析失败，请稍后重试。");
+      // 本地旧版后端仍可能直接返回结果；线上后端返回任务号后轮询进度。
+      if (!payload?.result) {
+        const jobId = payload?.job_id;
+        if (!jobId) throw new Error("后端未返回任务编号，请重试。");
+        const startedAt = Date.now();
+        const pollMs = Number(window.TRAINING_PLAN_POLL_MS) || 2000;
+        setStatus("文件已上传，正在后台分析，通常需要几分钟。请勿关闭页面。", "loading");
+        while (true) {
+          await new Promise((resolve) => setTimeout(resolve, pollMs));
+          const statusResponse = await fetch(
+            apiUrl(`/api/training-plan/analyze/status/${encodeURIComponent(jobId)}`),
+            { signal: controller.signal, cache: "no-store", credentials: "include" }
+          );
+          if (!statusResponse.headers.get("content-type")?.includes("application/json")) {
+            throw new Error(`查询分析进度失败（HTTP ${statusResponse.status}），请稍后重试。`);
+          }
+          const statusPayload = await statusResponse.json();
+          if (!statusResponse.ok) throw new Error(statusPayload?.error || "查询分析进度失败。");
+          if (statusPayload.status === "done") {
+            payload = statusPayload;
+            break;
+          }
+          if (statusPayload.status === "error") {
+            throw new Error(statusPayload.error || "分析失败，请重试。");
+          }
+          const seconds = Math.round((Date.now() - startedAt) / 1000);
+          setStatus(`后台分析中…已等待 ${seconds} 秒，请勿关闭页面。`, "loading");
+        }
+      }
       const validItem = (item) => item && typeof item.text === "string" && item.text.trim()
         && !/[\r\n]/.test(item.text)
         && (item.source === null || (typeof item.source === "string" && item.source.trim() && !/[\r\n]/.test(item.source)));
@@ -187,9 +229,9 @@
     try {
       const controller = new AbortController();
       timer = setTimeout(() => controller.abort(), 5000);
-      const response = await fetch(apiUrl("/api/health"), { signal: controller.signal, cache: "no-store" });
+      const response = await fetch(apiUrl("/api/health"), { signal: controller.signal, cache: "no-store", credentials: "include" });
       if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
-        throw new Error("分析接口暂不可用，请从完整分享链接重新进入后重试。");
+        throw new Error(`分析接口暂不可用（HTTP ${response.status}），请从完整分享链接重新进入后重试。`);
       }
       const health = await response.json();
       if (health.provider !== "deepseek") throw new Error("后端尚未更新为 DeepSeek，请重启 server.py 并刷新页面。");

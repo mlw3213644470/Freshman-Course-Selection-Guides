@@ -6,6 +6,7 @@ import unittest
 import zipfile
 import tempfile
 import shutil
+import time
 from pathlib import Path
 from unittest.mock import patch
 
@@ -168,6 +169,42 @@ class OfflineTests(unittest.TestCase):
         # Lock must be released after failure.
         with patch.object(server, "analyze_document", return_value={}) as analyze:
             self.post()
+            analyze.assert_called_once()
+
+    def test_async_analysis_polling(self):
+        def submit():
+            return self.client.post("/api/training-plan/analyze/async", data={
+                "file": (io.BytesIO(pdf_bytes()), "plan.pdf")
+            })
+
+        with patch.object(server, "analyze_document", return_value=empty_result()):
+            response = submit()
+            self.assertEqual(response.status_code, 202)
+            job_id = response.json["job_id"]
+            deadline = time.monotonic() + 5
+            while True:
+                status = self.client.get(f"/api/training-plan/analyze/status/{job_id}")
+                if status.json["status"] != "running":
+                    break
+                self.assertLess(time.monotonic(), deadline)
+                time.sleep(0.01)
+            self.assertEqual(status.json["status"], "done")
+            self.assertEqual(status.json["result"], empty_result())
+        self.assertEqual(self.client.get("/api/training-plan/analyze/status/missing").status_code, 404)
+
+        with patch.object(server, "analyze_document", side_effect=server.AnalysisError("分析失败", 502)):
+            job_id = submit().json["job_id"]
+            deadline = time.monotonic() + 5
+            while True:
+                status = self.client.get(f"/api/training-plan/analyze/status/{job_id}")
+                if status.json["status"] != "running":
+                    break
+                self.assertLess(time.monotonic(), deadline)
+                time.sleep(0.01)
+            self.assertEqual(status.json["status"], "error")
+            self.assertEqual(status.json["error"], "分析失败")
+        with patch.object(server, "analyze_document", return_value=empty_result()) as analyze:
+            self.assertEqual(submit().status_code, 202)
             analyze.assert_called_once()
 
     def test_docx_validation_and_route(self):
