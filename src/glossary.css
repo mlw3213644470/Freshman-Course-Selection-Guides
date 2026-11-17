@@ -1,0 +1,197 @@
+/* 教务术语词典：搜索、筛选与词条卡片，依赖 guide.css 的基础配色。 */
+
+.glossary-tools { margin-top: 26px; }
+
+.glossary-search {
+  position: relative;
+  display: block;
+  max-width: 36rem;
+}
+
+.glossary-search__icon {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  color: var(--ink-faint);
+  font-size: 1.2rem;
+  line-height: 1;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.glossary-search input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 18px 0 46px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  font-family: inherit;
+  font-size: .95rem;
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+
+.glossary-search input::placeholder { color: var(--ink-faint); }
+
+.glossary-search input:focus {
+  border-color: var(--luojia);
+  box-shadow: 0 0 0 3px rgb(20 80 60 / 12%);
+  outline: none;
+}
+
+.glossary-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.glossary-chip {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: .86rem;
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+
+.glossary-chip:hover {
+  border-color: var(--luojia);
+  color: var(--luojia-deep);
+}
+
+.glossary-chip.is-active {
+  background: var(--luojia);
+  border-color: var(--luojia);
+  color: #fff;
+  font-weight: 700;
+}
+
+.glossary-count {
+  margin: 14px 0 0;
+  color: var(--ink-faint);
+  font-size: .82rem;
+}
+
+.term-grid {
+  display: grid;
+  align-items: start;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  margin-top: 22px;
+}
+
+.term {
+  padding: 22px 24px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.term[hidden] { display: none; }
+
+.term__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.term__title {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.45;
+}
+
+.term__tag {
+  flex: 0 0 auto;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--luojia-tint);
+  color: var(--luojia-deep);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.term[data-category="plan"] .term__tag { background: #e4ece5; color: #0b3a2b; }
+.term[data-category="credit"] .term__tag { background: #f6e7ea; color: #8c3f56; }
+.term[data-category="action"] .term__tag { background: #f5ecd2; color: #7a5a1f; }
+.term[data-category="alias"] .term__tag { background: #e8e4f2; color: #4f4472; }
+
+.term__plain {
+  margin: 10px 0 0;
+  font-size: .98rem;
+}
+
+.term__details {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.term__details dt {
+  color: var(--ink-faint);
+  font-size: .72rem;
+  letter-spacing: .08em;
+}
+
+.term__details dd {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: .88rem;
+}
+
+.glossary-empty {
+  margin-top: 22px;
+  padding: 30px 24px;
+  background: rgb(255 253 248 / 66%);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.glossary-empty p {
+  margin: 0 0 16px;
+  color: var(--ink-soft);
+}
+
+.confusion { border-left: 3px solid var(--sakura); }
+
+.confusion .card__title { font-size: 1.05rem; }
+
+@media (max-width: 560px) {
+  .term { padding: 18px; }
+  .term__head { flex-direction: column; gap: 6px; }
+  .glossary-search input { min-height: 48px; }
+  .glossary-chip { flex: 1 1 auto; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glossary-search input,
+  .glossary-chip { transition: none; }
+}
+
+@media print {
+  .glossary-tools,
+  .glossary-empty,
+  .pager,
+  .site-header,
+  .site-footer { display: none; }
+
+  .term[hidden] { display: block; }
+
+  .term {
+    break-inside: avoid;
+    border-color: #bbb;
+    box-shadow: none;
+  }
+}

@@ -6,6 +6,7 @@
   <title>学长抢课秘籍｜选课经验：少走弯路，排好第一份课表</title>
   <meta name="description" content="学长学姐的私房选课经验：HAM、新生群、淘课啦等信息渠道，选课当天的设备与时间安排，第三轮放余量的规律，以及抢课优先级与实操流程。">
   <link rel="stylesheet" href="/src/guide.css">
+  <link rel="stylesheet" href="/src/ask-tool.css">
 </head>
 <body class="has-campus-bg" data-page="senior-tips">
   <a class="skip-link" href="#main">跳到正文</a>
@@ -67,6 +68,7 @@
           </div>
           <p class="note__body">
             发帖，<strong>一定会有学长学姐乐意解答</strong>。问题问<strong>具体一点</strong>——哪门课、哪位老师、你担心什么，这样回你的人也更好答。
+            <a class="note__jump" href="#ask-generator">不会组织语言？用下面的提问模板 →</a>
           </p>
           <span class="note__tag">渠道 · 发帖</span>
         </article>
@@ -81,6 +83,79 @@
           </p>
           <span class="note__tag">渠道 · 第三方平台</span>
         </article>
+      </div>
+
+      <div class="ask-tool reveal" id="ask-generator">
+        <div class="ask-tool__head">
+          <p class="section__kicker">对应上面第 03 条 · 发帖问</p>
+          <h3 class="ask-tool__title">提问模板生成器</h3>
+          <p class="ask-tool__lede">
+            填好年级、专业和关心点，生成一段可以直接复制去问学长学姐的话。
+            四个关心点对应<a href="course-info.html">「课前打听四问」</a>；模板只帮你把问题<strong>问具体</strong>，不替你判断答案。
+          </p>
+        </div>
+
+        <noscript>
+          <style>.ask-form { display: none; }</style>
+          <div class="ask-fallback">
+            <p><strong>脚本未运行，可以直接套用这个模板：</strong></p>
+            <p>你好！我是（年级）（专业）的新生，想请教一下「课程 / 老师」的情况。我最关心：课程主要讲什么、需要什么基础；平时有哪些任务、每周投入多少时间；考核包含哪些环节；你这条经验是哪一届、现在是否还适用。方便的话，请结合你当时的实际情况说说，谢谢！</p>
+          </div>
+        </noscript>
+
+        <form class="ask-form" data-ask-form novalidate>
+          <div class="ask-grid">
+            <label class="ask-field">
+              <span class="ask-field__label">你的年级</span>
+              <input type="text" data-ask-grade placeholder="如：2026 级 / 大一" autocomplete="off">
+            </label>
+            <label class="ask-field">
+              <span class="ask-field__label">你的专业</span>
+              <input type="text" data-ask-major placeholder="如：计算机类 / 新闻传播学类" autocomplete="off">
+            </label>
+            <label class="ask-field ask-field--wide">
+              <span class="ask-field__label">想请教的课程或老师 <small>（可不填）</small></span>
+              <input type="text" data-ask-target placeholder="如：高等数学 / 王老师" autocomplete="off">
+            </label>
+          </div>
+
+          <fieldset class="ask-concerns">
+            <legend>你最关心什么？<small>至少选一项</small></legend>
+            <div class="ask-checks">
+              <label class="ask-check">
+                <input type="checkbox" name="concern" value="content" checked>
+                <span><strong>课程内容</strong><small>主要学什么、需要什么基础</small></span>
+              </label>
+              <label class="ask-check">
+                <input type="checkbox" name="concern" value="workload" checked>
+                <span><strong>学习任务</strong><small>作业、实验、每周投入</small></span>
+              </label>
+              <label class="ask-check">
+                <input type="checkbox" name="concern" value="assessment" checked>
+                <span><strong>考核方式</strong><small>考试、论文、展示、成绩构成</small></span>
+              </label>
+              <label class="ask-check">
+                <input type="checkbox" name="concern" value="experience" checked>
+                <span><strong>往届经验</strong><small>哪一届、还适不适用</small></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="ask-actions">
+            <button type="submit" class="button">生成提问</button>
+            <button type="button" class="button button--ghost" data-ask-reset>重新填写</button>
+          </div>
+
+          <p class="ask-status" data-ask-status role="status" aria-live="polite"></p>
+
+          <div class="ask-output">
+            <label class="ask-output__label" for="ask-result">生成结果</label>
+            <textarea id="ask-result" data-ask-result rows="10" readonly placeholder="填好上面的信息，点「生成提问」，这里会出现一段可以直接复制的提问。"></textarea>
+            <div class="ask-output__actions">
+              <button type="button" class="button" data-ask-copy disabled>复制提问</button>
+            </div>
+          </div>
+        </form>
       </div>
     </section>
 
@@ -185,5 +260,6 @@
 
   <footer class="site-footer" data-site-footer></footer>
   <script type="module" src="/src/guide.js"></script>
+  <script type="module" src="/src/ask-tool.js"></script>
 </body>
 </html>

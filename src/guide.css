@@ -28,6 +28,9 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 锚点跳转时给固定页头留出空间，避免标题被挡住。 */
+[id] { scroll-margin-top: var(--header-offset, 8rem); }
+
 body {
   margin: 0;
   background: var(--paper);
@@ -60,6 +63,9 @@ body.has-campus-bg[data-page="schedule"] { --page-photo: url("../assets/campus/s
 body.has-campus-bg[data-page="after"] { --page-photo: url("../assets/campus/after.jpg"); }
 body.has-campus-bg[data-page="faq"] { --page-photo: url("../assets/campus/faq.jpg"); }
 body.has-campus-bg[data-page="senior-tips"] { --page-photo: url("../assets/campus/senior.jpg"); }
+body.has-campus-bg[data-page="glossary"] { --page-photo: url("../assets/campus/extra-sakura.jpg"); }
+body.has-campus-bg[data-page="game"] { --page-photo: url("../assets/campus/course.jpg"); }
+body.has-campus-bg[data-page="changelog"] { --page-photo: url("../assets/campus/guide.jpg"); }
 
 h1, h2, h3 {
   font-family: var(--serif);
@@ -221,11 +227,12 @@ a { color: var(--luojia); }
   color: #fff;
 }
 
-.site-header__features {
+.site-header__actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 9px;
-  flex: 0 0 auto;
   order: 2;
   margin-left: auto;
 }
@@ -252,6 +259,10 @@ a { color: var(--luojia); }
   filter: brightness(1.06);
 }
 
+.site-header__feature--glossary {
+  background: linear-gradient(135deg, #7f93d4, #3b4a86);
+}
+
 .site-header__feature--sakura {
   background: linear-gradient(135deg, #e59ab6, #c25e84);
 }
@@ -273,6 +284,63 @@ a { color: var(--luojia); }
 
 .site-header__feature--teacher {
   background: linear-gradient(135deg, #7fb0a2, #2f6a5c);
+}
+
+.site-header__feature[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* 信息侦探：单独的小游戏入口，固定在页头最右侧。 */
+.site-header__game {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 5px 18px;
+  border: 1px solid #8d1d18;
+  margin-left: 6px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #c93a30, #a3221c);
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgb(163 34 28 / 34%);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+
+.site-header__game:hover {
+  color: #fff;
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+  box-shadow: 0 11px 24px rgb(163 34 28 / 42%);
+}
+
+.site-header__game[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.site-header__game-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.site-header__game-text {
+  display: flex;
+  flex-direction: column;
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.15;
+}
+
+.site-header__game-text small {
+  margin-top: 2px;
+  color: rgb(255 255 255 / 82%);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .2em;
 }
 
 /* ---------- hero ---------- */
@@ -1061,6 +1129,38 @@ main b {
   .note__slots li { grid-template-columns: minmax(0, 1fr); gap: 1px; }
 }
 
+/* ---------- 页面末尾的练习入口 ---------- */
+
+.practice-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 26px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--luojia);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: var(--shadow);
+}
+
+.practice-banner .section__kicker { margin-bottom: 6px; }
+
+.practice-banner h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+}
+
+.practice-banner p {
+  max-width: 42em;
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: .92rem;
+}
+
+.practice-banner .button { flex: 0 0 auto; }
+
 /* ---------- pager ---------- */
 
 .pager {
@@ -1140,6 +1240,11 @@ main b {
   font-size: .8rem;
 }
 
+.site-footer__meta a {
+  color: var(--luojia);
+  font-weight: 700;
+}
+
 .noscript {
   margin: 0;
   padding: 12px 24px;
@@ -1165,6 +1270,9 @@ main b {
 /* ---------- responsive ---------- */
 
 @media (max-width: 820px) {
+  /* 导航项较多时要能从头滑到尾；右对齐会让左侧项目超出可滚动范围。 */
+  .site-nav { justify-content: flex-start; }
+
   .hero { padding-top: 46px; }
 
   .road {
@@ -1200,8 +1308,11 @@ main b {
 @media (max-width: 560px) {
   .site-header__inner { flex-wrap: wrap; gap: 8px 14px; padding-bottom: 8px; }
   .site-nav { width: 100%; margin-left: 0; }
-  .site-header__features { width: 100%; flex-wrap: wrap; }
-  .site-header__feature { flex: 1 1 auto; justify-content: center; padding: 0 11px; font-size: .78rem; }
+  .site-header__actions { width: 100%; margin-left: 0; gap: 7px; justify-content: space-between; }
+  .site-header__feature { flex: 0 1 auto; min-height: 34px; justify-content: center; padding: 0 10px; font-size: .74rem; }
+  .site-header__game { margin-left: auto; min-height: 40px; padding: 4px 14px; }
+  .site-header__game-text { font-size: .82rem; }
+  .site-header__game-text small { font-size: .6rem; }
   .step { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .qa__body { padding-left: 20px; }
   .callout { flex-direction: column; gap: 6px; }

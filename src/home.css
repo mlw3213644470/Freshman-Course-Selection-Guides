@@ -99,6 +99,7 @@
 .landing-next .landing-section-kicker { margin-bottom: 7px; }
 .landing-next h3 { margin: 0; color: var(--ink); font-size: 18px; font-weight: 500; }
 .landing-next p:last-child { margin: 6px 0 0; color: var(--ink-soft); font-size: 11px; }
+.landing-next p a { color: var(--luojia) !important; font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
 .landing-next__actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; gap: 9px; }
 .landing-outline-button { display: inline-flex; min-height: 40px; align-items: center; padding: 0 15px; border: 1px solid #b7c8bb; border-radius: 8px; color: var(--luojia) !important; font-size: 11px; }
 .landing-outline-button:hover { background: #fffdf8; }

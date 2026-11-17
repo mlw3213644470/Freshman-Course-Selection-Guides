@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>信息侦探｜选课经验：用八条虚构传闻练习判断可信度</title>
+  <meta name="description" content="信息侦探：八条虚构的课程传闻，按红黄绿标准判断属于可采信、待核实还是无法确认，答完查看判断依据。只练方法，不评价任何真实课程。">
+  <link rel="stylesheet" href="/src/guide.css">
+  <link rel="stylesheet" href="/src/game.css">
+</head>
+<body class="has-campus-bg" data-page="game">
+  <a class="skip-link" href="#main">跳到正文</a>
+  <noscript><p class="noscript">导航与小游戏需要 JavaScript；下面的红黄绿标准不受影响，可直接阅读。</p></noscript>
+  <header class="site-header" data-site-header></header>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">练一练 · 信息侦探</p>
+      <h1>信息侦探</h1>
+      <p class="lede">
+        八条课程传闻，三种颜色。你要判断的不是<strong>这门课好不好</strong>，而是<strong>这条信息能用到什么程度</strong>。
+      </p>
+    </section>
+
+    <section class="section section--tight wrap" aria-labelledby="rules-title">
+      <div class="section__head">
+        <p class="section__kicker">先复习标准</p>
+        <h2 class="section__title" id="rules-title">红黄绿，只说明可信度</h2>
+        <p class="section__lede">
+          标准来自<a href="course-info.html">课程信息 · 红黄绿提示</a>：颜色只说明这条信息能不能当判断依据，<strong>不评价课程本身</strong>。
+        </p>
+      </div>
+
+      <div class="lights reveal">
+        <div class="light light--green">
+          <h3 class="light__title">🟢 多项资料相互印证</h3>
+          <p class="light__body">官方课程信息与学生反馈<strong>方向一致</strong>，可以据此判断；落地前仍要<strong>回官方渠道核对一次</strong>。</p>
+        </div>
+        <div class="light light--amber">
+          <h3 class="light__title">🟡 仅有少量学生反馈</h3>
+          <p class="light__body">当作<strong>线索而不是结论</strong>。继续找<strong>第二个独立来源</strong>，再决定信多少。</p>
+        </div>
+        <div class="light light--red">
+          <h3 class="light__title">🔴 关键信息无法确认或已过时</h3>
+          <p class="light__body"><strong>先不下判断</strong>。找开课单位、任课教师或学院确认，再回到这一步。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap" aria-labelledby="game-title">
+      <div class="section__head">
+        <p class="section__kicker">开始判断</p>
+        <h2 class="section__title" id="game-title">这八条传闻，你会标什么颜色？</h2>
+        <p class="section__lede">
+          以下传闻均为<strong>虚构示例</strong>，不对应任何真实课程、教师或院系。选一个颜色，看看判断依据。
+        </p>
+      </div>
+
+      <noscript>
+        <style>.game { display: none; }</style>
+        <div class="panel game-fallback">
+          <h3 class="panel__title">脚本未运行？先看三类判断示例</h3>
+          <ol class="game-fallback__list">
+            <li><strong>红 · 匿名群聊截图：</strong>“这门课不点名，期末只交一篇论文。”截图没有来源，也没写学期。→ 🔴 无法确认</li>
+            <li><strong>绿 · 当期课程通知 + 两位学长：</strong>“每周有一次小组讨论。”官方通知与两位不同年级学长的说法一致。→ 🟢 可采信</li>
+            <li><strong>黄 · 两位同学的聊天：</strong>“这门课作业量挺大的。”但没写教学班、老师和学期。→ 🟡 待核实</li>
+          </ol>
+          <p class="card__note">完整 8 道题需要开启脚本；判断依据见上方红黄绿标准。</p>
+        </div>
+      </noscript>
+
+      <div class="game reveal" data-game>
+        <div class="game__hud">
+          <p class="game__progress-text">第 <strong data-progress-current>1</strong> / <span data-progress-total>8</span> 题</p>
+          <p class="game__score">得分 <strong data-score>0</strong> / <span data-progress-total>8</span></p>
+        </div>
+        <div class="game__progress" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">
+          <span data-progress-bar></span>
+        </div>
+
+        <div class="game__stage" data-stage>
+          <article class="rumor" aria-labelledby="rumor-quote">
+            <p class="rumor__meta">
+              <span class="rumor__badge" data-badge>传闻 01</span>
+              <span class="rumor__source" data-source></span>
+            </p>
+            <blockquote class="rumor__quote" id="rumor-quote" data-quote></blockquote>
+            <p class="rumor__detail" data-detail></p>
+          </article>
+
+          <div class="game__choices" role="group" aria-label="这条传闻属于哪种可信度？">
+            <button type="button" class="choice choice--green" data-answer="green">🟢 可采信</button>
+            <button type="button" class="choice choice--amber" data-answer="amber">🟡 待核实</button>
+            <button type="button" class="choice choice--red" data-answer="red">🔴 无法确认</button>
+          </div>
+
+          <div class="game__feedback" data-feedback tabindex="-1" hidden aria-live="polite"></div>
+
+          <div class="game__actions">
+            <button type="button" class="button" data-next hidden>下一题</button>
+          </div>
+        </div>
+
+        <div class="game__result" data-result hidden aria-live="polite">
+          <p class="result__stamp" aria-hidden="true" data-result-stamp>🔍</p>
+          <p class="result__score"><strong data-result-score>0</strong> / <span data-progress-total>8</span></p>
+          <p class="result__verdict" data-result-verdict></p>
+          <p class="result__best" data-result-best></p>
+          <div class="result__actions">
+            <button type="button" class="button" data-restart>再玩一次</button>
+            <a class="button button--ghost" href="course-info.html">回看红黄绿标准</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout reveal">
+        <span class="callout__label">边界说明</span>
+        <p class="callout__body">
+          本页只训练<strong>判断信息可信度的方法</strong>，不提供任何真实课程的评价、给分或推荐。
+          这些题没有“标准课程答案”，只有“该不该信、下一步问谁”。
+        </p>
+      </div>
+    </section>
+
+    <nav class="pager wrap" aria-label="板块跳转">
+      <a class="pager__link" href="course-info.html">
+        <span class="pager__dir">← 相关板块</span>
+        <span class="pager__name">第二步 · 课程信息</span>
+      </a>
+      <a class="pager__link pager__link--next" href="faq.html">
+        <span class="pager__dir">继续查 →</span>
+        <span class="pager__name">第五步 · 常见问题</span>
+      </a>
+    </nav>
+  </main>
+
+  <footer class="site-footer" data-site-footer></footer>
+  <script type="module" src="/src/guide.js"></script>
+  <script type="module" src="/src/game.js"></script>
+</body>
+</html>

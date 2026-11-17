@@ -1,0 +1,180 @@
+/* 内容更新日志：核实时间表、状态标签与更新记录。 */
+
+.log-table-wrap {
+  overflow-x: auto;
+  margin-top: 26px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+
+.log-table th,
+.log-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.log-table thead th {
+  background: var(--luojia-tint);
+  color: var(--luojia-deep);
+  font-size: .76rem;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.log-table tbody th {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.log-table tbody th a {
+  color: var(--luojia);
+  text-decoration: none;
+}
+
+.log-table tbody th a:hover { text-decoration: underline; }
+
+.log-table tbody tr:last-child th,
+.log-table tbody tr:last-child td { border-bottom: 0; }
+
+.log-table td:nth-child(2),
+.log-table td:nth-child(3) { white-space: nowrap; }
+
+.log-table td:last-child {
+  color: var(--ink-soft);
+  font-size: .86rem;
+}
+
+.log-status {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.log-status--ok { background: #e4ece5; color: #14503c; }
+.log-status--exp { background: #f5ecd2; color: #7a5a1f; }
+.log-status--official { background: #f6e7ea; color: #8c3f56; }
+.log-status--entry { background: #e8e4f2; color: #4f4472; }
+
+.log-footnote {
+  margin: 12px 0 0;
+  color: var(--ink-faint);
+  font-size: .82rem;
+}
+
+.log-timeline {
+  display: grid;
+  gap: 18px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.log-entry {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 18px;
+  padding: 20px 22px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--sakura);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.log-entry__date {
+  margin: 0;
+  color: var(--sakura);
+  font-size: .86rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.log-entry__title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.log-entry__list {
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--ink-soft);
+  font-size: .9rem;
+}
+
+.log-entry__list li { margin: .3em 0; }
+
+@media (max-width: 760px) {
+  .log-table-wrap {
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .log-table,
+  .log-table tbody,
+  .log-table tr,
+  .log-table th,
+  .log-table td { display: block; width: 100%; }
+
+  .log-table thead { display: none; }
+
+  .log-table tr {
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  .log-table th,
+  .log-table td {
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+
+  .log-table tbody th {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+
+  .log-table td {
+    display: grid;
+    grid-template-columns: 5.5em minmax(0, 1fr);
+    gap: 10px;
+    padding: 4px 0;
+  }
+
+  .log-table td::before {
+    content: attr(data-label);
+    color: var(--ink-faint);
+    font-size: .76rem;
+  }
+
+  .log-table td:last-child { font-size: .86rem; }
+
+  .log-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-table tbody th a:hover { text-decoration: none; }
+}
